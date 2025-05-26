@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import { getAllContentItems, ContentItem } from '@/content/mockData';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { TocItem } from '@/types';
-import homeContentRaw from '@/content_files/index.md?raw'; // Updated import path
+import homeContentRaw from '@/pages_files/index.md?raw'; // Updated import path
 
 const IndexPage = () => {
   const [allNotes, setAllNotes] = useState<ContentItem[]>([]);
@@ -14,7 +14,9 @@ const IndexPage = () => {
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
 
   useEffect(() => {
-    const items = getAllContentItems();
+    // These are still fetched for potential [[links]] or other interactions within the Home page content.
+    // If Home page content never links to items from content_files, this could be omitted.
+    const items = getAllContentItems(); 
     setAllNotes(items);
     setGlossaryTerms(items.filter(item => item.type === 'glossary_term'));
   }, []);
@@ -22,7 +24,6 @@ const IndexPage = () => {
   return (
     <div className="container mx-auto py-12 md:py-20 flex justify-center min-h-[calc(100vh-10rem)] animate-fade-in">
       <div className="max-w-3xl w-full flex flex-col items-start text-left">
-        {/* Title removed as it's likely in the markdown now, or can be added there as H1 */}
         
         <SimpleRenderer 
           content={homeContentRaw} 

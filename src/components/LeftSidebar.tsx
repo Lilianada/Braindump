@@ -19,26 +19,19 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const rawContentTree = getContentTree(true); // Get all items including non-folder types at root
-    const rootContentPathsToExclude = ['index.md', 'about.md', 'docs.md']; 
+    const rawContentTree = getContentTree(true); 
+    const rootContentPathsToExclude: string[] = []; 
     
-    // Filter out specific root files (like about.md, docs.md, index.md) from appearing as content sections
-    // if they are not explicitly part of a folder structure.
-    // This logic ensures that top-level markdown files configured as pages (Home, About, Docs)
-    // do not also appear in the "Content Sections" if they are not in a subfolder.
     const filteredContentTree = rawContentTree.filter(item => {
-      // If it's a folder, always include it.
       if (item.type === 'folder') return true;
-      // If it's not a folder (e.g., a note, topic), and it's a root file, exclude if it's one of the special page files.
-      if (!item.path.includes('/')) { // Root file
+      if (!item.path.includes('/')) { // Root file from content_files
         return !rootContentPathsToExclude.includes(item.path);
       }
-      // Otherwise (not a folder, and not a root file, OR a root file not in exclude list), include it.
       return true;
     });
     setContentSections(filteredContentTree);
     
-    const allItems = getAllContentItems();
+    const allItems = getAllContentItems(); // This gets items from content_files only
     const tagsSet = new Set<string>();
     allItems.forEach(item => {
       const normalizedItemTags = getNormalizedTags(item.tags);
@@ -49,15 +42,15 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
     setUniqueTags(Array.from(tagsSet).sort());
 
     if (allItems.length > 0 && tagsSet.size === 0) {
-      console.warn("LeftSidebar: No tags found in any content items. Ensure tags are defined in your markdown frontmatter (e.g., --- tags: [tag1, tag2] --- or --- tags: tag1, tag2 ---).");
+      console.warn("LeftSidebar: No tags found in any content items from 'content_files'. Ensure tags are defined in your markdown frontmatter.");
     } else if (tagsSet.size > 0) {
-        console.log("LeftSidebar: Tags found:", Array.from(tagsSet).sort());
+        console.log("LeftSidebar: Tags found in 'content_files':", Array.from(tagsSet).sort());
     }
   }, []);
 
   const handleTagClick = (tag: string) => {
     navigate(`/tags/${encodeURIComponent(tag)}`);
-    if (onClose && isOpen) { // Close sidebar on mobile after navigation
+    if (onClose && isOpen) {
         onClose();
     }
   };

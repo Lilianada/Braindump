@@ -4,8 +4,8 @@ import { useOutletContext } from 'react-router-dom';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { getAllContentItems, ContentItem } from '@/content/mockData';
 import { TocItem } from '@/types';
-import { AppContextType } from '@/components/Layout'; // Import AppContextType
-import aboutContentRaw from '@/content_files/about.md?raw';
+import { AppContextType } from '@/components/Layout';
+import aboutContentRaw from '@/pages_files/about.md?raw'; // Updated import path
 
 const AboutPage = () => {
   const { setTocItems: setGlobalTocItems } = useOutletContext<AppContextType>();
@@ -15,6 +15,7 @@ const AboutPage = () => {
 
 
   useEffect(() => {
+    // Fetched for potential [[links]] or other interactions within the About page content.
     const items = getAllContentItems();
     setAllNotes(items);
     setGlossaryTerms(items.filter(item => item.type === 'glossary_term'));
@@ -28,10 +29,9 @@ const AboutPage = () => {
 
   return (
     <div className="container mx-auto py-8 animate-fade-in">
-      {/* The H1 title will come from the markdown itself */}
       <SimpleRenderer
         content={aboutContentRaw}
-        setTocItems={setTocItems} // Pass local setter
+        setTocItems={setTocItems} 
         allNotes={allNotes}
         glossaryTerms={glossaryTerms}
       />
