@@ -1,10 +1,12 @@
 
 // Parser for frontmatter and content from raw markdown string
 export function parseFrontmatterAndContent(rawContent: string): { frontmatter: Record<string, any>; content: string } {
+  // console.log('[Parser] Starting frontmatter parsing...');
   const frontmatterRegex = /^---\s*([\s\S]*?)\s*---/;
   const match = rawContent.match(frontmatterRegex);
 
   if (!match) {
+    // console.log('[Parser] No frontmatter block found.');
     return { frontmatter: {}, content: rawContent };
   }
 
@@ -19,44 +21,54 @@ export function parseFrontmatterAndContent(rawContent: string): { frontmatter: R
   
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
+    // console.log(`[Parser] Processing line: "${line}", currentKey: ${currentKey}, isInList: ${isInList}`);
     
-    // Skip empty lines
     if (!line) continue;
     
-    // Check if this line starts a list item
     if (line.startsWith('- ')) {
       if (currentKey) {
-        // If we're not already in a list for this key, initialize it
-        if (!isInList) {
+        if (!Array.isArray(frontmatter[currentKey])) {
+          // This can happen if a key was previously defined as a scalar or not at all,
+          // and then list items appear. Standard YAML might expect the key to pre-declare the list.
+          // For robustness, ensure it's an array.
+          // console.log(`[Parser] Initializing list for key "${currentKey}" upon finding list item.`);
           frontmatter[currentKey] = [];
-          isInList = true;
+          isInList = true; // Ensure isInList is true if we are starting a list here
         }
-        // Add the list item (removing the dash and trimming)
         const value = line.substring(2).trim().replace(/^["']|["']$/g, '');
         frontmatter[currentKey].push(value);
+        // console.log(`[Parser] Added item "${value}" to list for key "${currentKey}". Current list:`, frontmatter[currentKey]);
+      } else {
+        // console.log('[Parser] Warning: Found list item but no currentKey is set.');
       }
       continue;
     }
     
-    // Check if this line defines a new key
     const colonIndex = line.indexOf(':');
     if (colonIndex > 0) {
-      currentKey = line.substring(0, colonIndex).trim();
+      const newKey = line.substring(0, colonIndex).trim();
       let value = line.substring(colonIndex + 1).trim();
+      currentKey = newKey; // Set currentKey to the new key
+      // console.log(`[Parser] New key detected: "${currentKey}"`);
       
-      // Check if this is the start of a list
-      if (!value && i + 1 < lines.length && lines[i+1].trim().startsWith('- ')) {
+      if (!value && (i + 1 < lines.length) && lines[i+1].trim().startsWith('- ')) {
+        // console.log(`[Parser] Key "${currentKey}" is a list (starts on next line).`);
         isInList = true;
         frontmatter[currentKey] = [];
       } else {
-        // This is a simple key-value pair
+        // console.log(`[Parser] Key "${currentKey}" is a scalar value: "${value}".`);
         isInList = false;
-        // Remove surrounding quotes if present
-        value = value.replace(/^["']|["']$/g, '');
+        value = value.replace(/^["']|["']$/g, ''); // Remove surrounding quotes
         frontmatter[currentKey] = value;
       }
+    } else if (currentKey && isInList && frontmatter[currentKey] && line.trim() !== '') {
+      // This case is unlikely with standard YAML frontmatter but could handle malformed continuations.
+      // Generally, non-indented, non-key-value lines after a list has started would be part of the content block.
+      // For frontmatter, this branch might not be strictly necessary if YAML is well-formed.
+      // console.log(`[Parser] Warning: Line "${line}" is not a key or standard list item, currentKey: ${currentKey}, isInList: ${isInList}`);
     }
   }
 
+  // console.log('[Parser] Parsing complete. Final frontmatter:', JSON.stringify(frontmatter, null, 2));
   return { frontmatter, content };
 }

@@ -19,32 +19,38 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const rawContentTree = getContentTree(true); 
+    // console.log("[LeftSidebar] useEffect triggered to load content and tags.");
+    const rawContentTree = getContentTree(true); // Force refresh for testing
     const rootContentPathsToExclude: string[] = []; 
     
     const filteredContentTree = rawContentTree.filter(item => {
       if (item.type === 'folder') return true;
-      if (!item.path.includes('/')) { // Root file from content_files
+      if (!item.path.includes('/')) { 
         return !rootContentPathsToExclude.includes(item.path);
       }
       return true;
     });
     setContentSections(filteredContentTree);
     
-    const allItems = getAllContentItems(); // This gets items from content_files only
+    const allItems = getAllContentItems(true); // Force refresh for testing
+    // console.log("[LeftSidebar] All items for tag processing:", allItems);
     const tagsSet = new Set<string>();
     allItems.forEach(item => {
-      const normalizedItemTags = getNormalizedTags(item.tags);
+      // console.log(`[LeftSidebar] Processing item for tags: ${item.title}, item.tags:`, item.tags);
+      const normalizedItemTags = getNormalizedTags(item.tags); // item.tags should be string[] here
+      // console.log(`[LeftSidebar] Normalized tags for ${item.title}:`, normalizedItemTags);
       normalizedItemTags.forEach(tag => {
         if (tag) tagsSet.add(tag);
       });
     });
-    setUniqueTags(Array.from(tagsSet).sort());
+    const sortedTags = Array.from(tagsSet).sort();
+    setUniqueTags(sortedTags);
+    // console.log("[LeftSidebar] Unique tags set:", sortedTags);
 
     if (allItems.length > 0 && tagsSet.size === 0) {
-      console.warn("LeftSidebar: No tags found in any content items from 'content_files'. Ensure tags are defined in your markdown frontmatter.");
+      console.warn("LeftSidebar: No tags found in any content items from 'content_files'. Ensure tags are defined and correctly parsed.");
     } else if (tagsSet.size > 0) {
-        console.log("LeftSidebar: Tags found in 'content_files':", Array.from(tagsSet).sort());
+        // console.log("LeftSidebar: Tags successfully processed:", sortedTags);
     }
   }, []);
 
@@ -63,7 +69,9 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
       const originalReplaceState = history.replaceState;
 
       const handleClose = () => {
-        onClose();
+        if (typeof onClose === 'function') {
+          onClose();
+        }
       };
 
       // Close sidebar on navigation
@@ -105,6 +113,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
           <nav className="space-y-6">
             <PageLinks />
             <ContentNavigation contentSections={contentSections} />
+            {/* console.log("[LeftSidebar] Rendering TagList with tags:", uniqueTags); */}
             <TagList tags={uniqueTags} onTagClick={handleTagClick} />
           </nav>
         </ScrollArea>
