@@ -1,4 +1,7 @@
 
+@import url('https://unpkg.com/geist@1.4.2/dist/geist-sans.css');
+@import url('https://unpkg.com/geist@1.4.2/dist/geist-mono.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

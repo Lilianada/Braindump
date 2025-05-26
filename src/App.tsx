@@ -1,6 +1,7 @@
+
 // Import the Geist font CSS files directly
-import 'geist/dist/geist-sans.css';
-import 'geist/dist/geist-mono.css';
+// import 'geist/dist/geist-sans.css'; // REMOVED
+// import 'geist/dist/geist-mono.css'; // REMOVED
 
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -44,3 +45,4 @@ const App = () => (
 );
 
 export default App;
+
