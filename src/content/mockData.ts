@@ -1,3 +1,4 @@
+
 export interface ContentItem {
   id: string;
   title: string;
@@ -22,7 +23,7 @@ function parseFrontmatterAndContent(rawContent: string): { frontmatter: Record<s
   }
 
   const frontmatterBlock = match[1].trim();
-  const content = rawContent.substring(match[0].length).trim();
+  const content = rawContent; // Keep the entire content including frontmatter
   
   const frontmatter: Record<string, any> = {};
   const lines = frontmatterBlock.split('\n');
@@ -32,12 +33,8 @@ function parseFrontmatterAndContent(rawContent: string): { frontmatter: Record<s
     const trimmedLine = line.trim();
     if (trimmedLine.startsWith('- ')) { // Handling list items, e.g. for tags
       if (currentListKey && Array.isArray(frontmatter[currentListKey])) {
-        // Assumes list items are indented, e.g. `  - item` or `- item` if key line was `tags:`
-        // Adjust substring index based on actual indentation of list items.
-        // If `  - value`, then `line.substring(line.indexOf('- ') + 2)`
-        // If `- value` (directly under key), then `trimmedLine.substring(2)`
-        // For current files like `  - "concept"`, `line.substring(4)` works.
-         frontmatter[currentListKey].push(line.substring(line.indexOf('-') + 1).trim().replace(/^["']|["']$/g, ''));
+        const value = line.substring(line.indexOf('-') + 1).trim().replace(/^["']|["']$/g, '');
+        frontmatter[currentListKey].push(value);
       }
     } else {
       const colonIndex = line.indexOf(':');
@@ -55,13 +52,13 @@ function parseFrontmatterAndContent(rawContent: string): { frontmatter: Record<s
       }
     }
   });
-  // Ensure tags are always an array, even if defined as a single string in frontmatter (though current format is list)
+
+  // Ensure tags are always an array, even if defined as a single string in frontmatter
   if (frontmatter.tags && typeof frontmatter.tags === 'string') {
     frontmatter.tags = [frontmatter.tags];
   } else if (!frontmatter.tags) {
     frontmatter.tags = [];
   }
-
 
   return { frontmatter, content };
 }
@@ -77,8 +74,10 @@ export const getAllFileContentItems = (forceRefresh: boolean = false): ContentIt
   }
 
   const modules = import.meta.glob('/src/content_files/**/*.md', { eager: true, as: 'raw' });
+  const pagesModules = import.meta.glob('/src/pages_files/**/*.md', { eager: true, as: 'raw' });
   const flatItems: ContentItem[] = [];
 
+  // Process content files
   for (const filePath in modules) {
     const rawContent = modules[filePath];
     const { frontmatter, content } = parseFrontmatterAndContent(rawContent);
@@ -100,6 +99,16 @@ export const getAllFileContentItems = (forceRefresh: boolean = false): ContentIt
     };
     flatItems.push(item);
   }
+
+  // Process page files (but don't include them in the content navigation)
+  for (const filePath in pagesModules) {
+    // We process these files for potential use elsewhere, but we don't add them to the content tree
+    const rawContent = pagesModules[filePath];
+    const { frontmatter } = parseFrontmatterAndContent(rawContent);
+    
+    console.log(`Processed page file ${filePath} with frontmatter:`, frontmatter);
+  }
+
   allContentCache = flatItems;
   return flatItems;
 };

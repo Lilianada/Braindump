@@ -8,7 +8,7 @@ import { ContentItem } from '@/content/mockData';
 import CustomHeading from './markdown/CustomHeading';
 import CustomParagraph from './markdown/CustomParagraph';
 import CustomLink from './markdown/CustomLink';
-import CustomCodeBlock from './markdown/CustomCodeBlock'; // Added import
+import CustomCodeBlock from './markdown/CustomCodeBlock';
 
 interface SimpleRendererProps {
   content: string;
@@ -18,11 +18,15 @@ interface SimpleRendererProps {
 }
 
 const SimpleRenderer: React.FC<SimpleRendererProps> = ({ content, setTocItems, allNotes, glossaryTerms }) => {
-  
   useEffect(() => {
     setTocItems([]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content]); // setTocItems is stable
+
+  // Make sure we're not rendering frontmatter
+  const cleanContent = content.trim().startsWith('---') 
+    ? content.replace(/^---[\s\S]*?---\s*/m, '') 
+    : content;
 
   return (
     <div className="prose dark:prose-invert max-w-none text-foreground space-y-3 text-sm">
@@ -35,10 +39,10 @@ const SimpleRenderer: React.FC<SimpleRendererProps> = ({ content, setTocItems, a
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           p: ({node, ...props}) => <CustomParagraph {...props} allNotes={allNotes} glossaryTerms={glossaryTerms} />,
           a: CustomLink,
-          code: CustomCodeBlock, // Added custom code component
+          code: CustomCodeBlock,
         }}
       >
-        {content}
+        {cleanContent}
       </ReactMarkdown>
     </div>
   );

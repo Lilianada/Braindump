@@ -43,6 +43,12 @@ const ContentPage: React.FC = () => {
       setCurrentContentItem(item); 
 
       if (item) {
+        // Log the content item to debug frontmatter issues
+        console.log("Content item found:", item);
+        console.log("Content item frontmatter:", item.frontmatter);
+        console.log("Content item lastUpdated:", item.lastUpdated);
+        console.log("Content item tags:", item.tags);
+        
         const markdownBody = extractMarkdownBody(item.content ? item.content.replace(/\\n/g, '\n') : "");
         if (!markdownBody) {
           setTocItems([]);
@@ -206,28 +212,42 @@ const ContentPage: React.FC = () => {
         <h1 className="text-4xl font-semibold capitalize mb-2">{contentItem.title}</h1>
         {/* Metadata section from frontmatter/contentItem properties */}
         <div className="mt-3 mb-6 text-sm text-muted-foreground space-y-1">
+          {contentItem.created && (
+            <div className="flex items-center gap-2">
+              <CalendarDays className="h-4 w-4" />
+              <span>Created: {new Date(contentItem.created).toLocaleDateString()}</span>
+            </div>
+          )}
           {contentItem.lastUpdated && (
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
+              <CalendarDays className="h-4 w-4" />
               <span>Last Updated: {new Date(contentItem.lastUpdated).toLocaleDateString()}</span>
             </div>
           )}
           {category && (
-             <div className="flex items-center">
+             <div className="flex items-center gap-2">
+              <TagIcon className="h-4 w-4" />
               <span>Category: {category}</span>
             </div>
           )}
           {contentItem.frontmatter?.source && (
-             <div className="flex items-center">
-          
-                <span>Source: {contentItem.frontmatter.source}</span>
+             <div className="flex items-center gap-2">
+              <Link2 className="h-4 w-4" />
+              <span>Source: {contentItem.frontmatter.source}</span>
+             </div>
+          )}
+          {contentItem.frontmatter?.author && (
+             <div className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              <span>Author: {contentItem.frontmatter.author}</span>
              </div>
           )}
         </div>
 
         {contentItem.tags && contentItem.tags.length > 0 && (
           <div className="mb-6">
-            <div className="flex items-center text-sm text-muted-foreground mb-2">
-      
+            <div className="flex items-center text-sm text-muted-foreground mb-2 gap-2">
+              <TagIcon className="h-4 w-4" />
               <span>Tags:</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -239,7 +259,15 @@ const ContentPage: React.FC = () => {
         )}
       </header>
       
-      {markdownContentToRender ? (
+      {/* Fix for frontmatter display issue */}
+      {markdownContentToRender.trim().startsWith('---') ? (
+        <SimpleRenderer 
+          content={markdownContentToRender.replace(/^---[\s\S]*?---\s*/m, '')} 
+          setTocItems={setTocItems}
+          allNotes={allNotesAndTopics}
+          glossaryTerms={glossaryTerms}
+        />
+      ) : markdownContentToRender ? (
         <SimpleRenderer 
           content={markdownContentToRender} 
           setTocItems={setTocItems}
@@ -260,7 +288,7 @@ const ContentPage: React.FC = () => {
           <>
             <div>
               <h3 className="mb-3 text-base font-medium flex items-center">
-                
+                <Link2 className="h-4 w-4 mr-2" />
                 Backlinks
               </h3>
               {backlinks.length > 0 ? (
@@ -280,6 +308,7 @@ const ContentPage: React.FC = () => {
 
             <div>
               <h3 className="mb-3 text-base font-medium flex items-center">
+                <TagIcon className="h-4 w-4 mr-2" />
                 Related Notes
               </h3>
               {relatedNotes.length > 0 ? (

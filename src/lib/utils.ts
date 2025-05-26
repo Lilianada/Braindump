@@ -27,11 +27,17 @@ export const extractMarkdownBody = (markdownContent: string | undefined | null):
   if (!markdownContent) {
     return '';
   }
-  // Regex to match frontmatter (content between --- at the start of the string)
-  // It looks for '---', followed by any characters (non-greedy), then '---'
-  // and any trailing whitespace including newlines.
-  const frontmatterRegex = /^---\s*[\s\S]*?---\s*/;
-  const body = markdownContent.replace(frontmatterRegex, '');
-  return body.trim(); // Trim any leading/trailing whitespace from the body
+  
+  // Check if markdownContent starts with --- which indicates frontmatter
+  if (markdownContent.trim().startsWith('---')) {
+    // Find the second --- which closes frontmatter
+    const secondDashIndex = markdownContent.indexOf('---', 3);
+    if (secondDashIndex !== -1) {
+      // Return all content after the second ---
+      return markdownContent.substring(secondDashIndex + 3).trim();
+    }
+  }
+  
+  // If we didn't find frontmatter pattern or it's malformed, return the original content
+  return markdownContent.trim();
 };
-
