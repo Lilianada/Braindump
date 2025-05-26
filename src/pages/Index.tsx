@@ -19,28 +19,28 @@ const IndexPage = () => {
   return (
     <div className="container mx-auto py-12 md:py-20 flex justify-center min-h-[calc(100vh-10rem)] animate-fade-in">
       <div className="max-w-3xl w-full flex flex-col items-start text-left">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-foreground">
           <InteractiveFragment allNotes={allNotes} glossaryTerms={glossaryTerms} baseKeyPrefix="main-heading">
             Welcome to my Braindump
           </InteractiveFragment>
         </h1>
         
-        <p className="text-lg text-muted-foreground mb-6">
+        <p className="text-base text-muted-foreground mb-6">
           <InteractiveFragment allNotes={allNotes} glossaryTerms={glossaryTerms} baseKeyPrefix="intro-1">
             My [[personal knowledge management]] space of evolving knowledge where I collect, connect, and grow ideas over time.
           </InteractiveFragment>
         </p>
 
-        <p className="text-lg text-muted-foreground mb-6">
+        <p className="text-base text-muted-foreground mb-6">
           <InteractiveFragment allNotes={allNotes} glossaryTerms={glossaryTerms} baseKeyPrefix="intro-2">
             Braindump is my personal [[digital garden]], a space to cultivate and connect my thoughts, learnings, and ideas over time. Unlike a traditional blog or a fleeting note-taking app, a digital garden is a living collection of interconnected notes that evolve as you do.
           </InteractiveFragment>
         </p>
 
-        <h2 className="text-2xl md:text-3xl font-semibold mt-8 mb-4 text-foreground">
+        <h2 className="text-xl md:text-3xl font-semibold mt-8 mb-4 text-foreground">
           What's Inside?
         </h2>
-        <p className="text-lg text-muted-foreground mb-4">
+        <p className="text-base text-muted-foreground mb-4">
           My garden is made up of two main types of notes:
         </p>
         <ul className="list-disc list-inside text-lg text-muted-foreground mb-6 space-y-3 pl-4">
