@@ -4,7 +4,10 @@ id: "project-phoenix"
 title: "Project Phoenix"
 path: "projects/project-phoenix"
 type: "topic"
-tags: ["active-project", "planning", "example"]
+tags:
+  - "new"
+  - "core-idea"
+  - "example"
 created: "2025-05-27"
 lastUpdated: "2025-05-27"
 ---

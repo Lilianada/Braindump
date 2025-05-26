@@ -6,8 +6,9 @@ path: "zettels/note-a"
 slug: "note-a"
 type: "note"
 tags:
-  - "concept"
-  - "idea"
+  - "zettel"
+  - "note"
+  - "learning"
 created: "2025-05-26"
 lastUpdated: "2025-05-26"
 ---
