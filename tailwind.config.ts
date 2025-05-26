@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -25,7 +26,7 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
+					DEFAULT: 'hsl(var(--primary))', // hsl(348 69.5% 56.8%)
 					foreground: 'hsl(var(--primary-foreground))'
 				},
 				secondary: {
@@ -68,6 +69,14 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			fontFamily: {
+        'roboto-mono': ['"Roboto Mono"', 'monospace'],
+        'inter': ['"Inter"', 'sans-serif'],
+        'kalam': ['"Kalam"', 'cursive'],
+        'indie-flower': ['"Indie Flower"', 'cursive'],
+        'lancelot': ['"Lancelot"', 'cursive'], // 'serif' or 'fantasy' might be better fallbacks for Lancelot
+        'cormorant-upright': ['"Cormorant Upright"', 'serif'],
+      },
 			keyframes: {
 				'accordion-down': {
 					from: {

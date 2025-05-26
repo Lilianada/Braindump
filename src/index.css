@@ -1,11 +1,12 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 100%; /* Light mode background */
+    --foreground: 222.2 84% 4.9%; /* Light mode text */
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -13,8 +14,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 348 69.5% 56.8%; /* Custom primary color */
+    --primary-foreground: 0 0% 100%; /* Text on primary color - white for good contrast */
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -30,30 +31,22 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 348 69.5% 56.8%; /* Ring color to match primary */
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Custom font variables */
+    --font-roboto-mono: "Roboto Mono", monospace;
+    --font-inter: "Inter", sans-serif;
+    --font-kalam: "Kalam", cursive;
+    --font-indie-flower: "Indie Flower", cursive;
+    --font-lancelot: "Lancelot", cursive;
+    --font-cormorant-upright: "Cormorant Upright", serif;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 222.2 84% 4.9%; /* Dark mode background */
+    --foreground: 210 40% 98%; /* Dark mode text */
 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -61,8 +54,8 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 348 69.5% 56.8%; /* Custom primary color */
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -78,15 +71,7 @@
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --ring: 348 69.5% 56.8%; /* Ring color to match primary */
   }
 }
 
@@ -97,5 +82,29 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-roboto-mono); /* Default font */
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
+
+  body.font-roboto-mono { font-family: var(--font-roboto-mono); }
+  body.font-inter { font-family: var(--font-inter); }
+  body.font-kalam { font-family: var(--font-kalam); }
+  body.font-indie-flower { font-family: var(--font-indie-flower); }
+  body.font-lancelot { font-family: var(--font-lancelot); }
+  body.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
+
+  /* Ensure html also gets font for consistency if needed */
+  html {
+    font-family: var(--font-roboto-mono); /* Default font */
+  }
+  html.font-roboto-mono { font-family: var(--font-roboto-mono); }
+  html.font-inter { font-family: var(--font-inter); }
+  html.font-kalam { font-family: var(--font-kalam); }
+  html.font-indie-flower { font-family: var(--font-indie-flower); }
+  html.font-lancelot { font-family: var(--font-lancelot); }
+  html.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
 }
+
+/* Remove default App.css styling */
+/* #root, .logo, .card, .read-the-docs styling can be removed or adjusted as needed */
+/* For now, I'll clear App.css */
