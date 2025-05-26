@@ -118,7 +118,6 @@ const ContentPage: React.FC = () => {
     }
     const prev = currentIndex > 0 ? allNotesAndTopics[currentIndex - 1] : null;
     const next = currentIndex < allNotesAndTopics.length - 1 ? allNotesAndTopics[currentIndex + 1] : null;
-   console.log(contentItem)
     return { prevItem: prev, nextItem: next };
   }, [contentItem, allNotesAndTopics]);
 
@@ -204,7 +203,7 @@ const ContentPage: React.FC = () => {
   return (
     <article className="container mx-auto py-8 animate-fade-in">
       <header className="mb-8">
-        <h1 className="text-2xl font-medium capitalize mb-2">{contentItem.title}</h1>
+        <h1 className="text-4xl font-bold text-primary mb-2">{contentItem.title}</h1>
         {/* Metadata section from frontmatter/contentItem properties */}
         <div className="mt-3 mb-6 text-sm text-muted-foreground space-y-1">
           {contentItem.lastUpdated && (
@@ -214,13 +213,12 @@ const ContentPage: React.FC = () => {
           )}
           {category && (
              <div className="flex items-center">
-              <Info className="h-4 w-4 mr-2" />
               <span>Category: {category}</span>
             </div>
           )}
           {contentItem.frontmatter?.source && (
              <div className="flex items-center">
-               <Info className="h-4 w-4 mr-2" />
+          
                 <span>Source: {contentItem.frontmatter.source}</span>
              </div>
           )}
@@ -229,7 +227,7 @@ const ContentPage: React.FC = () => {
         {contentItem.tags && contentItem.tags.length > 0 && (
           <div className="mb-6">
             <div className="flex items-center text-sm text-muted-foreground mb-2">
-              <TagIcon className="h-4 w-4 mr-2" />
+      
               <span>Tags:</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -261,8 +259,8 @@ const ContentPage: React.FC = () => {
         {contentItem && (
           <>
             <div>
-              <h3 className="mb-3 text-lg font-semibold flex items-center">
-                <Link2 className="h-5 w-5 mr-2 text-primary" />
+              <h3 className="mb-3 text-base font-medium flex items-center">
+                
                 Backlinks
               </h3>
               {backlinks.length > 0 ? (
@@ -281,8 +279,7 @@ const ContentPage: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="mb-3 text-lg font-semibold flex items-center">
-                <Users className="h-5 w-5 mr-2 text-primary" />
+              <h3 className="mb-3 text-base font-medium flex items-center">
                 Related Notes
               </h3>
               {relatedNotes.length > 0 ? (
