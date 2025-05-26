@@ -9,6 +9,7 @@ import CustomHeading from './markdown/CustomHeading';
 import CustomParagraph from './markdown/CustomParagraph';
 import CustomLink from './markdown/CustomLink';
 import CustomCodeBlock from './markdown/CustomCodeBlock';
+import { extractMarkdownBody } from '@/lib/utils';
 
 interface SimpleRendererProps {
   content: string;
@@ -23,10 +24,8 @@ const SimpleRenderer: React.FC<SimpleRendererProps> = ({ content, setTocItems, a
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content]); // setTocItems is stable
 
-  // Make sure we're not rendering frontmatter
-  const cleanContent = content.trim().startsWith('---') 
-    ? content.replace(/^---[\s\S]*?---\s*/m, '') 
-    : content;
+  // Extract markdown body without frontmatter
+  const markdownBody = extractMarkdownBody(content);
 
   return (
     <div className="prose dark:prose-invert max-w-none text-foreground space-y-3 text-sm">
@@ -42,7 +41,7 @@ const SimpleRenderer: React.FC<SimpleRendererProps> = ({ content, setTocItems, a
           code: CustomCodeBlock,
         }}
       >
-        {cleanContent}
+        {markdownBody}
       </ReactMarkdown>
     </div>
   );

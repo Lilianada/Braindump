@@ -22,42 +22,54 @@ function parseFrontmatterAndContent(rawContent: string): { frontmatter: Record<s
     return { frontmatter: {}, content: rawContent };
   }
 
-  const frontmatterBlock = match[1].trim();
+  const frontmatterBlock = match[1];
   const content = rawContent; // Keep the entire content including frontmatter
   
   const frontmatter: Record<string, any> = {};
   const lines = frontmatterBlock.split('\n');
-  let currentListKey: string | null = null;
-
-  lines.forEach(line => {
-    const trimmedLine = line.trim();
-    if (trimmedLine.startsWith('- ')) { // Handling list items, e.g. for tags
-      if (currentListKey && Array.isArray(frontmatter[currentListKey])) {
-        const value = line.substring(line.indexOf('-') + 1).trim().replace(/^["']|["']$/g, '');
-        frontmatter[currentListKey].push(value);
-      }
-    } else {
-      const colonIndex = line.indexOf(':');
-      if (colonIndex > 0) {
-        const key = line.substring(0, colonIndex).trim();
-        const value = line.substring(colonIndex + 1).trim();
-        
-        if (value === '' && (line.endsWith(':'))) { // Potential start of a list (e.g., tags:)
-          frontmatter[key] = [];
-          currentListKey = key;
-        } else {
-          frontmatter[key] = value.replace(/^["']|["']$/g, ''); // Remove surrounding quotes
-          if(key === currentListKey) currentListKey = null; 
+  
+  let currentKey: string | null = null;
+  let isInList = false;
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    
+    // Skip empty lines
+    if (!line) continue;
+    
+    // Check if this line starts a list item
+    if (line.startsWith('- ')) {
+      if (currentKey) {
+        // If we're not already in a list for this key, initialize it
+        if (!isInList) {
+          frontmatter[currentKey] = [];
+          isInList = true;
         }
+        // Add the list item (removing the dash and trimming)
+        const value = line.substring(2).trim().replace(/^["']|["']$/g, '');
+        frontmatter[currentKey].push(value);
+      }
+      continue;
+    }
+    
+    // Check if this line defines a new key
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > 0) {
+      currentKey = line.substring(0, colonIndex).trim();
+      let value = line.substring(colonIndex + 1).trim();
+      
+      // Check if this is the start of a list
+      if (!value) {
+        isInList = true;
+        frontmatter[currentKey] = [];
+      } else {
+        // This is a simple key-value pair
+        isInList = false;
+        // Remove surrounding quotes if present
+        value = value.replace(/^["']|["']$/g, '');
+        frontmatter[currentKey] = value;
       }
     }
-  });
-
-  // Ensure tags are always an array, even if defined as a single string in frontmatter
-  if (frontmatter.tags && typeof frontmatter.tags === 'string') {
-    frontmatter.tags = [frontmatter.tags];
-  } else if (!frontmatter.tags) {
-    frontmatter.tags = [];
   }
 
   return { frontmatter, content };
@@ -92,11 +104,20 @@ export const getAllFileContentItems = (forceRefresh: boolean = false): ContentIt
       slug: frontmatter.slug || contentPath.split('/').pop(),
       created: frontmatter.created,
       lastUpdated: frontmatter.lastUpdated,
-      tags: frontmatter.tags || [],
+      tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : 
+            (typeof frontmatter.tags === 'string' ? [frontmatter.tags] : []),
       content: content,
       frontmatter: frontmatter,
       children: [] 
     };
+    
+    // Add any additional frontmatter fields to the item directly
+    for (const key in frontmatter) {
+      if (!(key in item) && key !== 'content' && key !== 'children') {
+        item[key as keyof ContentItem] = frontmatter[key];
+      }
+    }
+    
     flatItems.push(item);
   }
 

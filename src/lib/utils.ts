@@ -30,7 +30,6 @@ export const extractMarkdownBody = (markdownContent: string | undefined | null):
   
   // Check if markdownContent starts with --- which indicates frontmatter
   if (markdownContent.trim().startsWith('---')) {
-    // Find the second --- which closes frontmatter
     const secondDashIndex = markdownContent.indexOf('---', 3);
     if (secondDashIndex !== -1) {
       // Return all content after the second ---
