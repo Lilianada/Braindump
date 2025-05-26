@@ -16,7 +16,7 @@ source: "Example Source"
 # Concept Alpha
 
 This concept discusses fundamental ideas.
-It is related to [[Note A]] and also mentions [[Log 001]].
+It is related to [[brave]] and also mentions [[001]].
 
 We should also define **Term X** here again to see the popover. This page also mentions **Brave** character.
 
