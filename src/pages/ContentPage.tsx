@@ -261,7 +261,7 @@ const ContentPage: React.FC = () => {
         {contentItem && (
           <>
             <div>
-              <h3 className="mb-3 text-lg font-semibold flex items-center">
+              <h3 className="mb-3 text-base font-medium flex items-center">
                 <Link2 className="h-5 w-5 mr-2 text-primary" />
                 Backlinks
               </h3>
@@ -281,7 +281,7 @@ const ContentPage: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="mb-3 text-lg font-semibold flex items-center">
+              <h3 className="mb-3 text-base font-medium flex items-center">
                 <Users className="h-5 w-5 mr-2 text-primary" />
                 Related Notes
               </h3>
