@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation, useOutletContext } from 'react-router-dom';
-import { findContentByPath, getAllContentItems, ContentItem } from '@/content/mockData'; // mockContentData removed from imports
+import { useParams, useLocation, useOutletContext, Link } from 'react-router-dom';
+import { findContentByPath, getAllContentItems, ContentItem } from '@/content/mockData';
 import { AlertCircle, FileText } from 'lucide-react';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { TocItem } from '@/types';
@@ -9,16 +8,14 @@ import { TocItem } from '@/types';
 const ContentPage: React.FC = () => {
   const params = useParams();
   const location = useLocation();
-  const [contentItem, setContentItem] = useState<ContentItem | null | undefined>(undefined); // Initialize to undefined for loading state
+  const [contentItem, setContentItem] = useState<ContentItem | null | undefined>(undefined);
   const { setTocItems } = useOutletContext<{ setTocItems: React.Dispatch<React.SetStateAction<TocItem[]>> }>();
 
   const [allNotesAndTopics, setAllNotesAndTopics] = useState<ContentItem[]>([]);
   const [glossaryTerms, setGlossaryTerms] = useState<ContentItem[]>([]);
 
   useEffect(() => {
-    // Fetch all content items once to be used for linking and glossary
-    const allItems = getAllContentItems(true); // true for forceRefresh, remove mockContentData argument
-    
+    const allItems = getAllContentItems();
     const notesAndTopics = allItems.filter(item => 
       item.type === 'note' || 
       item.type === 'topic' || 
@@ -32,18 +29,16 @@ const ContentPage: React.FC = () => {
 
     const path = params['*'];
     if (path) {
-      // console.log(`ContentPage: Attempting to find content for path: ${path}`);
       const item = findContentByPath(path);
-      // console.log(`ContentPage: Found item for path ${path}:`, item);
-      setContentItem(item); // This can be undefined if not found, or null explicitly if logic changes
-      if (!item || !item.content) { // If item is found but has no content (e.g. folder page not yet handled this way)
+      setContentItem(item);
+      if (!item || !item.content) { 
         setTocItems([]);
       }
     } else {
-      setContentItem(null); // No path, so no content
+      setContentItem(null);
       setTocItems([]);
     }
-  }, [params, location.pathname, setTocItems]); // location.pathname ensures re-fetch on path change
+  }, [params, location.pathname, setTocItems]);
 
   if (contentItem === undefined) {
     return (
@@ -68,13 +63,12 @@ const ContentPage: React.FC = () => {
     );
   }
 
-  // Handling for 'folder' type pages
   if (contentItem.type === 'folder') {
-     React.useEffect(() => { // Effect to clear TOC for folder pages
-        setTocItems([]);
-     }, [setTocItems, contentItem.path]); // Depend on contentItem.path to re-run if folder changes
+    React.useEffect(() => {
+      setTocItems([]);
+    }, [setTocItems, contentItem.path]);
 
-     return (
+    return (
       <div className="container mx-auto py-8 animate-fade-in">
         <header className="mb-8">
           <h1 className="text-4xl font-bold text-primary mb-2">{contentItem.title}</h1>
@@ -84,16 +78,14 @@ const ContentPage: React.FC = () => {
         </header>
         <p className="text-muted-foreground mb-4">This is a category or folder. Select an item from its children in the sidebar, or this folder might have its own content below.</p>
         
-        {/* Render content if folder itself has content (e.g. an _index.md equivalent) */}
         {contentItem.content ? (
-           <SimpleRenderer 
+          <SimpleRenderer 
             content={contentItem.content} 
-            setTocItems={setTocItems} // TOC will be for the folder's own content
+            setTocItems={setTocItems} 
             allNotes={allNotesAndTopics}
             glossaryTerms={glossaryTerms}
           />
         ) : (
-          // Display children if no direct content for the folder
           contentItem.children && contentItem.children.length > 0 && (
             <div>
               <h2 className="text-xl font-semibold mb-2 mt-6">Contents:</h2>
@@ -109,26 +101,24 @@ const ContentPage: React.FC = () => {
             </div>
           )
         )}
-        {/* If no content AND no children, show a specific message */}
         {!contentItem.content && (!contentItem.children || contentItem.children.length === 0) && (
-            <p className="text-muted-foreground">This folder is currently empty or has no overview content.</p>
+          <p className="text-muted-foreground">This folder is currently empty or has no overview content.</p>
         )}
       </div>
     );
   }
 
-  // Default rendering for notes, topics, etc.
   return (
     <article className="container mx-auto py-8 animate-fade-in">
       <header className="mb-8">
         <h1 className="text-4xl font-bold text-primary mb-2">{contentItem.title}</h1>
         <p className="text-sm text-muted-foreground">
           Type: {contentItem.type} | Path: /content/{contentItem.path}
-          {contentItem.created && ` | Created: ${contentItem.created}`}
-          {contentItem.lastUpdated && ` | Updated: ${contentItem.lastUpdated}`}
+          {contentItem.created && ` | Created: ${new Date(contentItem.created).toLocaleDateString()}`}
+          {contentItem.lastUpdated && ` | Updated: ${new Date(contentItem.lastUpdated).toLocaleDateString()}`}
         </p>
-        {contentItem.frontmatter?.source && ( // Example of showing other frontmatter
-             <p className="text-xs text-muted-foreground">Source: {contentItem.frontmatter.source}</p>
+        {contentItem.frontmatter?.source && (
+          <p className="text-xs text-muted-foreground">Source: {contentItem.frontmatter.source}</p>
         )}
         {contentItem.tags && contentItem.tags.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-2">
@@ -143,7 +133,7 @@ const ContentPage: React.FC = () => {
         <SimpleRenderer 
           content={contentItem.content} 
           setTocItems={setTocItems}
-          allNotes={allNotesAndTopics} // Changed prop name
+          allNotes={allNotesAndTopics}
           glossaryTerms={glossaryTerms}
         />
       ) : (
