@@ -73,7 +73,7 @@ const Layout: React.FC = () => {
           <PopoverTrigger asChild>
             <Button variant="outline" size="icon" className="rounded-full shadow-lg">
               <ListOrdered className="h-5 w-5" />
-              <span className="sr-only">Table of Contents</span>
+              <span className="sr-only">On This Page</span>
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-64 mb-2 p-0" side="top" align="end">

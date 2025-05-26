@@ -101,7 +101,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
                 ))}
               </ul>
             ) : (
-              <p className="text-xs text-muted-foreground">No headings found for TOC.</p>
+              <p className="text-xs text-muted-foreground">No headings found.</p>
             )}
           </div>
           
