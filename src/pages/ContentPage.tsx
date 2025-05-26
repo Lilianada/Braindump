@@ -163,9 +163,9 @@ const ContentPage: React.FC = () => {
     return (
       <div className="container mx-auto py-8 animate-fade-in">
         <header className="mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-2">{contentItem.title}</h1>
+          <h1 className="capitalize text-3xl font-bold mb-2">{contentItem.title}</h1>
           <p className="text-sm text-muted-foreground">
-            Type: {contentItem.type} | Path: /content/{contentItem.path}
+            Type: {contentItem.type} <br/> Path: /content/{contentItem.path}
           </p>
         </header>
         <p className="text-muted-foreground mb-4">This is a category or folder. Select an item from its children in the sidebar, or this folder might have its own content below.</p>
