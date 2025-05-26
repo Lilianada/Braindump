@@ -18,15 +18,8 @@ const CustomHeading: React.FC<CustomHeadingProps> = ({ level, children, setTocIt
           // Create a new array, add the item, then sort
           const updatedItems = [...prevItems, newTocItem];
           updatedItems.sort((a, b) => {
-            // A simple sort: first by level, then by order of appearance (implicit if not sorting by text)
-            // For more sophisticated sorting (like document order for same-level headers),
-            // an index or a more complex tracking mechanism would be needed.
-            // This sort keeps levels grouped.
             if (a.level !== b.level) return a.level - b.level;
-            // If you need to maintain appearance order strictly for same level headers,
-            // you might need to rely on the order they are added or assign an index.
-            // For now, this basic sort will group by level.
-            return 0; // Or implement a secondary sort criterion if needed
+            return 0;
           });
           return updatedItems;
         }

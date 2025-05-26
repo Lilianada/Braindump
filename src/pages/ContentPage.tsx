@@ -118,6 +118,7 @@ const ContentPage: React.FC = () => {
     }
     const prev = currentIndex > 0 ? allNotesAndTopics[currentIndex - 1] : null;
     const next = currentIndex < allNotesAndTopics.length - 1 ? allNotesAndTopics[currentIndex + 1] : null;
+   console.log(contentItem)
     return { prevItem: prev, nextItem: next };
   }, [contentItem, allNotesAndTopics]);
 
@@ -203,12 +204,11 @@ const ContentPage: React.FC = () => {
   return (
     <article className="container mx-auto py-8 animate-fade-in">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold text-primary mb-2">{contentItem.title}</h1>
+        <h1 className="text-2xl font-medium capitalize mb-2">{contentItem.title}</h1>
         {/* Metadata section from frontmatter/contentItem properties */}
         <div className="mt-3 mb-6 text-sm text-muted-foreground space-y-1">
           {contentItem.lastUpdated && (
             <div className="flex items-center">
-              <CalendarDays className="h-4 w-4 mr-2" />
               <span>Last Updated: {new Date(contentItem.lastUpdated).toLocaleDateString()}</span>
             </div>
           )}
@@ -261,7 +261,7 @@ const ContentPage: React.FC = () => {
         {contentItem && (
           <>
             <div>
-              <h3 className="mb-3 text-base font-medium flex items-center">
+              <h3 className="mb-3 text-lg font-semibold flex items-center">
                 <Link2 className="h-5 w-5 mr-2 text-primary" />
                 Backlinks
               </h3>
@@ -281,7 +281,7 @@ const ContentPage: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="mb-3 text-base font-medium flex items-center">
+              <h3 className="mb-3 text-lg font-semibold flex items-center">
                 <Users className="h-5 w-5 mr-2 text-primary" />
                 Related Notes
               </h3>
