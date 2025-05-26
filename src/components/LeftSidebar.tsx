@@ -1,12 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Tag as TagIcon, Home, Info, FileText as FileTextIcon, ChevronDown, ChevronRight, Folder, File as FileIcon } from 'lucide-react';
 import { getContentTree, getAllContentItems, ContentItem } from '@/content/mockData';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { toast } from 'sonner';
 import {
   Collapsible,
   CollapsibleContent,
@@ -47,7 +45,7 @@ const CollapsibleNavItem: React.FC<{ item: ContentItem; level?: number }> = ({ i
   const hasChildren = item.children && item.children.length > 0;
   const colorClass = iconColors[Math.min(level, iconColors.length - 1)];
 
-  const iconMargin = "mr-1"; // Adjusted margin for icon from mr-1.5
+  const iconMargin = "mr-1"; 
 
   if (!hasChildren) {
     return (
@@ -105,15 +103,13 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
 
   const [contentSections, setContentSections] = useState<ContentItem[]>([]);
   const [uniqueTags, setUniqueTags] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const rawContentTree = getContentTree(true);
-    // These are the paths of files at the root of content_files that are handled by the "Pages" section
     const rootContentPathsToExclude = ['index', 'about', 'docs']; 
     
     const filteredContentTree = rawContentTree.filter(item => {
-      // Exclude if item is a file-like (not a folder) AND its path is in rootContentPathsToExclude
-      // AND it's a root path (doesn't contain '/')
       if (item.type !== 'folder' && rootContentPathsToExclude.includes(item.path) && !item.path.includes('/')) {
         return false;
       }
@@ -124,20 +120,31 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
     const allItems = getAllContentItems();
     const tagsSet = new Set<string>();
     allItems.forEach(item => {
-      item.tags?.forEach(tag => tagsSet.add(tag));
+      if (item.tags) {
+        if (Array.isArray(item.tags)) {
+          item.tags.forEach(tag => {
+            const trimmedTag = tag.trim();
+            if (trimmedTag) tagsSet.add(trimmedTag);
+          });
+        } else if (typeof item.tags === 'string') {
+          item.tags.split(',').forEach(tag => {
+            const trimmedTag = tag.trim();
+            if (trimmedTag) tagsSet.add(trimmedTag);
+          });
+        }
+      }
     });
     setUniqueTags(Array.from(tagsSet).sort());
 
     if (allItems.length > 0 && tagsSet.size === 0) {
-      console.warn("LeftSidebar: No tags found in any content items. Ensure tags are defined in your markdown frontmatter (e.g., --- tags: [tag1, tag2] ---).");
+      console.warn("LeftSidebar: No tags found in any content items. Ensure tags are defined in your markdown frontmatter (e.g., --- tags: [tag1, tag2] --- or --- tags: tag1, tag2 ---).");
+    } else if (tagsSet.size > 0) {
+        console.log("LeftSidebar: Tags found:", Array.from(tagsSet).sort());
     }
   }, []);
 
   const handleTagClick = (tag: string) => {
-    toast.info(`Clicked tag: ${tag}`, {
-      description: "Filtering by tags will be implemented soon.",
-    });
-    // Future: navigate or filter based on tag
+    navigate(`/tags/${encodeURIComponent(tag)}`);
   };
 
   return (
@@ -182,6 +189,9 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
                       variant="secondary"
                       className="cursor-pointer hover:bg-accent"
                       onClick={() => handleTagClick(tag)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleTagClick(tag);}}
                     >
                       <TagIcon className="h-3 w-3 mr-1" /> {tag}
                     </Badge>
@@ -197,4 +207,3 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
 };
 
 export default LeftSidebar;
-

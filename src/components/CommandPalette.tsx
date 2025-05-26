@@ -18,7 +18,7 @@ interface CommandPaletteProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const pageAndNoteTypes: ContentItem['type'][] = ['note', 'topic', 'log', 'dictionary_entry'];
+const pageAndNoteTypes: ContentItem['type'][] = ['note', 'topic', 'log', 'dictionary_entry', 'glossary_term'];
 
 const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) => {
   const navigate = useNavigate();
@@ -31,11 +31,23 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
       const fetchedItems = getAllContentItems();
       setAllItems(fetchedItems);
 
-      const tags = new Set<string>();
+      const tagsSet = new Set<string>();
       fetchedItems.forEach(item => {
-        item.tags?.forEach(tag => tags.add(tag));
+        if (item.tags) {
+          if (Array.isArray(item.tags)) {
+            item.tags.forEach(tag => {
+              const trimmedTag = tag.trim();
+              if (trimmedTag) tagsSet.add(trimmedTag);
+            });
+          } else if (typeof item.tags === 'string') {
+            item.tags.split(',').forEach(tag => {
+              const trimmedTag = tag.trim();
+              if (trimmedTag) tagsSet.add(trimmedTag);
+            });
+          }
+        }
       });
-      setUniqueTags(Array.from(tags).sort());
+      setUniqueTags(Array.from(tagsSet).sort());
 
       const fetchedCategories = fetchedItems.filter(item => item.type === 'folder');
       setCategories(fetchedCategories);
@@ -49,6 +61,14 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
 
   const handleSelectContent = (path: string) => {
     runCommand(() => navigate(`/content/${path}`));
+  };
+
+  const handleSelectTag = (tag: string) => {
+    runCommand(() => navigate(`/tags/${encodeURIComponent(tag)}`));
+  };
+
+  const handleViewAllTags = () => {
+    runCommand(() => navigate('/tags'));
   };
 
   return (
@@ -85,10 +105,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
           <CommandItem
             key="command-view-tags"
             value="View all tags"
-            onSelect={() => {
-              toast.info('View All Tags action selected.', { description: 'Tags are listed below. Advanced tag view is planned.' });
-              onOpenChange(false);
-            }}
+            onSelect={handleViewAllTags}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
           >
             <TagsIcon className="mr-2 h-4 w-4" />
@@ -144,10 +161,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
                 <CommandItem
                   key={`tag-${tag}`}
                   value={tag}
-                  onSelect={() => {
-                    toast.info(`Selected tag: ${tag}`, { description: 'Navigating to tag specific page or filtering by this tag will be implemented soon.'});
-                    onOpenChange(false);
-                  }}
+                  onSelect={() => handleSelectTag(tag)}
                   className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
                 >
                   <Tag className="mr-2 h-4 w-4" />

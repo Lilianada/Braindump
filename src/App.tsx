@@ -8,6 +8,8 @@ import IndexPage from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
 import DocsPage from "./pages/DocsPage";
 import ContentPage from "./pages/ContentPage";
+import TagsPage from "./pages/TagsPage"; // Import TagsPage
+import TagDetailPage from "./pages/TagDetailPage"; // Import TagDetailPage
 import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -26,7 +28,9 @@ const App = () => (
               <Route path="/" element={<IndexPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/docs" element={<DocsPage />} />
-              <Route path="/content/*" element={<ContentPage />} /> {/* Catch-all for content */}
+              <Route path="/content/*" element={<ContentPage />} />
+              <Route path="/tags" element={<TagsPage />} /> {/* Add route for TagsPage */}
+              <Route path="/tags/:tagName" element={<TagDetailPage />} /> {/* Add route for TagDetailPage */}
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
