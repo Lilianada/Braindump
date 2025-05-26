@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Tag, FolderOpen, Search as SearchIcon, Filter as FilterIcon, ArrowUpDown, Tags as TagsIcon } from 'lucide-react';
+import { FileText, Tag, FolderOpen, ArrowUpDown, Filter as FilterIcon, Tags as TagsIcon } from 'lucide-react';
 import {
   CommandDialog,
   CommandInput,
@@ -62,7 +61,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             key="command-sort"
             value="Sort items by criteria"
             onSelect={() => {
-              console.log('Command Palette: Sort action triggered. Future: Implement sort options (e.g., by title, date).');
+              console.log('Command Palette: "Sort Items" selected. Full functionality to sort items by title, date, or type is planned.');
               onOpenChange(false);
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
@@ -74,7 +73,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             key="command-filter"
             value="Filter items by type or status"
             onSelect={() => {
-              console.log('Command Palette: Filter action triggered. Future: Implement filter options (e.g., by type, tags).');
+              console.log('Command Palette: "Filter Items" selected. Full functionality to filter items by type, tags, or other criteria is planned.');
               onOpenChange(false);
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
@@ -86,8 +85,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             key="command-view-tags"
             value="View all tags"
             onSelect={() => {
-              console.log('Command Palette: View All Tags action triggered. Future: Navigate to a dedicated tags page or show tag cloud.');
-              // For now, tags are already listed below. This could be enhanced.
+              console.log('Command Palette: "View All Tags" selected. Full functionality for a dedicated tag view or advanced tag-based filtering is planned. Tags are currently listed in their own group.');
               onOpenChange(false);
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
