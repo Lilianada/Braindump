@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { ContentItem } from '@/content/mockData';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { extractMarkdownBody } from '@/lib/utils';
+import SimpleRenderer from '@/components/SimpleRenderer'; // Added import
+import { TocItem } from '@/types'; // Added import for dummy function type
 
 export const renderInteractiveText = (
   textNode: string,
@@ -19,15 +21,13 @@ export const renderInteractiveText = (
   );
   
   const combinedRegexParts = [];
-  // Regex for [[wiki links]] - Group 1
   combinedRegexParts.push(`\\[\\[(.*?)\\]\\]`); 
-  // Regex for glossary terms - Group 2
   if (escapedGlossaryTitles.length > 0) {
     combinedRegexParts.push(`\\b(${escapedGlossaryTitles.join('|')})\\b`);
   }
 
   if (combinedRegexParts.length === 0) {
-    return [remainingText]; // Return original text if no patterns to match
+    return [remainingText];
   }
 
   const combinedRegex = new RegExp(combinedRegexParts.join('|'), 'gi');
@@ -43,13 +43,14 @@ export const renderInteractiveText = (
       parts.push(remainingText.substring(lastIndex, matchIndex));
     }
 
-    const wikiLinkTitle = match[1]; // Content of [[...]]
-    const glossaryWord = match[2] && escapedGlossaryTitles.length > 0 ? match[2] : null; // Matched glossary word
+    const wikiLinkTitle = match[1]; 
+    const glossaryWord = match[2] && escapedGlossaryTitles.length > 0 ? match[2] : null;
 
-    if (wikiLinkTitle) { // Matched a [[wiki link]]
+    if (wikiLinkTitle) {
       const note = allNotes.find(n => n.title.toLowerCase() === wikiLinkTitle.toLowerCase());
       if (note) {
-        const previewContent = note.content 
+        const fullMarkdownForPopover = note.content ? extractMarkdownBody(note.content.replace(/\\n/g, '\n')) : '';
+        const plainTextPreview = note.content 
                                ? extractMarkdownBody(note.content.replace(/\\n/g, '\n')).split('\n')[0] 
                                : 'No preview available.';
         parts.push(
@@ -61,15 +62,23 @@ export const renderInteractiveText = (
             </HoverCardTrigger>
             <HoverCardContent className="w-80 bg-popover text-popover-foreground p-4 shadow-md rounded-md border text-sm">
               <h4 className="font-semibold mb-1 text-base">{note.title}</h4>
-              <p>{previewContent || "No content preview."}</p>
+              {note.content && fullMarkdownForPopover ? (
+                <SimpleRenderer
+                  content={fullMarkdownForPopover}
+                  allNotes={[]} 
+                  glossaryTerms={[]} 
+                  setTocItems={(() => {}) as React.Dispatch<React.SetStateAction<TocItem[]>>} 
+                />
+              ) : (
+                <p>{plainTextPreview}</p>
+              )}
             </HoverCardContent>
           </HoverCard>
         );
-      } else { // Wiki link target not found
+      } else { 
         parts.push(
           <HoverCard key={`${baseKey}-wikilink-missing-${partIndex}`}>
             <HoverCardTrigger asChild>
-              {/* Using custom-link for background, but overriding text color to indicate missing link */}
               <span className="custom-link !text-destructive cursor-help">
                 {`[[${wikiLinkTitle}]]`}
               </span>
@@ -80,12 +89,12 @@ export const renderInteractiveText = (
           </HoverCard>
         );
       }
-    } else if (glossaryWord) { // Matched a glossary term
+    } else if (glossaryWord) {
       const term = glossaryTerms.find(t => t.title.toLowerCase() === glossaryWord.toLowerCase());
-      // Ensure term and content for hover exists
-      const termContentForHover = term?.content ? extractMarkdownBody(term.content.replace(/\\n/g, '\n')).split('\n')[0] : '';
+      const termFullMarkdown = term?.content ? extractMarkdownBody(term.content.replace(/\\n/g, '\n')) : '';
+      const termPlainTextPreview = term?.content ? extractMarkdownBody(term.content.replace(/\\n/g, '\n')).split('\n')[0] : '';
 
-      if (term && termContentForHover) {
+      if (term && term.title) {
         parts.push(
           <HoverCard key={`${baseKey}-glossary-${partIndex}`}>
             <HoverCardTrigger asChild>
@@ -93,19 +102,24 @@ export const renderInteractiveText = (
             </HoverCardTrigger>
             <HoverCardContent className="w-80 bg-popover text-popover-foreground p-4 shadow-md rounded-md border text-sm">
               <h4 className="font-semibold mb-1 text-base">{term.title}</h4>
-              <p>{termContentForHover}</p>
+              {term.content && termFullMarkdown ? (
+                <SimpleRenderer
+                  content={termFullMarkdown}
+                  allNotes={[]}
+                  glossaryTerms={[]}
+                  setTocItems={(() => {}) as React.Dispatch<React.SetStateAction<TocItem[]>>}
+                />
+              ) : (
+                <p>{termPlainTextPreview || "No definition preview available."}</p>
+              )}
             </HoverCardContent>
           </HoverCard>
         );
-      } else { // Glossary term found but no content for hover, or term itself not found (shouldn't happen if regex matched)
-        parts.push(glossaryWord); // Fallback to just displaying the word
+      } else { 
+        parts.push(glossaryWord); 
       }
     }
-    // This 'else' should ideally not be reached if the regex correctly captures one or the other.
-    // else { 
-    //   parts.push(match[0]); // Fallback for unforeseen cases
-    // }
-
+    
     lastIndex = combinedRegex.lastIndex;
     partIndex++;
   }
@@ -114,5 +128,5 @@ export const renderInteractiveText = (
     parts.push(remainingText.substring(lastIndex));
   }
   
-  return parts.length > 0 ? parts : [textNode]; // Ensure always returning an array, even if just original text
+  return parts.length > 0 ? parts : [textNode];
 };
