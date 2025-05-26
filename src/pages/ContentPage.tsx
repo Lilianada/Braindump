@@ -4,12 +4,15 @@ import { findContentByPath, getAllContentItems, ContentItem } from '@/content/mo
 import { AlertCircle, FileText } from 'lucide-react';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { TocItem } from '@/types';
+import { AppContextType } from '@/components/Layout'; // Import the context type
 
 const ContentPage: React.FC = () => {
   const params = useParams();
   const location = useLocation();
   const [contentItem, setContentItem] = useState<ContentItem | null | undefined>(undefined);
-  const { setTocItems } = useOutletContext<{ setTocItems: React.Dispatch<React.SetStateAction<TocItem[]>> }>();
+  
+  // Use the new context type
+  const { setTocItems, setCurrentContentItem, setAllNotesForContext } = useOutletContext<AppContextType>();
 
   const [allNotesAndTopics, setAllNotesAndTopics] = useState<ContentItem[]>([]);
   const [glossaryTerms, setGlossaryTerms] = useState<ContentItem[]>([]);
@@ -23,6 +26,7 @@ const ContentPage: React.FC = () => {
       item.type === 'dictionary_entry'
     );
     setAllNotesAndTopics(notesAndTopics);
+    setAllNotesForContext(notesAndTopics); // Set for context
 
     const terms = allItems.filter(item => item.type === 'glossary_term');
     setGlossaryTerms(terms);
@@ -30,28 +34,22 @@ const ContentPage: React.FC = () => {
     const path = params['*'];
     if (path) {
       const item = findContentByPath(path);
-      setContentItem(item); // Update state, will trigger re-render
+      setContentItem(item);
+      setCurrentContentItem(item); // Set for context
 
       if (item) {
-        // If the loaded item has no main content (e.g., a folder overview or note body),
-        // then the TOC should be empty. SimpleRenderer is only invoked if item.content exists.
-        // If item.content does NOT exist, SimpleRenderer's useEffect for TOC won't run.
-        // So, we explicitly clear TOC items here.
         if (!item.content) {
           setTocItems([]);
         }
-        // If item.content *does* exist, SimpleRenderer will be rendered,
-        // and its internal useEffect will take care of setting the TOC based on that content.
       } else {
-        // Item not found
         setTocItems([]);
       }
     } else {
-      // No path (e.g. /content/ without specific item), treat as not found.
       setContentItem(null); 
+      setCurrentContentItem(null); // Set for context
       setTocItems([]);
     }
-  }, [params, location.pathname, setTocItems]);
+  }, [params, location.pathname, setTocItems, setCurrentContentItem, setAllNotesForContext]);
 
   if (contentItem === undefined) {
     return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Tag as TagIcon, Home, Info, FileText as FileTextIcon, ChevronDown, ChevronRight, Folder, File as FileIcon } from 'lucide-react'; // Renamed to avoid conflict
+import { Tag as TagIcon, Home, Info, FileText as FileTextIcon, ChevronDown, ChevronRight, Folder, File as FileIcon } from 'lucide-react';
 import { getContentTree, ContentItem } from '@/content/mockData';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -28,7 +28,6 @@ const NavLink: React.FC<{ to: string; icon: React.ElementType; label: string; ex
   );
 };
 
-// Updated icon color palette
 const iconColors = [
   'text-yellow-400',   // level 0
   'text-emerald-500',  // level 1
@@ -46,7 +45,7 @@ const CollapsibleNavItem: React.FC<{ item: ContentItem; level?: number }> = ({ i
   const hasChildren = item.children && item.children.length > 0;
   const colorClass = iconColors[Math.min(level, iconColors.length - 1)];
 
-  const iconMargin = "mr-1.5"; // Adjusted margin for icon
+  const iconMargin = "mr-1"; // Adjusted margin for icon from mr-1.5
 
   if (!hasChildren) {
     return (
@@ -54,7 +53,7 @@ const CollapsibleNavItem: React.FC<{ item: ContentItem; level?: number }> = ({ i
         to={`/content/${item.path}`}
         style={{ paddingLeft: `${12 + level * 16}px` }}
         className={cn(
-          "flex items-center py-2 pr-3 rounded-md text-sm hover:bg-accent hover:text-accent-foreground transition-colors w-full group", // Removed space-x-2
+          "flex items-center py-2 pr-3 rounded-md text-sm hover:bg-accent hover:text-accent-foreground transition-colors w-full group",
           isActive ? "bg-primary/10 text-primary font-semibold" : "text-foreground/80"
         )}
       >
@@ -72,12 +71,12 @@ const CollapsibleNavItem: React.FC<{ item: ContentItem; level?: number }> = ({ i
         <button
           style={{ paddingLeft: `${12 + level * 16}px` }}
           className={cn(
-            "flex items-center justify-between w-full py-2 pr-3 rounded-md text-sm hover:bg-accent hover:text-accent-foreground transition-colors group", // Removed space-x-2
+            "flex items-center justify-between w-full py-2 pr-3 rounded-md text-sm hover:bg-accent hover:text-accent-foreground transition-colors group",
             isActive && item.type === 'folder' ? "bg-accent text-accent-foreground font-medium" : "",
             location.pathname === `/content/${item.path}` ? "bg-primary/10 text-primary font-semibold" : "text-foreground/80"
           )}
         >
-          <Link to={`/content/${item.path}`} className="flex items-center truncate flex-1" onClick={(e) => e.stopPropagation()}> {/* Removed space-x-2 */}
+          <Link to={`/content/${item.path}`} className="flex items-center truncate flex-1" onClick={(e) => e.stopPropagation()}>
             {item.type === 'folder' 
                 ? <Folder className={cn("h-4 w-4 shrink-0", iconMargin, colorClass, isActive && item.type === 'folder' ? "text-accent-foreground": (location.pathname === `/content/${item.path}` ? "text-primary": "") )} /> 
                 : <FileIcon className={cn("h-4 w-4 shrink-0", iconMargin, colorClass, location.pathname === `/content/${item.path}` ? "text-primary": "")} />}
@@ -86,7 +85,7 @@ const CollapsibleNavItem: React.FC<{ item: ContentItem; level?: number }> = ({ i
           {hasChildren && (isOpen ? <ChevronDown className="h-4 w-4 shrink-0 ml-1" /> : <ChevronRight className="h-4 w-4 shrink-0 ml-1" />)}
         </button>
       </CollapsibleTrigger>
-      <CollapsibleContent className="pl-0"> {/* Ensure no extra padding causing misalignment */}
+      <CollapsibleContent className="pl-0">
         {item.children?.map(child => (
           <CollapsibleNavItem key={child.id} item={child} level={level + 1} />
         ))}
@@ -95,20 +94,19 @@ const CollapsibleNavItem: React.FC<{ item: ContentItem; level?: number }> = ({ i
   );
 };
 
-
 const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isOpen, onClose }) => {
   const pages = [
     { to: "/", icon: Home, label: "Home", exact: true },
     { to: "/about", icon: Info, label: "About" },
-    { to: "/docs", icon: FileTextIcon, label: "Docs" }, // Use aliased FileTextIcon
+    { to: "/docs", icon: FileTextIcon, label: "Docs" },
   ];
 
-  const tags = ["React", "JavaScript", "Design", "Productivity", "AI"]; // Placeholder, can be dynamic later
+  const tags = ["React", "JavaScript", "Design", "Productivity", "AI"]; 
 
   const [contentSections, setContentSections] = useState<ContentItem[]>([]);
 
   useEffect(() => {
-    setContentSections(getContentTree(true)); // Fetch tree structure, true for forceRefresh on mount
+    setContentSections(getContentTree(true)); 
   }, []);
 
 
@@ -136,7 +134,7 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
             {contentSections.length > 0 && (
               <div>
                 <h3 className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Content Sections</h3>
-                <div className="space-y-0.5"> {/* Slightly reduce space between nav items if needed */}
+                <div className="space-y-0.5">
                   {contentSections.map(item => (
                     <CollapsibleNavItem key={item.id} item={item} />
                   ))}
@@ -149,7 +147,7 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
               <div className="flex flex-wrap gap-2 px-3">
                 {tags.map(tag => (
                   <Button key={tag} variant="outline" size="sm" className="text-xs bg-secondary hover:bg-secondary/80">
-                    <TagIcon className="h-3 w-3 mr-1.5" /> {tag} {/* Use aliased TagIcon */}
+                    <TagIcon className="h-3 w-3 mr-1.5" /> {tag}
                   </Button>
                 ))}
               </div>

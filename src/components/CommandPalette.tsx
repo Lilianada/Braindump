@@ -11,14 +11,13 @@ import {
   CommandItem,
   CommandSeparator,
 } from '@/components/ui/command';
-import { getAllContentItems, ContentItem } from '@/content/mockData'; // Ensure this path is correct
+import { getAllContentItems, ContentItem } from '@/content/mockData';
 
 interface CommandPaletteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-// Define the types that should be displayed in "Pages & Notes"
 const pageAndNoteTypes: ContentItem['type'][] = ['note', 'topic', 'log', 'dictionary_entry'];
 
 const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) => {
@@ -28,7 +27,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
   const [categories, setCategories] = useState<ContentItem[]>([]);
 
   useEffect(() => {
-    if (open) { // Fetch or update data only when dialog is opened or data changes
+    if (open) {
       const fetchedItems = getAllContentItems();
       setAllItems(fetchedItems);
 
@@ -63,7 +62,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             key="command-sort"
             value="Sort items by criteria"
             onSelect={() => {
-              console.log('Sort action triggered');
+              console.log('Command Palette: Sort action triggered. Future: Implement sort options (e.g., by title, date).');
               onOpenChange(false);
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
@@ -75,7 +74,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             key="command-filter"
             value="Filter items by type or status"
             onSelect={() => {
-              console.log('Filter action triggered');
+              console.log('Command Palette: Filter action triggered. Future: Implement filter options (e.g., by type, tags).');
               onOpenChange(false);
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
@@ -87,8 +86,8 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             key="command-view-tags"
             value="View all tags"
             onSelect={() => {
-              console.log('View all tags action triggered');
-              // In future, could navigate to a dedicated tags page: runCommand(() => navigate(`/tags`));
+              console.log('Command Palette: View All Tags action triggered. Future: Navigate to a dedicated tags page or show tag cloud.');
+              // For now, tags are already listed below. This could be enhanced.
               onOpenChange(false);
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
@@ -103,7 +102,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
         {allItems.length > 0 && (
           <CommandGroup heading="Pages & Notes">
             {allItems
-              .filter(item => pageAndNoteTypes.includes(item.type)) // Simplified and fixed filter
+              .filter(item => pageAndNoteTypes.includes(item.type))
               .map((item) => (
               <CommandItem
                 key={`content-${item.id}`}
@@ -147,9 +146,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
                   key={`tag-${tag}`}
                   value={tag}
                   onSelect={() => {
-                    console.log('Selected tag:', tag);
-                    // Placeholder: In a real app, you might navigate to a tag search page
-                    // e.g., runCommand(() => navigate(`/search?tag=${encodeURIComponent(tag)}`))
+                    console.log('Command Palette: Selected tag:', tag, '. Future: Navigate to tag search page or filter by this tag.');
                     onOpenChange(false);
                   }}
                   className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
