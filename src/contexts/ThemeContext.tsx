@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Theme = 'light' | 'dark';
-export type Font = 'roboto-mono' | 'inter' | 'kalam' | 'indie-flower' | 'lancelot' | 'cormorant-upright';
+export type Font = 'geist-mono' | 'geist-sans' | 'kalam' | 'indie-flower' | 'lancelot' | 'cormorant-upright'; // Updated fonts
 
 interface ThemeContextType {
   theme: Theme;
@@ -20,7 +20,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return localTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   });
   const [font, setFontState] = useState<Font>(() => {
-    return (localStorage.getItem('braindump-font') as Font | null) || 'roboto-mono';
+    return (localStorage.getItem('braindump-font') as Font | null) || 'geist-mono'; // Default to Geist Mono
   });
 
   useEffect(() => {
@@ -33,7 +33,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     const body = window.document.body;
     const html = window.document.documentElement;
-    ['font-roboto-mono', 'font-inter', 'font-kalam', 'font-indie-flower', 'font-lancelot', 'font-cormorant-upright'].forEach(cls => {
+    // Updated font list
+    ['font-geist-mono', 'font-geist-sans', 'font-kalam', 'font-indie-flower', 'font-lancelot', 'font-cormorant-upright'].forEach(cls => {
       body.classList.remove(cls);
       html.classList.remove(cls);
     });

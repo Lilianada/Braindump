@@ -36,8 +36,8 @@
     --radius: 0.5rem;
 
     /* Custom font variables */
-    --font-roboto-mono: "Roboto Mono", monospace;
-    --font-inter: "Inter", sans-serif;
+    --font-geist-sans: "Geist Sans", sans-serif;
+    --font-geist-mono: "Geist Mono", monospace;
     --font-kalam: "Kalam", cursive;
     --font-indie-flower: "Indie Flower", cursive;
     --font-lancelot: "Lancelot", cursive;
@@ -82,13 +82,13 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-roboto-mono); /* Default font */
+    font-family: var(--font-geist-mono); /* Default font to Geist Mono */
     font-size: 14px; /* Set base body font size */
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  body.font-roboto-mono { font-family: var(--font-roboto-mono); }
-  body.font-inter { font-family: var(--font-inter); }
+  body.font-geist-sans { font-family: var(--font-geist-sans); }
+  body.font-geist-mono { font-family: var(--font-geist-mono); }
   body.font-kalam { font-family: var(--font-kalam); }
   body.font-indie-flower { font-family: var(--font-indie-flower); }
   body.font-lancelot { font-family: var(--font-lancelot); }
@@ -96,10 +96,10 @@
 
   /* Ensure html also gets font for consistency if needed */
   html {
-    font-family: var(--font-roboto-mono); /* Default font */
+    font-family: var(--font-geist-mono); /* Default font to Geist Mono */
   }
-  html.font-roboto-mono { font-family: var(--font-roboto-mono); }
-  html.font-inter { font-family: var(--font-inter); }
+  html.font-geist-sans { font-family: var(--font-geist-sans); }
+  html.font-geist-mono { font-family: var(--font-geist-mono); }
   html.font-kalam { font-family: var(--font-kalam); }
   html.font-indie-flower { font-family: var(--font-indie-flower); }
   html.font-lancelot { font-family: var(--font-lancelot); }
@@ -120,8 +120,10 @@
   .prose :where(p):not(:where([class~="not-prose"] *)) {
     font-size: inherit; /* Ensure paragraphs within prose also inherit */
   }
+  .prose :where(code):not(:where([class~="not-prose"] *))::before,
+  .prose :where(code):not(:where([class~="not-prose"] *))::after {
+    content: ""; /* Remove backticks from inline code in prose */
+  }
 }
 
-/* Remove default App.css styling */
-/* #root, .logo, .card, .read-the-docs styling can be removed or adjusted as needed */
-/* For now, I'll clear App.css */
+/* ... keep existing code (rest of the file) */

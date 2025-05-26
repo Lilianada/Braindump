@@ -70,11 +70,11 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-        'roboto-mono': ['"Roboto Mono"', 'monospace'],
-        'inter': ['"Inter"', 'sans-serif'],
+        'geist-sans': ['"Geist Sans"', 'sans-serif'],
+        'geist-mono': ['"Geist Mono"', 'monospace'],
         'kalam': ['"Kalam"', 'cursive'],
         'indie-flower': ['"Indie Flower"', 'cursive'],
-        'lancelot': ['"Lancelot"', 'cursive'], // 'serif' or 'fantasy' might be better fallbacks for Lancelot
+        'lancelot': ['"Lancelot"', 'cursive'], 
         'cormorant-upright': ['"Cormorant Upright"', 'serif'],
       },
 			keyframes: {

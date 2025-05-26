@@ -7,11 +7,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // Assuming you have shadcn select
+} from "@/components/ui/select";
 
 const fonts: { value: Font; label: string }[] = [
-  { value: 'roboto-mono', label: 'GeistMono (Roboto Mono)' },
-  { value: 'inter', label: 'GeistSans (Inter)' },
+  { value: 'geist-mono', label: 'Geist Mono' },
+  { value: 'geist-sans', label: 'Geist Sans' },
   { value: 'kalam', label: 'Kalam' },
   { value: 'indie-flower', label: 'Indie Flower' },
   { value: 'lancelot', label: 'Lancelot' },

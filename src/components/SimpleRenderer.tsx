@@ -8,6 +8,7 @@ import { ContentItem } from '@/content/mockData';
 import CustomHeading from './markdown/CustomHeading';
 import CustomParagraph from './markdown/CustomParagraph';
 import CustomLink from './markdown/CustomLink';
+import CustomCodeBlock from './markdown/CustomCodeBlock'; // Added import
 
 interface SimpleRendererProps {
   content: string;
@@ -34,6 +35,7 @@ const SimpleRenderer: React.FC<SimpleRendererProps> = ({ content, setTocItems, a
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           p: ({node, ...props}) => <CustomParagraph {...props} allNotes={allNotes} glossaryTerms={glossaryTerms} />,
           a: CustomLink,
+          code: CustomCodeBlock, // Added custom code component
         }}
       >
         {content}
