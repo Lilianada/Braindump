@@ -37,8 +37,8 @@ const pages = [
 const PageLinks: React.FC = () => {
   return (
     <div>
-      <h3 className="px-3 mb-2 text-sm font-semibold uppercase text-muted-foreground tracking-wider">Pages</h3>
-      <div className="space-y-1">
+      <h3 className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Pages</h3>
+      <div className="space-y-0.5">
         {pages.map(page => <NavLink key={page.label} {...page} />)}
       </div>
     </div>

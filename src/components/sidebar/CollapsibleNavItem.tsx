@@ -46,7 +46,7 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({ item, level = 0
         {item.type === 'folder' 
             ? <Folder className={cn("h-4 w-4 shrink-0", iconMargin, colorClass, isActive ? "text-primary": "")} /> 
             : <FileIcon className={cn("h-4 w-4 shrink-0", iconMargin, colorClass, isActive ? "text-primary": "")} />}
-        <span className="truncate flex-1">{item.title}</span>
+        <span className="truncate flex-1 capiatlize tex-sm">{item.title}</span>
       </Link>
     );
   }
