@@ -30,12 +30,25 @@ const ContentPage: React.FC = () => {
     const path = params['*'];
     if (path) {
       const item = findContentByPath(path);
-      setContentItem(item);
-      if (!item || !item.content) { 
+      setContentItem(item); // Update state, will trigger re-render
+
+      if (item) {
+        // If the loaded item has no main content (e.g., a folder overview or note body),
+        // then the TOC should be empty. SimpleRenderer is only invoked if item.content exists.
+        // If item.content does NOT exist, SimpleRenderer's useEffect for TOC won't run.
+        // So, we explicitly clear TOC items here.
+        if (!item.content) {
+          setTocItems([]);
+        }
+        // If item.content *does* exist, SimpleRenderer will be rendered,
+        // and its internal useEffect will take care of setting the TOC based on that content.
+      } else {
+        // Item not found
         setTocItems([]);
       }
     } else {
-      setContentItem(null);
+      // No path (e.g. /content/ without specific item), treat as not found.
+      setContentItem(null); 
       setTocItems([]);
     }
   }, [params, location.pathname, setTocItems]);
@@ -64,10 +77,6 @@ const ContentPage: React.FC = () => {
   }
 
   if (contentItem.type === 'folder') {
-    React.useEffect(() => {
-      setTocItems([]);
-    }, [setTocItems, contentItem.path]);
-
     return (
       <div className="container mx-auto py-8 animate-fade-in">
         <header className="mb-8">
