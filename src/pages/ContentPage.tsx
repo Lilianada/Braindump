@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useOutletContext } from 'react-router-dom';
-import { findContentByPath, getAllContentItems, ContentItem } from '@/content/mockData';
+import { findContentByPath, getAllContentItems, ContentItem, mockContentData } from '@/content/mockData';
 import { AlertCircle, FileText } from 'lucide-react';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { TocItem } from '@/types';
@@ -17,7 +17,8 @@ const ContentPage: React.FC = () => {
   useEffect(() => {
     // Fetch all content items once to be used for linking and glossary
     // In a real app, this might come from a context or a global store
-    const allItems = getAllContentItems();
+    // Pass mockContentData to getAllContentItems
+    const allItems = getAllContentItems(mockContentData);
     
     const notes = allItems.filter(item => 
       item.type === 'note' || 
