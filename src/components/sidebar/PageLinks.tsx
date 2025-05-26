@@ -18,7 +18,7 @@ const NavLink: React.FC<NavLinkProps> = ({ to, icon: Icon, label, exact }) => {
     <Link
       to={to}
       className={cn(
-        "flex items-center space-x-3 px-3 py-2.5 rounded-md text-xs font-medium hover:bg-accent hover:text-accent-foreground transition-colors",
+        "flex items-center space-x-3 px-3 py-2.5 rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors",
         isActive ? "bg-primary/10 text-primary font-semibold" : "text-foreground/80"
       )}
     >
@@ -37,7 +37,7 @@ const pages = [
 const PageLinks: React.FC = () => {
   return (
     <div>
-      <h3 className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Pages</h3>
+      <h3 className="px-3 mb-2 text-sm font-semibold uppercase text-muted-foreground tracking-wider">Pages</h3>
       <div className="space-y-1">
         {pages.map(page => <NavLink key={page.label} {...page} />)}
       </div>

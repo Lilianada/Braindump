@@ -1,4 +1,6 @@
 
+# Introduction
+
 Welcome to my Braindump — my [[personal knowledge management]] space of evolving knowledge where I collect, connect, and grow ideas over time.
 
 Braindump is my personal [[digital garden]], a space to cultivate and connect my thoughts, learnings, and ideas over time. Unlike a traditional blog or a fleeting note-taking app, a digital garden is a living collection of interconnected notes that evolve as you do.
