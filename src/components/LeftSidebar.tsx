@@ -82,7 +82,7 @@ const CollapsibleNavItem: React.FC<{ item: ContentItem; level?: number }> = ({ i
             {item.type === 'folder' 
                 ? <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive && item.type === 'folder' ? "text-accent-foreground": (location.pathname === `/content/${item.path}` ? "text-primary": "") )} /> 
                 : <FileIcon className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, location.pathname === `/content/${item.path}` ? "text-primary": "")} />}
-            <span className="text-left truncate flex-1 group-hover:text-accent-foreground">{item.title}</span>
+            <span className="text-left ml-1 truncate flex-1 group-hover:text-accent-foreground">{item.title}</span>
           </Link>
           {hasChildren && (isOpen ? <ChevronDown className="h-3 w-3 shrink-0 ml-1" /> : <ChevronRight className="h-4 w-4 shrink-0 ml-1" />)}
         </button>
