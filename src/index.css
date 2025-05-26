@@ -47,7 +47,7 @@
     --font-cormorant-upright: "Cormorant Upright", serif;
 
     /* Custom yellow for wiki links */
-    --custom-yellow: 45 90% 55%; /* A nice, noticeable yellow */
+    --custom-yellow: 42 92% 42%; /* A nice, noticeable yellow */
     --custom-yellow-foreground: 222.2 84% 4.9%; /* Dark text for yellow background in light mode if needed */
   }
 
