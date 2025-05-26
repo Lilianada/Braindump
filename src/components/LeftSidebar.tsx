@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Tag as TagIcon, Home, Info, FileText as FileTextIcon, ChevronDown, ChevronRight, Folder, File as FileIcon } from 'lucide-react';
@@ -111,9 +112,9 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
     const rootContentPathsToExclude = ['index', 'about', 'docs']; 
     
     const filteredContentTree = rawContentTree.filter(item => {
-      // Exclude if item is a file (not a folder) AND its path is in rootContentPathsToExclude
+      // Exclude if item is a file-like (not a folder) AND its path is in rootContentPathsToExclude
       // AND it's a root path (doesn't contain '/')
-      if (item.type === 'file' && rootContentPathsToExclude.includes(item.path) && !item.path.includes('/')) {
+      if (item.type !== 'folder' && rootContentPathsToExclude.includes(item.path) && !item.path.includes('/')) {
         return false;
       }
       return true;
@@ -196,3 +197,4 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
 };
 
 export default LeftSidebar;
+
