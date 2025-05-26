@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useLocation, useOutletContext, Link, useNavigate } from 'react-router-dom';
 import { findContentByPath, getAllContentItems, ContentItem } from '@/content/mockData';
-import { AlertCircle, FileText, Info, Tag as TagIcon, CalendarDays, ArrowLeft, ArrowRight, Link2, Users } from 'lucide-react';
+import { AlertCircle, FileText, Info, Tag as TagIcon, CalendarDays, ArrowLeft, ArrowRight, Link2, Users, Folder } from 'lucide-react';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { TocItem } from '@/types';
 import { AppContextType } from '@/components/Layout';
-import { extractMarkdownBody } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -31,7 +30,7 @@ const ContentPage: React.FC = () => {
     ).sort((a, b) => a.path.localeCompare(b.path)); // Ensure a consistent order for prev/next
     
     setAllNotesAndTopics(notesAndTopicsItems);
-    setAllNotesForContext(notesAndTopicsItems); // Pass the sorted list to context if needed elsewhere
+    setAllNotesForContext(notesAndTopicsItems); 
 
     const terms = allItems.filter(item => item.type === 'glossary_term');
     setGlossaryTerms(terms);
@@ -43,9 +42,10 @@ const ContentPage: React.FC = () => {
       setCurrentContentItem(item); 
 
       if (item) {
-        // Log the content item to debug frontmatter issues
         console.log("Content item found:", item);
         console.log("Content item frontmatter:", item.frontmatter);
+        console.log("Content item lastUpdated:", item.lastUpdated);
+        console.log("Content item tags:", item.tags);
       } else {
         setTocItems([]);
       }
@@ -54,11 +54,9 @@ const ContentPage: React.FC = () => {
       setCurrentContentItem(null);
       setTocItems([]);
     }
-  // Ensure all dependencies are correctly listed or managed
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params, location.pathname, setTocItems, setCurrentContentItem, setAllNotesForContext]);
+  }, [params, location.pathname]); // Removed setTocItems, setCurrentContentItem, setAllNotesForContext as they are stable or updated via context setters
   
-  // Backlinks and Related Notes logic (adapted from RightSidebar)
   const backlinks = useMemo(() => {
     if (!contentItem || !allNotesAndTopics || allNotesAndTopics.length === 0) return [];
     
@@ -105,7 +103,6 @@ const ContentPage: React.FC = () => {
     return foundRelated;
   }, [contentItem, allNotesAndTopics]);
 
-  // Previous/Next Navigation Logic
   const { prevItem, nextItem } = useMemo(() => {
     if (!contentItem || allNotesAndTopics.length === 0 || contentItem.type === 'folder') {
       return { prevItem: null, nextItem: null };
@@ -142,19 +139,27 @@ const ContentPage: React.FC = () => {
       </div>
     );
   }
+  
+  const markdownContentToRender = contentItem.type === 'folder' ? contentItem.content : null;
+
+  const categoryTag = contentItem.tags?.find(tag => tag.toLowerCase().startsWith('category:'));
+  const category = categoryTag ? categoryTag.substring('category:'.length).trim() : null;
+
 
   if (contentItem.type === 'folder') {
     return (
       <div className="container mx-auto py-8 animate-fade-in">
-        <header className="mb-8">
-          <h1 className="capitalize text-3xl font-bold mb-2">{contentItem.title}</h1>
-          <p className="text-sm text-muted-foreground">
-            Type: {contentItem.type} <br/> Path: /content/{contentItem.path}
-          </p>
+        <header className="mb-8 flex items-center gap-3">
+          <Folder className="h-8 w-8 text-muted-foreground" />
+          <div>
+            <h1 className="capitalize text-3xl font-bold">{contentItem.title}</h1>
+            <p className="text-sm text-muted-foreground">
+              Path: /content/{contentItem.path}
+            </p>
+          </div>
         </header>
-        <p className="text-muted-foreground mb-4">This is a category or folder. Select an item from its children in the sidebar, or this folder might have its own content below.</p>
         
-        {markdownContentToRender ? (
+        {markdownContentToRender && markdownContentToRender.trim() !== '' ? (
           <SimpleRenderer 
             content={markdownContentToRender} 
             setTocItems={setTocItems} 
@@ -162,7 +167,7 @@ const ContentPage: React.FC = () => {
             glossaryTerms={glossaryTerms}
           />
         ) : (
-          contentItem.children && contentItem.children.length > 0 && (
+          contentItem.children && contentItem.children.length > 0 ? (
             <div>
               <h2 className="text-xl font-semibold mb-2 mt-6">Contents:</h2>
               <ul className="list-disc list-inside space-y-1">
@@ -175,10 +180,9 @@ const ContentPage: React.FC = () => {
                 ))}
               </ul>
             </div>
+          ) : (
+             <p className="text-muted-foreground">This folder is currently empty or has no overview content.</p>
           )
-        )}
-        {!markdownContentToRender && (!contentItem.children || contentItem.children.length === 0) && (
-          <p className="text-muted-foreground">This folder is currently empty or has no overview content.</p>
         )}
       </div>
     );
@@ -189,8 +193,17 @@ const ContentPage: React.FC = () => {
       <header className="mb-8">
         <h1 className="text-4xl font-semibold capitalize mb-2">{contentItem.title}</h1>
         
-        {/* Metadata section from frontmatter/contentItem properties */}
-        <div className="mt-3 mb-6 text-sm text-muted-foreground space-y-1">
+        <div className="mt-3 mb-6 text-sm text-muted-foreground space-y-1.5">
+          {contentItem.frontmatter?.type && contentItem.type !== contentItem.frontmatter.type && (
+            <div className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              <span>Type (File): {contentItem.frontmatter.type}</span>
+            </div>
+          )}
+           <div className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              <span>Type (System): {contentItem.type}</span>
+            </div>
           {contentItem.created && (
             <div className="flex items-center gap-2">
               <CalendarDays className="h-4 w-4" />
@@ -217,19 +230,22 @@ const ContentPage: React.FC = () => {
           )}
           {category && (
              <div className="flex items-center gap-2">
-              <Info className="h-4 w-4" />
+              <Folder className="h-4 w-4" />
               <span>Category: {category}</span>
             </div>
           )}
-          {/* Display any other frontmatter fields that aren't already shown */}
           {contentItem.frontmatter && Object.entries(contentItem.frontmatter)
-            .filter(([key]) => !['id', 'title', 'path', 'type', 'tags', 'created', 'lastUpdated', 'author', 'source', 'slug'].includes(key))
-            .map(([key, value]) => (
-              <div key={key} className="flex items-center gap-2">
-                <Info className="h-4 w-4" />
-                <span>{key.charAt(0).toUpperCase() + key.slice(1)}: {value.toString()}</span>
-              </div>
-            ))
+            .filter(([key]) => !['id', 'title', 'path', 'type', 'tags', 'created', 'lastUpdated', 'author', 'source', 'slug', 'content'].includes(key.toLowerCase()))
+            .map(([key, value]) => {
+              if (value === undefined || value === null || (Array.isArray(value) && value.length === 0)) return null;
+              const displayValue = Array.isArray(value) ? value.join(', ') : String(value);
+              return (
+                <div key={key} className="flex items-center gap-2">
+                  <Info className="h-4 w-4" />
+                  <span>{key.charAt(0).toUpperCase() + key.slice(1)}: {displayValue}</span>
+                </div>
+              );
+            })
           }
         </div>
 
@@ -248,7 +264,6 @@ const ContentPage: React.FC = () => {
         )}
       </header>
       
-      {/* Content rendering */}
       <SimpleRenderer 
         content={contentItem.content || ''} 
         setTocItems={setTocItems}
@@ -256,7 +271,6 @@ const ContentPage: React.FC = () => {
         glossaryTerms={glossaryTerms}
       />
 
-      {/* Backlinks and Related Notes for Mobile/Tablet */}
       <div className="lg:hidden mt-12 space-y-8 border-t pt-8">
         {contentItem && (
           <>
@@ -303,7 +317,6 @@ const ContentPage: React.FC = () => {
         )}
       </div>
 
-      {/* Previous/Next Navigation */}
       {(prevItem || nextItem) && (
         <div className="mt-12 pt-8 border-t flex justify-between items-center">
           {prevItem ? (
@@ -313,7 +326,7 @@ const ContentPage: React.FC = () => {
                 {prevItem.title}
               </Link>
             </Button>
-          ) : <div /> /* Placeholder to keep Next button to the right */}
+          ) : <div />
           {nextItem ? (
             <Button variant="outline" asChild>
               <Link to={`/content/${nextItem.path}`}>
@@ -321,7 +334,7 @@ const ContentPage: React.FC = () => {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-          ) : <div /> /* Placeholder */}
+          ) : <div />
         </div>
       )}
     </article>
