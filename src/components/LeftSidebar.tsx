@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Tag as TagIcon, Home, Info, FileText as FileTextIcon, ChevronDown, ChevronRight, Folder, File as FileIcon } from 'lucide-react';
-import { getContentTree, ContentItem } from '@/content/mockData';
+import { getContentTree, getAllContentItems, ContentItem } from '@/content/mockData';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from '@/components/ui/button';
+import { Badge } from "@/components/ui/badge";
+import { toast } from 'sonner';
 import {
   Collapsible,
   CollapsibleContent,
@@ -101,14 +102,26 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
     { to: "/docs", icon: FileTextIcon, label: "Docs" },
   ];
 
-  const tags = ["React", "JavaScript", "Design", "Productivity", "AI"]; 
-
   const [contentSections, setContentSections] = useState<ContentItem[]>([]);
+  const [uniqueTags, setUniqueTags] = useState<string[]>([]);
 
   useEffect(() => {
-    setContentSections(getContentTree(true)); 
+    setContentSections(getContentTree(true));
+    
+    const allItems = getAllContentItems();
+    const tagsSet = new Set<string>();
+    allItems.forEach(item => {
+      item.tags?.forEach(tag => tagsSet.add(tag));
+    });
+    setUniqueTags(Array.from(tagsSet).sort());
   }, []);
 
+  const handleTagClick = (tag: string) => {
+    toast.info(`Clicked tag: ${tag}`, {
+      description: "Filtering by tags will be implemented soon.",
+    });
+    // Future: navigate or filter based on tag
+  };
 
   return (
     <aside className={cn(
@@ -142,16 +155,23 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
               </div>
             )}
             
-            <div>
-              <h3 className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Tags</h3>
-              <div className="flex flex-wrap gap-2 px-3">
-                {tags.map(tag => (
-                  <Button key={tag} variant="outline" size="sm" className="text-xs bg-secondary hover:bg-secondary/80">
-                    <TagIcon className="h-3 w-3 mr-1.5" /> {tag}
-                  </Button>
-                ))}
+            {uniqueTags.length > 0 && (
+              <div>
+                <h3 className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Tags</h3>
+                <div className="flex flex-wrap gap-2 px-3">
+                  {uniqueTags.map(tag => (
+                    <Badge 
+                      key={tag} 
+                      variant="secondary"
+                      className="cursor-pointer hover:bg-accent"
+                      onClick={() => handleTagClick(tag)}
+                    >
+                      <TagIcon className="h-3 w-3 mr-1" /> {tag}
+                    </Badge>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </nav>
         </ScrollArea>
       </div>

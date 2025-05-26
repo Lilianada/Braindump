@@ -2,47 +2,38 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
+import { ArrowRight, BookOpenText } from 'lucide-react'; // Updated icons
 
 const IndexPage = () => {
   return (
-    <div className="container mx-auto py-8 animate-fade-in">
-      <header className="text-center mb-12">
-        <h1 className="text-5xl font-bold mb-4 text-primary">
-          Welcome to Braindump
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Your personal digital garden. Cultivate your thoughts, link your ideas, and watch your knowledge grow.
-        </p>
-      </header>
+    <div className="container mx-auto py-12 md:py-20 flex flex-col items-center justify-center text-center min-h-[calc(100vh-10rem)] animate-fade-in">
+      <BookOpenText className="h-16 w-16 md:h-20 md:w-20 text-primary mb-6" />
+      
+      <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
+        Welcome to Braindump
+      </h1>
+      
+      <p className="text-lg md:text-xl text-muted-foreground max-w-xl md:max-w-2xl mb-8">
+        Your personal space to capture, connect, and cultivate knowledge. Start building your digital garden today.
+      </p>
 
-      <section className="grid md:grid-cols-2 gap-8 mb-12">
-        <div className="bg-card p-6 rounded-lg shadow-lg border border-border hover-scale transition-transform">
-          <h2 className="text-2xl font-semibold mb-3 text-primary/90">Explore Your Notes</h2>
-          <p className="text-muted-foreground mb-4">
-            Dive into your Zettels, wikis, and daily logs. Discover connections and insights.
-          </p>
-          <Button asChild className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            <Link to="/content/zettels/note-a">Start Exploring</Link>
-          </Button>
-        </div>
-        <div className="bg-card p-6 rounded-lg shadow-lg border border-border hover-scale transition-transform">
-          <h2 className="text-2xl font-semibold mb-3 text-primary/90">What is a Digital Garden?</h2>
-          <p className="text-muted-foreground mb-4">
-            Learn more about the philosophy behind Braindump and how to make the most of your personal knowledge base.
-          </p>
-          <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary/5 hover:text-primary">
-            <Link to="/about">Learn More</Link>
-          </Button>
-        </div>
-      </section>
-
-      <section className="text-center">
-        <Sparkles className="h-12 w-12 text-primary mx-auto mb-4" />
-        <p className="text-lg text-muted-foreground">
-          Ready to start planting seeds of knowledge?
-        </p>
-      </section>
+      <div className="flex flex-col sm:flex-row gap-4">
+        <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+          <Link to="/content/zettels/note-a">
+            Explore Your Notes
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
+        </Button>
+        <Button asChild variant="outline" size="lg" className="border-primary text-primary hover:bg-primary/5 hover:text-primary">
+          <Link to="/about">
+            Learn More
+          </Link>
+        </Button>
+      </div>
+      
+      <p className="text-sm text-muted-foreground mt-12 max-w-md">
+        Braindump helps you organize thoughts, link ideas, and discover new insights through a simple and intuitive interface.
+      </p>
     </div>
   );
 };
