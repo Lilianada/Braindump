@@ -79,11 +79,11 @@ const CollapsibleNavItem: React.FC<{ item: ContentItem; level?: number }> = ({ i
         >
           <Link to={`/content/${item.path}`} className="flex items-center truncate flex-1" onClick={(e) => e.stopPropagation()}>
             {item.type === 'folder' 
-                ? <Folder className={cn("h-4 w-4 shrink-0", iconMargin, colorClass, isActive && item.type === 'folder' ? "text-accent-foreground": (location.pathname === `/content/${item.path}` ? "text-primary": "") )} /> 
-                : <FileIcon className={cn("h-4 w-4 shrink-0", iconMargin, colorClass, location.pathname === `/content/${item.path}` ? "text-primary": "")} />}
+                ? <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive && item.type === 'folder' ? "text-accent-foreground": (location.pathname === `/content/${item.path}` ? "text-primary": "") )} /> 
+                : <FileIcon className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, location.pathname === `/content/${item.path}` ? "text-primary": "")} />}
             <span className="text-left truncate flex-1 group-hover:text-accent-foreground">{item.title}</span>
           </Link>
-          {hasChildren && (isOpen ? <ChevronDown className="h-4 w-4 shrink-0 ml-1" /> : <ChevronRight className="h-4 w-4 shrink-0 ml-1" />)}
+          {hasChildren && (isOpen ? <ChevronDown className="h-3 w-3 shrink-0 ml-1" /> : <ChevronRight className="h-4 w-4 shrink-0 ml-1" />)}
         </button>
       </CollapsibleTrigger>
       <CollapsibleContent className="pl-0">
