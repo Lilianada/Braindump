@@ -203,7 +203,7 @@ const ContentPage: React.FC = () => {
   return (
     <article className="container mx-auto py-8 animate-fade-in">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold text-primary mb-2">{contentItem.title}</h1>
+        <h1 className="text-4xl font-semibold capitalize mb-2">{contentItem.title}</h1>
         {/* Metadata section from frontmatter/contentItem properties */}
         <div className="mt-3 mb-6 text-sm text-muted-foreground space-y-1">
           {contentItem.lastUpdated && (
