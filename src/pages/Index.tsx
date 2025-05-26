@@ -4,14 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { getAllContentItems, ContentItem } from '@/content/mockData';
-import SimpleRenderer from '@/components/SimpleRenderer'; // New import
-import { TocItem } from '@/types'; // New import
-import homeContentRaw from '@/content_files/pages/home.md?raw'; // Import raw markdown
+import SimpleRenderer from '@/components/SimpleRenderer';
+import { TocItem } from '@/types';
+import homeContentRaw from '@/content_files/index.md?raw'; // Updated import path
 
 const IndexPage = () => {
   const [allNotes, setAllNotes] = useState<ContentItem[]>([]);
   const [glossaryTerms, setGlossaryTerms] = useState<ContentItem[]>([]);
-  const [tocItems, setTocItems] = useState<TocItem[]>([]); // For SimpleRenderer
+  const [tocItems, setTocItems] = useState<TocItem[]>([]);
 
   useEffect(() => {
     const items = getAllContentItems();
@@ -22,9 +22,7 @@ const IndexPage = () => {
   return (
     <div className="container mx-auto py-12 md:py-20 flex justify-center min-h-[calc(100vh-10rem)] animate-fade-in">
       <div className="max-w-3xl w-full flex flex-col items-start text-left">
-        <h1 className="text-2xl md:text-3xl font-bold mb-8 text-foreground">
-          Welcome to my Braindump
-        </h1>
+        {/* Title removed as it's likely in the markdown now, or can be added there as H1 */}
         
         <SimpleRenderer 
           content={homeContentRaw} 
@@ -33,7 +31,7 @@ const IndexPage = () => {
           glossaryTerms={glossaryTerms} 
         />
 
-        <div className="flex flex-col sm:flex-row gap-4 mt-10"> {/* Added mt-10 for spacing */}
+        <div className="flex flex-col sm:flex-row gap-4 mt-10">
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
             <Link to="/content/zettels">
               Start Exploring Notes
