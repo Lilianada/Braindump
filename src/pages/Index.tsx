@@ -22,30 +22,13 @@ const IndexPage = () => {
   }, []);
 
   return (
-    <div className="container mx-auto py-12 md:py-20 flex justify-center min-h-[calc(100vh-10rem)] animate-fade-in">
-      <div className="max-w-3xl w-full flex flex-col items-start text-left">
-        
+    <div className="container mx-auto py-8 animate-fade-in">
         <SimpleRenderer 
           content={homeContentRaw} 
           setTocItems={setTocItems} 
           allNotes={allNotes} 
           glossaryTerms={glossaryTerms} 
         />
-
-        <div className="flex flex-col sm:flex-row gap-4 mt-10">
-          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            <Link to="/content/zettels">
-              Start Exploring Notes
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="lg" className="border-primary text-primary hover:bg-primary/5 hover:text-primary">
-            <Link to="/about">
-              Learn More About Braindump
-            </Link>
-          </Button>
-        </div>
-      </div>
     </div>
   );
 };
