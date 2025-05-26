@@ -27,7 +27,7 @@ const TagList: React.FC<TagListProps> = ({ tags, onTagClick }) => {
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onTagClick(tag);}}
           >
-            <TagIcon className="h-3 w-3 mr-1" /> {tag}
+           #{tag}
           </Badge>
         ))}
       </div>
