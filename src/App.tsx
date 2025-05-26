@@ -1,6 +1,7 @@
 
-import 'geist/font/sans.css';
-import 'geist/font/mono.css';
+// Import the Geist font components directly instead of CSS files
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +14,10 @@ import ContentPage from "./pages/ContentPage";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 import { ThemeProvider } from "./contexts/ThemeContext";
+
+// Initialize the fonts
+GeistSans.style;
+GeistMono.style;
 
 const queryClient = new QueryClient();
 
