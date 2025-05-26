@@ -326,7 +326,7 @@ const ContentPage: React.FC = () => {
                 {prevItem.title}
               </Link>
             </Button>
-          ) : <div />
+          ) : <div />}
           {nextItem ? (
             <Button variant="outline" asChild>
               <Link to={`/content/${nextItem.path}`}>
@@ -334,7 +334,7 @@ const ContentPage: React.FC = () => {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-          ) : <div />
+          ) : <div />}
         </div>
       )}
     </article>
