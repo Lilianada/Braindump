@@ -45,6 +45,10 @@
     --font-indie-flower: "Indie Flower", cursive;
     --font-lancelot: "Lancelot", cursive;
     --font-cormorant-upright: "Cormorant Upright", serif;
+
+    /* Custom yellow for wiki links */
+    --custom-yellow: 45 90% 55%; /* A nice, noticeable yellow */
+    --custom-yellow-foreground: 222.2 84% 4.9%; /* Dark text for yellow background in light mode if needed */
   }
 
   .dark {
@@ -75,6 +79,10 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 348 69.5% 56.8%; /* Ring color to match primary */
+    
+    /* Custom yellow for wiki links in dark mode */
+    --custom-yellow: 45 90% 55%; /* Same yellow, usually pops well on dark */
+    --custom-yellow-foreground: 210 40% 98%; /* Light text for yellow background in dark mode if needed */
   }
 }
 
@@ -110,11 +118,11 @@
 
   /* Custom link styling */
   .custom-link {
-    @apply bg-primary/20 dark:bg-primary/30 px-1 py-0.5 rounded-sm text-primary hover:underline;
+    @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--custom-yellow))] hover:underline;
   }
   /* Apply to prose links as well if needed */
-  .prose a, .prose dark:prose-invert a {
-     @apply bg-primary/20 dark:bg-primary/30 px-1 py-0.5 rounded-sm text-primary no-underline hover:underline;
+  .prose a, .prose .dark\:prose-invert a { /* Updated dark mode selector for prose */
+     @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--custom-yellow))] no-underline hover:underline;
   }
    /* Adjust prose default font size if body is 14px, Tailwind's prose might default to 16px */
   .prose {
