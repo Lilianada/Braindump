@@ -106,7 +106,19 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
   const [uniqueTags, setUniqueTags] = useState<string[]>([]);
 
   useEffect(() => {
-    setContentSections(getContentTree(true));
+    const rawContentTree = getContentTree(true);
+    // These are the paths of files at the root of content_files that are handled by the "Pages" section
+    const rootContentPathsToExclude = ['index', 'about', 'docs']; 
+    
+    const filteredContentTree = rawContentTree.filter(item => {
+      // Exclude if item is a file (not a folder) AND its path is in rootContentPathsToExclude
+      // AND it's a root path (doesn't contain '/')
+      if (item.type === 'file' && rootContentPathsToExclude.includes(item.path) && !item.path.includes('/')) {
+        return false;
+      }
+      return true;
+    });
+    setContentSections(filteredContentTree);
     
     const allItems = getAllContentItems();
     const tagsSet = new Set<string>();
@@ -114,6 +126,10 @@ const LeftSidebar: React.FC<{ isOpen?: boolean; onClose?: () => void }> = ({ isO
       item.tags?.forEach(tag => tagsSet.add(tag));
     });
     setUniqueTags(Array.from(tagsSet).sort());
+
+    if (allItems.length > 0 && tagsSet.size === 0) {
+      console.warn("LeftSidebar: No tags found in any content items. Ensure tags are defined in your markdown frontmatter (e.g., --- tags: [tag1, tag2] ---).");
+    }
   }, []);
 
   const handleTagClick = (tag: string) => {
