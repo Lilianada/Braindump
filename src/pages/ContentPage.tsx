@@ -1,51 +1,32 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useOutletContext } from 'react-router-dom';
 import { findContentByPath, ContentItem } from '@/content/mockData';
 import { AlertCircle, FileText } from 'lucide-react';
-
-// A very basic Markdown-like renderer for demonstration
-const SimpleRenderer: React.FC<{ content: string }> = ({ content }) => {
-  const lines = content.split('\\n');
-  return (
-    <div className="prose dark:prose-invert max-w-none text-foreground space-y-3">
-      {lines.map((line, index) => {
-        if (line.startsWith('### ')) {
-          return <h3 key={index} className="text-xl font-semibold mt-4 mb-2">{line.substring(4)}</h3>;
-        }
-        if (line.startsWith('## ')) {
-          return <h2 key={index} className="text-2xl font-semibold mt-5 mb-3 border-b pb-1">{line.substring(3)}</h2>;
-        }
-        if (line.startsWith('# ')) {
-          return <h1 key={index} className="text-3xl font-bold mt-6 mb-4 border-b pb-2">{line.substring(2)}</h1>;
-        }
-        if (line.startsWith('**') && line.endsWith('**')) {
-          return <p key={index}><strong>{line.substring(2, line.length -2)}</strong></p>
-        }
-        if (line.trim() === '') {
-          return <br key={index} />;
-        }
-        return <p key={index}>{line}</p>;
-      })}
-    </div>
-  );
-};
-
+import SimpleRenderer from '@/components/SimpleRenderer'; // Import the new SimpleRenderer
+import { TocItem } from '@/types'; // Import TocItem
 
 const ContentPage: React.FC = () => {
   const params = useParams();
   const location = useLocation();
   const [contentItem, setContentItem] = useState<ContentItem | null | undefined>(null); // undefined for loading, null for not found
+  
+  // Get setTocItems from Outlet context provided by Layout
+  const { setTocItems } = useOutletContext<{ setTocItems: React.Dispatch<React.SetStateAction<TocItem[]>> }>();
 
   useEffect(() => {
     const path = params['*'];
     if (path) {
       const item = findContentByPath(path);
       setContentItem(item);
+      if (!item || !item.content) { // Clear TOC if no content or item not found
+        setTocItems([]);
+      }
     } else {
       setContentItem(null); // No path provided
+      setTocItems([]); // Clear TOC if no path
     }
-  }, [params, location]);
+  }, [params, location, setTocItems]);
 
   if (contentItem === undefined) {
     return (
@@ -71,6 +52,11 @@ const ContentPage: React.FC = () => {
   }
 
   if (contentItem.type === 'folder') {
+     // Clear TOC for folders as they don't have direct content for TOC
+     React.useEffect(() => {
+        setTocItems([]);
+     }, [setTocItems]);
+
      return (
       <div className="container mx-auto py-8 animate-fade-in">
         <h1 className="text-3xl font-bold mb-6 text-primary">{contentItem.title}</h1>
@@ -81,7 +67,7 @@ const ContentPage: React.FC = () => {
             <ul className="list-disc list-inside space-y-1">
               {contentItem.children.map(child => (
                 <li key={child.id}>
-                  <a href={`/content/${child.path}`} className="text-primary hover:underline">
+                  <a href={`/content/${child.path}`} className="custom-link">
                     {child.title} ({child.type})
                   </a>
                 </li>
@@ -110,7 +96,7 @@ const ContentPage: React.FC = () => {
       </header>
       
       {contentItem.content ? (
-        <SimpleRenderer content={contentItem.content} />
+        <SimpleRenderer content={contentItem.content} setTocItems={setTocItems} />
       ) : (
         <div className="flex flex-col items-center justify-center text-center text-muted-foreground p-8 border border-dashed rounded-lg">
           <FileText className="h-12 w-12 mb-4" />

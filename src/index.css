@@ -83,6 +83,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-roboto-mono); /* Default font */
+    font-size: 14px; /* Set base body font size */
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
@@ -103,6 +104,22 @@
   html.font-indie-flower { font-family: var(--font-indie-flower); }
   html.font-lancelot { font-family: var(--font-lancelot); }
   html.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
+
+  /* Custom link styling */
+  .custom-link {
+    @apply bg-primary/20 dark:bg-primary/30 px-1 py-0.5 rounded-sm text-primary hover:underline;
+  }
+  /* Apply to prose links as well if needed */
+  .prose a, .prose dark:prose-invert a {
+     @apply bg-primary/20 dark:bg-primary/30 px-1 py-0.5 rounded-sm text-primary no-underline hover:underline;
+  }
+   /* Adjust prose default font size if body is 14px, Tailwind's prose might default to 16px */
+  .prose {
+    font-size: inherit; /* Inherit from body's 14px */
+  }
+  .prose :where(p):not(:where([class~="not-prose"] *)) {
+    font-size: inherit; /* Ensure paragraphs within prose also inherit */
+  }
 }
 
 /* Remove default App.css styling */
