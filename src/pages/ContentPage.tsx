@@ -1,30 +1,45 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useOutletContext } from 'react-router-dom';
-import { findContentByPath, ContentItem } from '@/content/mockData';
+import { findContentByPath, getAllContentItems, ContentItem } from '@/content/mockData';
 import { AlertCircle, FileText } from 'lucide-react';
-import SimpleRenderer from '@/components/SimpleRenderer'; // Import the new SimpleRenderer
-import { TocItem } from '@/types'; // Import TocItem
+import SimpleRenderer from '@/components/SimpleRenderer';
+import { TocItem } from '@/types';
 
 const ContentPage: React.FC = () => {
   const params = useParams();
   const location = useLocation();
-  const [contentItem, setContentItem] = useState<ContentItem | null | undefined>(null); // undefined for loading, null for not found
-  
-  // Get setTocItems from Outlet context provided by Layout
+  const [contentItem, setContentItem] = useState<ContentItem | null | undefined>(null);
   const { setTocItems } = useOutletContext<{ setTocItems: React.Dispatch<React.SetStateAction<TocItem[]>> }>();
 
+  const [allNotes, setAllNotes] = useState<ContentItem[]>([]);
+  const [glossaryTerms, setGlossaryTerms] = useState<ContentItem[]>([]);
+
   useEffect(() => {
+    // Fetch all content items once to be used for linking and glossary
+    // In a real app, this might come from a context or a global store
+    const allItems = getAllContentItems();
+    
+    const notes = allItems.filter(item => 
+      item.type === 'note' || 
+      item.type === 'topic' || 
+      item.type === 'log' || 
+      item.type === 'dictionary_entry'
+    );
+    setAllNotes(notes);
+
+    const terms = allItems.filter(item => item.type === 'glossary_term');
+    setGlossaryTerms(terms);
+
     const path = params['*'];
     if (path) {
       const item = findContentByPath(path);
       setContentItem(item);
-      if (!item || !item.content) { // Clear TOC if no content or item not found
+      if (!item || !item.content) {
         setTocItems([]);
       }
     } else {
-      setContentItem(null); // No path provided
-      setTocItems([]); // Clear TOC if no path
+      setContentItem(null);
+      setTocItems([]);
     }
   }, [params, location, setTocItems]);
 
@@ -52,7 +67,6 @@ const ContentPage: React.FC = () => {
   }
 
   if (contentItem.type === 'folder') {
-     // Clear TOC for folders as they don't have direct content for TOC
      React.useEffect(() => {
         setTocItems([]);
      }, [setTocItems]);
@@ -96,7 +110,12 @@ const ContentPage: React.FC = () => {
       </header>
       
       {contentItem.content ? (
-        <SimpleRenderer content={contentItem.content} setTocItems={setTocItems} />
+        <SimpleRenderer 
+          content={contentItem.content} 
+          setTocItems={setTocItems}
+          allNotes={allNotes}
+          glossaryTerms={glossaryTerms}
+        />
       ) : (
         <div className="flex flex-col items-center justify-center text-center text-muted-foreground p-8 border border-dashed rounded-lg">
           <FileText className="h-12 w-12 mb-4" />
