@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useLocation, useOutletContext, Link } from 'react-router-dom';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useParams, useLocation, useOutletContext, Link, useNavigate } from 'react-router-dom';
 import { findContentByPath, getAllContentItems, ContentItem } from '@/content/mockData';
-import { AlertCircle, FileText, Info, Tag as TagIcon, CalendarDays } from 'lucide-react';
+import { AlertCircle, FileText, Info, Tag as TagIcon, CalendarDays, ArrowLeft, ArrowRight, Link2, Users } from 'lucide-react';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { TocItem } from '@/types';
 import { AppContextType } from '@/components/Layout';
 import { extractMarkdownBody } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const ContentPage: React.FC = () => {
   const params = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const [contentItem, setContentItem] = useState<ContentItem | null | undefined>(undefined);
   
   const { setTocItems, setCurrentContentItem, setAllNotesForContext } = useOutletContext<AppContextType>();
@@ -20,14 +23,15 @@ const ContentPage: React.FC = () => {
 
   useEffect(() => {
     const allItems = getAllContentItems();
-    const notesAndTopics = allItems.filter(item => 
+    const notesAndTopicsItems = allItems.filter(item => 
       item.type === 'note' || 
       item.type === 'topic' || 
       item.type === 'log' || 
       item.type === 'dictionary_entry'
-    );
-    setAllNotesAndTopics(notesAndTopics);
-    setAllNotesForContext(notesAndTopics);
+    ).sort((a, b) => a.path.localeCompare(b.path)); // Ensure a consistent order for prev/next
+    
+    setAllNotesAndTopics(notesAndTopicsItems);
+    setAllNotesForContext(notesAndTopicsItems); // Pass the sorted list to context if needed elsewhere
 
     const terms = allItems.filter(item => item.type === 'glossary_term');
     setGlossaryTerms(terms);
@@ -52,7 +56,71 @@ const ContentPage: React.FC = () => {
       setCurrentContentItem(null);
       setTocItems([]);
     }
+  // Ensure all dependencies are correctly listed or managed
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params, location.pathname, setTocItems, setCurrentContentItem, setAllNotesForContext]);
+  
+  // Backlinks and Related Notes logic (adapted from RightSidebar)
+  const backlinks = useMemo(() => {
+    if (!contentItem || !allNotesAndTopics || allNotesAndTopics.length === 0) return [];
+    
+    const currentTitleLower = contentItem.title.toLowerCase();
+    const currentPath = `/content/${contentItem.path}`;
+    const foundBacklinks: ContentItem[] = [];
+
+    allNotesAndTopics.forEach(note => {
+      if (note.id === contentItem.id) return; 
+
+      if (note.content) {
+        const titleLinkRegex = /\[\[(.*?)\]\]/g;
+        let match;
+        while ((match = titleLinkRegex.exec(note.content)) !== null) {
+          if (match[1].toLowerCase() === currentTitleLower) {
+            if (!foundBacklinks.find(bl => bl.id === note.id)) foundBacklinks.push(note);
+            return; 
+          }
+        }
+        if (note.content.includes(currentPath) || note.content.includes(contentItem.path)) {
+            if (!foundBacklinks.find(bl => bl.id === note.id)) {
+                foundBacklinks.push(note);
+            }
+        }
+      }
+    });
+    return foundBacklinks;
+  }, [contentItem, allNotesAndTopics]);
+
+  const relatedNotes = useMemo(() => {
+    if (!contentItem || !contentItem.tags || contentItem.tags.length === 0 || !allNotesAndTopics || allNotesAndTopics.length === 0) {
+      return [];
+    }
+    
+    const currentTags = new Set(contentItem.tags.map(tag => tag.toLowerCase()));
+    const foundRelated: ContentItem[] = [];
+
+    allNotesAndTopics.forEach(note => {
+      if (note.id === contentItem.id) return; 
+      if (note.tags && note.tags.some(tag => currentTags.has(tag.toLowerCase()))) {
+        if (!foundRelated.find(rl => rl.id === note.id)) foundRelated.push(note);
+      }
+    });
+    return foundRelated;
+  }, [contentItem, allNotesAndTopics]);
+
+  // Previous/Next Navigation Logic
+  const { prevItem, nextItem } = useMemo(() => {
+    if (!contentItem || allNotesAndTopics.length === 0 || contentItem.type === 'folder') {
+      return { prevItem: null, nextItem: null };
+    }
+    const currentIndex = allNotesAndTopics.findIndex(item => item.id === contentItem.id);
+    if (currentIndex === -1) {
+      return { prevItem: null, nextItem: null };
+    }
+    const prev = currentIndex > 0 ? allNotesAndTopics[currentIndex - 1] : null;
+    const next = currentIndex < allNotesAndTopics.length - 1 ? allNotesAndTopics[currentIndex + 1] : null;
+    return { prevItem: prev, nextItem: next };
+  }, [contentItem, allNotesAndTopics]);
+
 
   if (contentItem === undefined) {
     return (
@@ -77,19 +145,15 @@ const ContentPage: React.FC = () => {
     );
   }
 
-  // Prepare content for rendering: extract body and replace literal \\n with actual newlines
   const rawMarkdownBody = extractMarkdownBody(contentItem.content);
   const markdownContentToRender = rawMarkdownBody.replace(/\\n/g, '\n');
 
-  // Derive category from path
   let category: string | null = null;
   const pathParts = contentItem.path.split('/');
   if (pathParts.length > 1 && contentItem.type !== 'folder') {
-    category = pathParts.slice(0, -1).join('/'); // Takes the parent path as category
-    // Capitalize first letter of each part of category for display
+    category = pathParts.slice(0, -1).join('/'); 
     category = category.split('/').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' / ');
   }
-  // Check if a "category" tag exists
   const categoryTag = contentItem.tags?.find(tag => tag.toLowerCase().startsWith('category:'));
   if (categoryTag) {
     category = categoryTag.substring('category:'.length).trim();
@@ -169,7 +233,7 @@ const ContentPage: React.FC = () => {
               <span>Tags:</span>
             </div>
             <div className="flex flex-wrap gap-2">
-              {contentItem.tags.filter(tag => !tag.toLowerCase().startsWith('category:')).map(tag => ( // Filter out category tags if displayed separately
+              {contentItem.tags.filter(tag => !tag.toLowerCase().startsWith('category:')).map(tag => (
                 <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
               ))}
             </div>
@@ -189,6 +253,75 @@ const ContentPage: React.FC = () => {
           <FileText className="h-12 w-12 mb-4" />
           <p>No content available for this item yet.</p>
           <p className="text-sm">This might be a note that is pending content.</p>
+        </div>
+      )}
+
+      {/* Backlinks and Related Notes for Mobile/Tablet */}
+      <div className="lg:hidden mt-12 space-y-8 border-t pt-8">
+        {contentItem && (
+          <>
+            <div>
+              <h3 className="mb-3 text-lg font-semibold flex items-center">
+                <Link2 className="h-5 w-5 mr-2 text-primary" />
+                Backlinks
+              </h3>
+              {backlinks.length > 0 ? (
+                <ul className="space-y-1.5">
+                  {backlinks.map(item => (
+                    <li key={`mobile-backlink-${item.id}`}>
+                      <Link to={`/content/${item.path}`} className="text-sm custom-link">
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-muted-foreground">No backlinks found.</p>
+              )}
+            </div>
+
+            <div>
+              <h3 className="mb-3 text-lg font-semibold flex items-center">
+                <Users className="h-5 w-5 mr-2 text-primary" />
+                Related Notes
+              </h3>
+              {relatedNotes.length > 0 ? (
+                <ul className="space-y-1.5">
+                  {relatedNotes.map(item => (
+                    <li key={`mobile-related-${item.id}`}>
+                      <Link to={`/content/${item.path}`} className="text-sm custom-link">
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-muted-foreground">No related notes found.</p>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Previous/Next Navigation */}
+      {(prevItem || nextItem) && (
+        <div className="mt-12 pt-8 border-t flex justify-between items-center">
+          {prevItem ? (
+            <Button variant="outline" asChild>
+              <Link to={`/content/${prevItem.path}`}>
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                {prevItem.title}
+              </Link>
+            </Button>
+          ) : <div /> /* Placeholder to keep Next button to the right */}
+          {nextItem ? (
+            <Button variant="outline" asChild>
+              <Link to={`/content/${nextItem.path}`}>
+                {nextItem.title}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          ) : <div /> /* Placeholder */}
         </div>
       )}
     </article>

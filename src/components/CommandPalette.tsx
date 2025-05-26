@@ -11,6 +11,7 @@ import {
   CommandSeparator,
 } from '@/components/ui/command';
 import { getAllContentItems, ContentItem } from '@/content/mockData';
+import { toast } from 'sonner';
 
 interface CommandPaletteProps {
   open: boolean;
@@ -61,7 +62,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             key="command-sort"
             value="Sort items by criteria"
             onSelect={() => {
-              console.log('Command Palette: "Sort Items" selected. Full functionality to sort items by title, date, or type is planned.');
+              toast.info('Sort Items action selected.', { description: 'Full functionality for sorting will be implemented soon.'});
               onOpenChange(false);
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
@@ -73,7 +74,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             key="command-filter"
             value="Filter items by type or status"
             onSelect={() => {
-              console.log('Command Palette: "Filter Items" selected. Full functionality to filter items by type, tags, or other criteria is planned.');
+              toast.info('Filter Items action selected.', { description: 'Full functionality for filtering will be implemented soon.'});
               onOpenChange(false);
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
@@ -85,7 +86,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             key="command-view-tags"
             value="View all tags"
             onSelect={() => {
-              console.log('Command Palette: "View All Tags" selected. Full functionality for a dedicated tag view or advanced tag-based filtering is planned. Tags are currently listed in their own group.');
+              toast.info('View All Tags action selected.', { description: 'Tags are listed below. Advanced tag view is planned.' });
               onOpenChange(false);
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
@@ -144,7 +145,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
                   key={`tag-${tag}`}
                   value={tag}
                   onSelect={() => {
-                    console.log('Command Palette: Selected tag:', tag, '. Future: Navigate to tag search page or filter by this tag.');
+                    toast.info(`Selected tag: ${tag}`, { description: 'Navigating to tag specific page or filtering by this tag will be implemented soon.'});
                     onOpenChange(false);
                   }}
                   className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
