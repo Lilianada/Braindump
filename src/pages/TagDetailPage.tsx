@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText as FileTextIcon, Tag as TagIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { getNormalizedTags } from '@/lib/utils';
 
 const TagDetailPage: React.FC = () => {
   const { tagName } = useParams<{ tagName: string }>();
@@ -17,13 +18,8 @@ const TagDetailPage: React.FC = () => {
     if (decodedTagName) {
       const allItems = getAllContentItems();
       const filteredItems = allItems.filter(item => {
-        if (!item.tags) return false;
-        if (Array.isArray(item.tags)) {
-          return item.tags.map(t => t.trim()).includes(decodedTagName);
-        } else if (typeof item.tags === 'string') {
-          return item.tags.split(',').map(t => t.trim()).includes(decodedTagName);
-        }
-        return false;
+        const normalizedItemTags = getNormalizedTags(item.tags);
+        return normalizedItemTags.includes(decodedTagName);
       });
       setRelatedItems(filteredItems);
     }
@@ -67,8 +63,8 @@ const TagDetailPage: React.FC = () => {
                       )}
                        {item.tags && (
                         <div className="mt-2 flex flex-wrap gap-1">
-                          {(Array.isArray(item.tags) ? item.tags : item.tags.split(',').map(t=>t.trim())).map(tag => (
-                            tag.trim() && <Badge key={tag} variant="outline" className="text-xs">{tag.trim()}</Badge>
+                          {getNormalizedTags(item.tags).map(tag => (
+                            tag && <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
                           ))}
                         </div>
                       )}

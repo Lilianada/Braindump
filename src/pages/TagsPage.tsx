@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getAllContentItems, ContentItem } from '@/content/mockData';
+import { getAllContentItems } from '@/content/mockData'; // Removed ContentItem as it's not directly used
 import { Badge } from '@/components/ui/badge';
 import { Tag as TagIcon } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getNormalizedTags } from '@/lib/utils';
 
 const TagsPage: React.FC = () => {
   const [uniqueTags, setUniqueTags] = useState<string[]>([]);
@@ -15,19 +16,10 @@ const TagsPage: React.FC = () => {
     const allItems = getAllContentItems();
     const tagsSet = new Set<string>();
     allItems.forEach(item => {
-      if (item.tags) {
-        if (Array.isArray(item.tags)) {
-          item.tags.forEach(tag => {
-            const trimmedTag = tag.trim();
-            if (trimmedTag) tagsSet.add(trimmedTag);
-          });
-        } else if (typeof item.tags === 'string') {
-          item.tags.split(',').forEach(tag => {
-            const trimmedTag = tag.trim();
-            if (trimmedTag) tagsSet.add(trimmedTag);
-          });
-        }
-      }
+      const normalizedItemTags = getNormalizedTags(item.tags);
+      normalizedItemTags.forEach(tag => {
+        if (tag) tagsSet.add(tag);
+      });
     });
     setUniqueTags(Array.from(tagsSet).sort());
     setIsLoading(false);

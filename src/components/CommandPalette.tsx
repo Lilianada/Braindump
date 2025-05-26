@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/command';
 import { getAllContentItems, ContentItem } from '@/content/mockData';
 import { toast } from 'sonner';
+import { getNormalizedTags } from '@/lib/utils';
 
 interface CommandPaletteProps {
   open: boolean;
@@ -33,19 +34,10 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
 
       const tagsSet = new Set<string>();
       fetchedItems.forEach(item => {
-        if (item.tags) {
-          if (Array.isArray(item.tags)) {
-            item.tags.forEach(tag => {
-              const trimmedTag = tag.trim();
-              if (trimmedTag) tagsSet.add(trimmedTag);
-            });
-          } else if (typeof item.tags === 'string') {
-            item.tags.split(',').forEach(tag => {
-              const trimmedTag = tag.trim();
-              if (trimmedTag) tagsSet.add(trimmedTag);
-            });
-          }
-        }
+        const normalizedItemTags = getNormalizedTags(item.tags);
+        normalizedItemTags.forEach(tag => {
+         if (tag) tagsSet.add(tag);
+        });
       });
       setUniqueTags(Array.from(tagsSet).sort());
 
@@ -122,7 +114,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
               .map((item) => (
               <CommandItem
                 key={`content-${item.id}`}
-                value={`${item.title} ${item.path} ${item.tags?.join(' ')} ${item.content?.substring(0,50)}`}
+                value={`${item.title} ${item.path} ${getNormalizedTags(item.tags).join(' ')} ${item.content?.substring(0,50)}`}
                 onSelect={() => handleSelectContent(item.path)}
                 className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
               >
