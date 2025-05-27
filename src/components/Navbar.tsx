@@ -42,7 +42,10 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
               <MenuIcon className="h-6 w-6" />
             </Button>
           )}
-          <Link to="/" className="text-2xl font-bold text-primary font-lancelot">
+          <Link to="/" className="text-2xl font-bold text-primary font-geist-sans">
+            <div className="bg-primary rounded-xl px-2 py-1">
+            <Brain className="h-5 w-5" aria-labelled= />
+            </div>
             Braindump
           </Link>
         </div>
