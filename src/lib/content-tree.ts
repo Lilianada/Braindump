@@ -126,13 +126,6 @@ export const getFlattenedNavigableTree = (forceRefresh: boolean = false): Conten
     }
   }
 
-  flatten(tree);
-  
-  // Debug log to check what content types are included
-  console.log("Flattened navigable tree item types:", 
-    navigableItems.map(item => item.type)
-      .filter((value, index, self) => self.indexOf(value) === index)
-  );
-  
+  flatten(tree);  
   return navigableItems;
 };

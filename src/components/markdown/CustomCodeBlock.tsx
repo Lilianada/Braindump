@@ -24,11 +24,6 @@ const CustomCodeBlock: React.FC<CustomCodeBlockProps> = ({ node, inline, classNa
     return <code className={`${className} bg-muted/60 dark:bg-muted/70 px-1 py-0.5 rounded text-sm`} {...props}>{children}</code>;
   }
 
-  // Removed Mermaid rendering logic:
-  // if (match && match[1] === 'mermaid') {
-  //   return <MermaidDiagram chart={codeString} />;
-  // }
-
   const baseStyle = theme === 'dark' ? okaidia : prismLight;
   // Modify the syntax highlighter theme to have a transparent background
   const transparentThemeStyle = {

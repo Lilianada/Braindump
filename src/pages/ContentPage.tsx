@@ -37,7 +37,6 @@ const ContentPage: React.FC = () => {
 
     // For sequential prev/next navigation - use flattened tree with ALL content types
     const sequencedItems = getFlattenedNavigableTree(true);
-    console.log("Sequential navigation items count:", sequencedItems.length);
     setSequencedNavigableItems(sequencedItems);
 
     const terms = allItems.filter(item => item.type === 'glossary_term');
@@ -52,8 +51,7 @@ const ContentPage: React.FC = () => {
       setActiveTocItemId(null);
 
       if (item) {
-        console.log("Content item found:", item);
-        // ... keep existing code (console logs for item details)
+        // ... keep existing code
       } else {
         setTocItems([]);
       }
@@ -94,7 +92,6 @@ const ContentPage: React.FC = () => {
           });
           
           if (bestVisibleEntry) {
-            console.log("[TOC Debug] Active heading set by observer:", bestVisibleEntry.target.id);
             setActiveTocItemId(bestVisibleEntry.target.id);
           }
         },
