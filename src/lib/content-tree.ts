@@ -3,7 +3,8 @@ import { getAllFileContentItems } from './content-loader';
 
 let allContentTreeCache: ContentItem[] | null = null;
 
-const NAVIGABLE_PAGE_TYPES: ContentItem['type'][] = ['note', 'topic', 'log', 'dictionary_entry', 'zettel'];
+// Added 'glossary_term' to include these in navigation.
+const NAVIGABLE_PAGE_TYPES: ContentItem['type'][] = ['note', 'topic', 'log', 'dictionary_entry', 'zettel', 'glossary_term'];
 
 // Builds a hierarchical tree from the flat list of file content items.
 // This includes creating "virtual" folder items based on path structure.
