@@ -1,3 +1,4 @@
+
 import { getLinkPreview } from 'link-preview-js';
 
 export interface LinkMetadata {
@@ -12,82 +13,28 @@ export interface LinkMetadata {
 
 const linkMetadataCache = new Map<string, LinkMetadata>();
 
-// Preloaded metadata for common external links
-const preloadedMetadata: Record<string, LinkMetadata> = {
-  'https://x.com/lilian_ada_': {
-    title: 'Twitter / X',
-    description: 'Lilian Ada on Twitter',
-    url: 'https://x.com/lilian_ada_',
-    siteName: 'X',
-    favicon: 'https://abs.twimg.com/favicons/twitter.3.ico' // Example, actual might differ
-  },
-  'https://instagram.com/defitcreative': {
-    title: 'Instagram',
-    description: 'Defit Creative on Instagram',
-    url: 'https://instagram.com/defitcreative',
-    siteName: 'Instagram',
-    favicon: 'https://www.instagram.com/static/images/ico/favicon.ico/36b3ee2d91ed.ico' // Example
-  },
-  'https://www.linkedin.com/in/lilianada': {
-    title: 'LinkedIn',
-    description: 'Lilian Ada on LinkedIn',
-    url: 'https://www.linkedin.com/in/lilianada',
-    siteName: 'LinkedIn',
-    favicon: 'https://static.licdn.com/sc/h/akt4ae504epesldzj74ls4n83' // Example
-  },
-  'https://www.github.com/lilianada': {
-    title: 'GitHub',
-    description: 'Lilian Ada on GitHub',
-    url: 'https://www.github.com/lilianada',
-    siteName: 'GitHub',
-    favicon: 'https://github.githubassets.com/favicons/favicon.svg' // Example
-  },
-  'https://braindump.lilyslab.xyz/rss.xml': {
-    title: 'RSS Feed',
-    description: 'Braindump RSS Feed',
-    url: 'https://braindump.lilyslab.xyz/rss.xml',
-    siteName: 'Lily\'s Lab Braindump'
-  }
+// Helper function to check for property existence
+const hasProperty = <T extends object, K extends PropertyKey>(obj: T, key: K): obj is T & Record<K, unknown> => {
+  return key in obj;
 };
-
 
 export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | null> => {
   if (linkMetadataCache.has(url)) {
     return linkMetadataCache.get(url) || null;
   }
 
-  if (url in preloadedMetadata) {
-    const metadata = preloadedMetadata[url];
-    linkMetadataCache.set(url, metadata);
-    return metadata;
-  }
-
   try {
     // Using a proxy for CORS issues, as link-preview-js might face them client-side for some sites.
     // It's generally better to run this kind of fetching server-side if possible.
-    // For client-side, a CORS proxy can help. Let's assume one is available or not needed for some URLs.
-    // If no proxy, direct fetch: const preview = await getLinkPreview(url);
-    // Using a simple public CORS proxy for demonstration. Replace with a more robust solution if needed.
-    // const proxyUrl = `https://cors-anywhere.herokuapp.com/`; // A common public proxy, might be rate-limited or unreliable.
-                                                          // For a real app, host your own or use a service.
-                                                          // Or, if link-preview-js handles this internally or it's not an issue, remove proxy.
-                                                          // For now, let's try direct fetching first, as proxies can be problematic.
-    
     const preview = await getLinkPreview(url);
-
-    // Helper function to check for property existence
-    const hasProperty = <T extends object, K extends PropertyKey>(obj: T, key: K): obj is T & Record<K, unknown> => {
-      return key in obj;
-    };
 
     const metadata: LinkMetadata = {
       title: (hasProperty(preview, 'title') && typeof preview.title === 'string') ? preview.title : url,
       description: (hasProperty(preview, 'description') && typeof preview.description === 'string') ? preview.description : undefined,
       image: (hasProperty(preview, 'images') && Array.isArray(preview.images) && preview.images.length > 0 && typeof preview.images[0] === 'string') ? preview.images[0] : undefined,
-      // favicons seem to be present in most response types from link-preview-js, but still good to check
       favicon: (Array.isArray(preview.favicons) && preview.favicons.length > 0 && typeof preview.favicons[0] === 'string') ? preview.favicons[0] : undefined,
       siteName: (hasProperty(preview, 'siteName') && typeof preview.siteName === 'string') ? preview.siteName : undefined,
-      url: (hasProperty(preview, 'url') && typeof preview.url === 'string') ? preview.url : url, // Fallback to original URL if not in preview
+      url: (hasProperty(preview, 'url') && typeof preview.url === 'string') ? preview.url : url,
       contentType: (hasProperty(preview, 'contentType') && typeof preview.contentType === 'string') ? preview.contentType : undefined,
     };
     linkMetadataCache.set(url, metadata);

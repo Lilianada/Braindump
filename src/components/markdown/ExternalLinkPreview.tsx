@@ -21,9 +21,6 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
   useEffect(() => {
     let isMounted = true;
     
-    // Removed metadata check from condition to always fetch if not already fetched,
-    // allowing for preloaded data to be potentially updated by a fetch if logic changes.
-    // For now, fetchLinkMetadata handles caching internally.
     setIsLoading(true);
     fetchLinkMetadata(href)
       .then(data => {
@@ -33,7 +30,6 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
       })
       .catch(error => {
         if (isMounted) {
-          // Ensure fallback metadata is set in case of error within fetchLinkMetadata not returning basic
           console.error("Error fetching metadata in component:", error);
           setMetadata({ title: href, url: href, description: "External link" });
         }
@@ -47,7 +43,7 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
     return () => {
       isMounted = false;
     };
-  }, [href]); // Removed metadata from dependency array as fetchLinkMetadata handles caching
+  }, [href]);
 
   return (
     <HoverCard open={isOpen} onOpenChange={setIsOpen}>
@@ -83,12 +79,11 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
               <a href={metadata.url} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
                 {metadata.favicon && <img src={metadata.favicon} alt="" className="h-3 w-3 mr-1.5"/>}
                 <span className="truncate">{metadata.url}</span>
-               
               </a>
             </p>
           </div>
         )}
-        {!isLoading && !metadata && ( // This case should ideally be handled by fetchLinkMetadata returning basic fallback
+        {!isLoading && !metadata && (
           <div className="flex flex-col space-y-1">
             <p className="text-xs text-muted-foreground">External link to:</p>
             <div className="flex items-center">
@@ -105,4 +100,3 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
 };
 
 export default ExternalLinkPreview;
-
