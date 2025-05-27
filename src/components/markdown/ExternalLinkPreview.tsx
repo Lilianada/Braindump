@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { fetchLinkMetadata, LinkMetadata } from '@/lib/link-metadata';
 import { Skeleton } from "@/components/ui/skeleton";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink as ExternalLinkIcon } from "lucide-react"; // Renamed to avoid conflict
 
 interface ExternalLinkPreviewProps {
   href: string;
@@ -16,31 +16,38 @@ interface ExternalLinkPreviewProps {
 const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, children, className, target, rel }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [metadata, setMetadata] = useState<LinkMetadata | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start loading true
 
-  // Pre-fetch metadata when component mounts
   useEffect(() => {
     let isMounted = true;
     
-    if (!metadata) {
-      setIsLoading(true);
-      fetchLinkMetadata(href)
-        .then(data => {
-          if (isMounted && data) {
-            setMetadata(data);
-          }
-        })
-        .finally(() => {
-          if (isMounted) {
-            setIsLoading(false);
-          }
-        });
-    }
+    // Removed metadata check from condition to always fetch if not already fetched,
+    // allowing for preloaded data to be potentially updated by a fetch if logic changes.
+    // For now, fetchLinkMetadata handles caching internally.
+    setIsLoading(true);
+    fetchLinkMetadata(href)
+      .then(data => {
+        if (isMounted && data) {
+          setMetadata(data);
+        }
+      })
+      .catch(error => {
+        if (isMounted) {
+          // Ensure fallback metadata is set in case of error within fetchLinkMetadata not returning basic
+          console.error("Error fetching metadata in component:", error);
+          setMetadata({ title: href, url: href, description: "External link" });
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      });
     
     return () => {
       isMounted = false;
     };
-  }, [href, metadata]);
+  }, [href]); // Removed metadata from dependency array as fetchLinkMetadata handles caching
 
   return (
     <HoverCard open={isOpen} onOpenChange={setIsOpen}>
@@ -62,27 +69,31 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
             {metadata.image && (
               <img 
                 src={metadata.image} 
-                alt="Preview" 
-                className="max-h-20 w-auto object-contain mb-2 rounded" 
+                alt={metadata.title || 'Preview'}
+                className="max-h-32 w-full object-cover mb-2 rounded" 
                 onError={(e) => (e.currentTarget.style.display = 'none')} 
               />
             )}
-            <h4 className="font-semibold mb-1 text-base truncate" title={metadata.title}>{metadata.title}</h4>
+             <h4 className="font-semibold mb-1 text-base truncate" title={metadata.title}>{metadata.title}</h4>
+            {metadata.siteName && <p className="text-xs text-muted-foreground mb-1">{metadata.siteName}</p>}
             {metadata.description && <p className="text-xs text-muted-foreground line-clamp-3">{metadata.description}</p>}
-            <p className="text-xs text-muted-foreground mt-1 truncate">
+            <p className="text-xs text-muted-foreground mt-2 truncate">
               <a href={metadata.url} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
+                {metadata.favicon && <img src={metadata.favicon} alt="" className="h-3 w-3 mr-1.5"/>}
                 <span className="truncate">{metadata.url}</span>
-                <ExternalLink className="h-3 w-3 ml-1 inline shrink-0" />
+                <ExternalLinkIcon className="h-3 w-3 ml-1 inline shrink-0" />
               </a>
             </p>
           </div>
         )}
-        {!isLoading && !metadata && (
-          <div className="flex flex-col">
-            <p className="text-xs text-muted-foreground mb-2">External link to</p>
-            <div className="flex items-center justify-between">
-              <span className="truncate text-sm">{href}</span>
-              <ExternalLink className="h-3 w-3 ml-1 shrink-0" />
+        {!isLoading && !metadata && ( // This case should ideally be handled by fetchLinkMetadata returning basic fallback
+          <div className="flex flex-col space-y-1">
+            <p className="text-xs text-muted-foreground">External link to:</p>
+            <div className="flex items-center">
+              <span className="truncate text-sm font-medium">{href}</span>
+              <a href={href} target="_blank" rel="noopener noreferrer" className="ml-1.5">
+                <ExternalLinkIcon className="h-4 w-4 shrink-0 text-muted-foreground hover:text-foreground" />
+              </a>
             </div>
           </div>
         )}
@@ -92,3 +103,4 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
 };
 
 export default ExternalLinkPreview;
+
