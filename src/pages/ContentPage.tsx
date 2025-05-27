@@ -65,17 +65,11 @@ const ContentPage: React.FC = () => {
       return;
     }
 
-    // Wait for TOC items to be populated by CustomHeading components
-    // This timeout is a pragmatic way to ensure headings are rendered.
-    // A more robust solution might involve a callback or context update from CustomHeading.
     const timer = setTimeout(() => {
       const headingElements = Array.from(document.querySelectorAll('[id]'))
         .filter(el => el.tagName.match(/^H[1-3]$/) && el.id);
-        // This selects h1, h2, h3 elements that have an ID.
-        // We assume tocItems will eventually contain these IDs.
       
       if (headingElements.length === 0) {
-        // console.log("No heading elements found for observer.");
         return;
       }
 
@@ -86,8 +80,7 @@ const ContentPage: React.FC = () => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               if (!bestVisibleEntry || entry.boundingClientRect.top < bestVisibleEntry.boundingClientRect.top) {
-                // Prioritize entries closer to the top of the viewport
-                if (entry.boundingClientRect.top >=0) { // Ensure it's not above the viewport
+                if (entry.boundingClientRect.top >=0) {
                      bestVisibleEntry = entry;
                 }
               }
@@ -95,33 +88,26 @@ const ContentPage: React.FC = () => {
           });
           
           if (bestVisibleEntry) {
-            // console.log("Active heading set by observer:", bestVisibleEntry.target.id);
+            console.log("[TOC Debug] Active heading set by observer:", bestVisibleEntry.target.id); // Added console log
             setActiveTocItemId(bestVisibleEntry.target.id);
-          } else {
-             // If nothing is intersecting, try to find the last one that was or first overall.
-             // For now, let's not change active ID if nothing is "best" visible to avoid jumpiness.
-             // Potentially, find the one closest to the top, even if slightly scrolled past.
           }
         },
         {
-          rootMargin: '-15% 0px -70% 0px', // Trigger when heading is in the top ~15-30% of the viewport
-          threshold: 0.1, // At least 10% of the item is visible
+          rootMargin: '-15% 0px -70% 0px', 
+          threshold: 0.1, 
         }
       );
 
       headingElements.forEach((el) => observer.observe(el));
-      // console.log("IntersectionObserver observing elements:", headingElements.map(el => el.id));
 
       return () => {
-        // console.log("Disconnecting IntersectionObserver");
         headingElements.forEach((el) => observer.unobserve(el));
         observer.disconnect();
       };
-    }, 100); // Small delay to ensure headings are in DOM from SimpleRenderer
+    }, 100); 
 
     return () => clearTimeout(timer);
-  }, [contentItem, setActiveTocItemId, tocItems]); // tocItems dependency is important to re-run when headings change
-
+  }, [contentItem, setActiveTocItemId, tocItems]);
 
   const backlinks = useMemo(() => {
     if (!contentItem || !allNotesAndTopics || allNotesAndTopics.length === 0) return [];

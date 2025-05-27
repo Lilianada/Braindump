@@ -1,6 +1,7 @@
 
 import { ContentItem } from '../types/content';
 import { parseFrontmatterAndContent } from './content-parser';
+import { formatSlugForTitle } from './stringUtils'; // Import the new function
 
 let allContentCache: ContentItem[] | null = null;
 
@@ -23,6 +24,7 @@ export const getAllFileContentItems = (forceRefresh: boolean = false): ContentIt
     // console.log(`[ContentLoader] Parsed ${filePath}. Raw frontmatter.tags:`, frontmatter.tags);
     
     const contentPath = filePath.replace('/src/content_files/', '').replace(/\.md$/, '');
+    const fallbackTitleSlug = contentPath.split('/').pop() || 'Untitled';
 
     const itemTags = Array.isArray(frontmatter.tags) ? frontmatter.tags : 
                      (typeof frontmatter.tags === 'string' && frontmatter.tags.trim() !== '' ? [frontmatter.tags] : []);
@@ -30,11 +32,11 @@ export const getAllFileContentItems = (forceRefresh: boolean = false): ContentIt
 
 
     const item: ContentItem = {
-      id: frontmatter.id || contentPath.split('/').pop() || filePath,
-      title: frontmatter.title || contentPath.split('/').pop() || 'Untitled',
+      id: frontmatter.id || fallbackTitleSlug || filePath,
+      title: frontmatter.title || formatSlugForTitle(fallbackTitleSlug), // Use formatter here
       path: frontmatter.path || contentPath,
       type: frontmatter.type || 'note',
-      slug: frontmatter.slug || contentPath.split('/').pop(),
+      slug: frontmatter.slug || fallbackTitleSlug,
       created: frontmatter.created,
       lastUpdated: frontmatter.lastUpdated,
       tags: itemTags,
@@ -69,3 +71,4 @@ export const getAllFileContentItems = (forceRefresh: boolean = false): ContentIt
 export const getAllContentItems = (forceRefresh: boolean = false): ContentItem[] => {
   return getAllFileContentItems(forceRefresh);
 };
+
