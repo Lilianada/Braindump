@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Ellipsis, Menu as MenuIcon } from 'lucide-react';
+import { Search, Ellipsis, Menu as MenuIcon, Brain } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import FontToggle from './FontToggle';
 import { Button } from '@/components/ui/button';
