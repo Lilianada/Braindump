@@ -1,5 +1,5 @@
 
-import { defineConfig, PluginOption } from "vite"; // Added PluginOption for explicit typing if needed, but 'as const' should suffice
+import { defineConfig, PluginOption, Plugin } from "vite"; // Added Plugin
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => ({
     },
     react(),
     mode === 'development' && componentTagger(),
-  ].filter(Boolean as <T>(x: T | false | null | undefined) => x is T), // Ensure filter type guard is correct
+  ].filter((p): p is Plugin => !!p), // Use a clear type guard
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -39,4 +39,3 @@ export default defineConfig(({ mode }) => ({
   //   },
   // },
 }));
-
