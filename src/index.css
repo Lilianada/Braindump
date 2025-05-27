@@ -1,88 +1,52 @@
 
-@import url('https://unpkg.com/geist@1.4.2/dist/geist-sans.css');
-@import url('https://unpkg.com/geist@1.4.2/dist/geist-mono.css');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* Light mode background */
-    --foreground: 222.2 84% 4.9%; /* Light mode text */
-
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 348 69.5% 56.8%; /* Custom primary color */
-    --primary-foreground: 0 0% 100%; /* Text on primary color - white for good contrast */
-
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 348 69.5% 56.8%; /* Ring color to match primary */
-
+    --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
-
-    /* Custom font variables */
-    --font-geist-sans: "Geist Sans", sans-serif;
-    --font-geist-mono: "Geist Mono", monospace;
-    --font-kalam: "Kalam", cursive;
-    --font-indie-flower: "Indie Flower", cursive;
-    --font-lancelot: "Lancelot", cursive;
-    --font-cormorant-upright: "Cormorant Upright", serif;
-
-    /* Custom yellow for wiki links */
-    --custom-yellow: 42 92% 42%; /* A nice, noticeable yellow */
-    --custom-yellow-foreground: 222.2 84% 4.9%; /* Dark text for yellow background in light mode if needed */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%; /* Dark mode background */
-    --foreground: 210 40% 98%; /* Dark mode text */
-
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
-    --primary: 348 69.5% 56.8%; /* Custom primary color */
-    --primary-foreground: 0 0% 100%;
-
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 348 69.5% 56.8%; /* Ring color to match primary */
-    
-    /* Custom yellow for wiki links in dark mode */
-    --custom-yellow: 45 90% 55%; /* Same yellow, usually pops well on dark */
-    --custom-yellow-foreground: 210 40% 98%; /* Light text for yellow background in dark mode if needed */
+    --ring: 216 12.2% 83.9%;
   }
 }
 
@@ -90,51 +54,21 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-geist-mono); /* Default font to Geist Mono */
-    font-size: 14px; /* Set base body font size */
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  body.font-geist-sans { font-family: var(--font-geist-sans); }
-  body.font-geist-mono { font-family: var(--font-geist-mono); }
-  body.font-kalam { font-family: var(--font-kalam); }
-  body.font-indie-flower { font-family: var(--font-indie-flower); }
-  body.font-lancelot { font-family: var(--font-lancelot); }
-  body.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
-
-  /* Ensure html also gets font for consistency if needed */
-  html {
-    font-family: var(--font-geist-mono); /* Default font to Geist Mono */
-  }
-  html.font-geist-sans { font-family: var(--font-geist-sans); }
-  html.font-geist-mono { font-family: var(--font-geist-mono); }
-  html.font-kalam { font-family: var(--font-kalam); }
-  html.font-indie-flower { font-family: var(--font-indie-flower); }
-  html.font-lancelot { font-family: var(--font-lancelot); }
-  html.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
-
-  /* Custom link styling */
-  .custom-link {
-    @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--custom-yellow))] hover:underline;
-  }
-  /* Apply to prose links as well if needed */
-  .prose a, .prose .dark\:prose-invert a { /* Updated dark mode selector for prose */
-     @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--custom-yellow))] no-underline hover:underline;
-  }
-   /* Adjust prose default font size if body is 14px, Tailwind's prose might default to 16px */
-  .prose {
-    font-size: inherit; /* Inherit from body's 14px */
-  }
-  .prose :where(p):not(:where([class~="not-prose"] *)) {
-    font-size: inherit; /* Ensure paragraphs within prose also inherit */
-  }
-  .prose :where(code):not(:where([class~="not-prose"] *))::before,
-  .prose :where(code):not(:where([class~="not-prose"] *))::after {
-    content: ""; /* Remove backticks from inline code in prose */
   }
 }
 
-/* ... keep existing code (rest of the file) */
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+
+.custom-link {
+  @apply text-primary hover:underline;
+}

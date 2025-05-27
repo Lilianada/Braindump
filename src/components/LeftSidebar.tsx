@@ -109,7 +109,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
         "fixed top-0 left-0 h-screen pt-16 w-72 bg-background border-r border-border flex flex-col z-40 transition-transform duration-300 ease-in-out",
          isOpen ? "translate-x-0" : "-translate-x-full", "md:relative md:translate-x-0 md:pt-4"
       )}>
-        <ScrollArea className="flex-1 px-4 py-4">
+        <ScrollArea className="flex-1 px-4 py-4 scrollbar-hide">
           <nav className="space-y-6">
             <PageLinks />
             <ContentNavigation contentSections={contentSections} />
