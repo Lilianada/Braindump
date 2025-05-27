@@ -1,5 +1,5 @@
 
-import { defineConfig } from "vite";
+import { defineConfig, PluginOption } from "vite"; // Added PluginOption for explicit typing if needed, but 'as const' should suffice
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
@@ -21,11 +21,11 @@ export default defineConfig(({ mode }) => ({
         // However, for globSync and fs.readFileSync to work, we need them.
         protocolImports: true, // Recommended for full compatibility
       }),
-      enforce: 'pre', // Run this plugin before Vite's core plugins
+      enforce: 'pre' as const, // Correctly typed 'pre'
     },
     react(),
     mode === 'development' && componentTagger(),
-  ].filter(Boolean),
+  ].filter(Boolean as <T>(x: T | false | null | undefined) => x is T), // Ensure filter type guard is correct
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -39,3 +39,4 @@ export default defineConfig(({ mode }) => ({
   //   },
   // },
 }));
+
