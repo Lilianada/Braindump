@@ -8,13 +8,13 @@
 @layer base {
   :root {
     --background: 0 0% 100%; /* Light mode background */
-    --foreground: 222.2 84% 4.9%; /* Light mode text */
+    --foreground: 324 5% 2%; /* Light mode text */
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 324 5% 2%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 324 5% 2%;
 
     --primary: 350 65% 70%; /* Custom primary color */
     --primary-foreground: 0 0% 100%; /* Text on primary color - white for good contrast */
@@ -47,36 +47,36 @@
 
     /* Custom yellow for wiki links */
     --custom-yellow: 42 92% 42%; /* A nice, noticeable yellow */
-    --custom-yellow-foreground: 222.2 84% 4.9%; /* Dark text for yellow background in light mode if needed */
+    --custom-yellow-foreground: 324 5% 2%; /* Dark text for yellow background in light mode if needed */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%; /* Dark mode background */
+    --background: 324 5% 2%; /* Dark mode background */
     --foreground: 210 40% 98%; /* Dark mode text */
 
-    --card: 222.2 84% 4.9%;
+    --card: 324 5% 2%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 324 5% 2%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 350 65% 70%; /* Custom primary color */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 217.2 4% 18%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 217.2 4% 18%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 217.2 4% 18%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 90% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --border: 217.2 4% 18%;
+    --input: 217.2 4% 18%;
     --ring: 350 65% 70%; /* Ring color to match primary */
     
     /* Custom yellow for wiki links in dark mode */

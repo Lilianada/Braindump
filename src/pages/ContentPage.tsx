@@ -295,7 +295,7 @@ const ContentPage: React.FC = () => {
             </div>
             <div className="flex flex-wrap gap-2">
               {contentItem.tags.filter(tag => !tag.toLowerCase().startsWith('category:')).map(tag => (
-                <Badge key={tag} variant="secondary" className="text-xs font-medium">{tag}</Badge>
+                <span key={tag} className="text-xs text-muted-foreground font-medium">#{tag}</span>
               ))}
             </div>
           </div>
@@ -356,7 +356,7 @@ const ContentPage: React.FC = () => {
       </div>
 
       {(prevItem || nextItem) && (
-        <div className="mt-12 pt-8 border-t flex justify-between items-center">
+        <div className="mt-12 pt-8 flex justify-between items-center">
           {prevItem ? (
             <Button variant="outline" asChild>
               <Link to={`/content/${prevItem.path}`}>

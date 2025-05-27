@@ -71,7 +71,6 @@ We'll review your PR and merge it if everything looks good!
 ## Future Enhancements (Ideas)
 
 *   In-app note creation and editing.
-*   Bi-directional linking between notes.
 *   Graph visualization of note connections.
 *   Advanced search capabilities.
 *   User authentication and cloud persistence.
