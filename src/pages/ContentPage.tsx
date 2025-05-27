@@ -15,7 +15,7 @@ const ContentPage: React.FC = () => {
   const navigate = useNavigate();
   const [contentItem, setContentItem] = useState<ContentItem | null | undefined>(undefined);
   
-  const { setTocItems, setCurrentContentItem, setAllNotesForContext, setActiveTocItemId } = useOutletContext<AppContextType>();
+  const { tocItems, setTocItems, setCurrentContentItem, setAllNotesForContext, setActiveTocItemId } = useOutletContext<AppContextType>(); // Added tocItems
 
   const [allNotesAndTopics, setAllNotesAndTopics] = useState<ContentItem[]>([]);
   const [glossaryTerms, setGlossaryTerms] = useState<ContentItem[]>([]);
