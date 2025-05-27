@@ -1,4 +1,3 @@
-
 import { getLinkPreview } from 'link-preview-js';
 
 export interface LinkMetadata {
@@ -74,23 +73,22 @@ export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | nul
                                                           // Or, if link-preview-js handles this internally or it's not an issue, remove proxy.
                                                           // For now, let's try direct fetching first, as proxies can be problematic.
     
-    const preview = await getLinkPreview(url); // Removed explicit type assertion
+    const preview = await getLinkPreview(url);
 
-    // The 'preview' object here will have its type inferred by TypeScript.
-    // We expect it to have properties like title, description, images, favicons, etc.
-    // based on the 'link-preview-js' library's return type for getLinkPreview.
+    // Helper function to check for property existence
+    const hasProperty = <T extends object, K extends PropertyKey>(obj: T, key: K): obj is T & Record<K, unknown> => {
+      return key in obj;
+    };
 
     const metadata: LinkMetadata = {
-      // Ensure that all accessed properties on 'preview' are handled safely,
-      // especially if they might be optional.
-      title: preview.title || url,
-      description: preview.description,
-      // Type checking for images and favicons as arrays of strings:
-      image: Array.isArray(preview.images) && preview.images.length > 0 ? preview.images[0] : undefined,
-      favicon: Array.isArray(preview.favicons) && preview.favicons.length > 0 ? preview.favicons[0] : undefined,
-      siteName: preview.siteName,
-      url: preview.url || url,
-      contentType: typeof preview.contentType === 'string' ? preview.contentType : undefined,
+      title: (hasProperty(preview, 'title') && typeof preview.title === 'string') ? preview.title : url,
+      description: (hasProperty(preview, 'description') && typeof preview.description === 'string') ? preview.description : undefined,
+      image: (hasProperty(preview, 'images') && Array.isArray(preview.images) && preview.images.length > 0 && typeof preview.images[0] === 'string') ? preview.images[0] : undefined,
+      // favicons seem to be present in most response types from link-preview-js, but still good to check
+      favicon: (Array.isArray(preview.favicons) && preview.favicons.length > 0 && typeof preview.favicons[0] === 'string') ? preview.favicons[0] : undefined,
+      siteName: (hasProperty(preview, 'siteName') && typeof preview.siteName === 'string') ? preview.siteName : undefined,
+      url: (hasProperty(preview, 'url') && typeof preview.url === 'string') ? preview.url : url, // Fallback to original URL if not in preview
+      contentType: (hasProperty(preview, 'contentType') && typeof preview.contentType === 'string') ? preview.contentType : undefined,
     };
     linkMetadataCache.set(url, metadata);
     return metadata;
@@ -106,4 +104,3 @@ export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | nul
     return basicMetadata;
   }
 };
-
