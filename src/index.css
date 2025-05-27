@@ -153,3 +153,7 @@
     font-weight: normal; /* reset prose defaults */
   }
 }
+
+.prose :where(pre):not(:where([class~=not-prose],[class~=not-prose] *)) {
+  background-color: transparent;
+}

@@ -46,7 +46,7 @@ const CustomCodeBlock: React.FC<CustomCodeBlockProps> = ({ node, inline, classNa
   };
 
   return match ? (
-    <div className="bg-muted p-4 rounded-md overflow-x-auto my-4"> {/* Added my-4 for spacing */}
+    <div className="bg-muted text-foreground p-4 rounded-md overflow-x-auto my-4"> {/* Added my-4 for spacing */}
       <SyntaxHighlighter
         style={transparentThemeStyle}
         language={match[1]}
