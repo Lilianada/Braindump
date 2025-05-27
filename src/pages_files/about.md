@@ -1,4 +1,19 @@
 
+---
+id: "log-001"
+title: "Log 001"
+path: "daily-logs/001"
+slug: "log-001"
+type: ["log"]
+tags:
+  - "new"
+  - "core-idea"
+  - "example"
+created: "2025-05-26"
+lastUpdated: "2025-05-26"
+---
+
+
 # About Braindump
 
 Braindump is your personal digital garden, a space to cultivate and connect your thoughts, learnings, and ideas over time. 
