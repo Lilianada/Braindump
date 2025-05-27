@@ -71,7 +71,7 @@ const Layout: React.FC = () => {
         <LeftSidebar isOpen={isLeftSidebarOpen} onClose={() => setIsLeftSidebarOpen(false)} />
         <main className="flex-1 flex max-w-full overflow-x-hidden">
           <ScrollArea className="flex-1 h-[calc(100vh-4rem)] scrollbar-hide overflow-y-auto">
-            <div className={cn("container mx-auto px-4 w-full max-w-4xl")}>
+            <div className={cn("container mx-auto w-full max-w-4xl")}>
                <Outlet context={{ tocItems, setTocItems, setCurrentContentItem, setAllNotesForContext, activeTocItemId, setActiveTocItemId } satisfies AppContextType} />
             </div>
           </ScrollArea>
