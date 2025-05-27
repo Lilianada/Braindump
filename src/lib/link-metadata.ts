@@ -1,5 +1,4 @@
-
-import { getLinkPreview, LinkPreview } from 'link-preview-js';
+import { getLinkPreview, Preview } from 'link-preview-js';
 
 export interface LinkMetadata {
   title: string;
@@ -73,7 +72,7 @@ export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | nul
                                                           // Or, if link-preview-js handles this internally or it's not an issue, remove proxy.
                                                           // For now, let's try direct fetching first, as proxies can be problematic.
     
-    const preview = await getLinkPreview(url) as LinkPreview; // Type assertion
+    const preview = await getLinkPreview(url) as Preview; // Type assertion corrected to use Preview
 
     const metadata: LinkMetadata = {
       title: preview.title || url,
@@ -82,7 +81,7 @@ export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | nul
       favicon: preview.favicons && preview.favicons.length > 0 ? preview.favicons[0] : undefined,
       siteName: preview.siteName,
       url: preview.url || url,
-      contentType: preview.contentType,
+      contentType: preview.contentType as string | undefined, // Ensure contentType is string or undefined
     };
     linkMetadataCache.set(url, metadata);
     return metadata;
@@ -98,4 +97,3 @@ export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | nul
     return basicMetadata;
   }
 };
-
