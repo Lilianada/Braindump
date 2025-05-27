@@ -11,15 +11,15 @@ lastUpdated: "2025-05-27"
 author: "Your Name"
 ---
 
-## What I Did
+### What I Did
 - Task 1
 - Task 2
 
-## What I Learned
+### What I Learned
 - Insight or lesson
 
-## Mood/Reflection
+### Mood/Reflection
 - How I felt, thoughts
 
-## Seeds for Tomorrow
+### Seeds for Tomorrow
 - Ideas to explore next

@@ -350,7 +350,7 @@ const ContentPage: React.FC = () => {
                 <ul className="space-y-1.5">
                   {relatedNotes.map(item => (
                     <li key={`mobile-related-${item.id}`}>
-                      <Link to={`/content/${item.path}`} className="text-sm custom-link">
+                      <Link to={`/content/${item.path}`} className="text-xs custom-link">
                         {item.title}
                       </Link>
                     </li>

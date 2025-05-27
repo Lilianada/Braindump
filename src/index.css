@@ -121,7 +121,7 @@
   }
 
   .custom-quote {
-    @apply bg-yellow-300 text-sm dark:bg-[hsl(var(--custom-yellow))] px-1 py-0.5 text-background font-geist-mono my-2;
+    @apply bg-[hsl(var(--custom-yellow))]/40 text-sm dark:bg-[hsl(var(--custom-yellow))]/80 px-1 py-0.5 dark:text-[hsl(var(--primary))] font-geist-mono my-2;
   }
   
   /* Apply to prose links as well if needed */
