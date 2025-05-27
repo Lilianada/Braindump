@@ -8,7 +8,7 @@ type: "dictionary_entry"
 tags:
   - "new"
   - "core-idea"
-  - "example"
+  - "brave"
 created: "2025-05-26"
 lastUpdated: "2025-05-26"
 ---

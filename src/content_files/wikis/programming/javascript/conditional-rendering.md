@@ -1,6 +1,6 @@
 
 ---
-id: "cond-render"
+id: "conditional-render"
 title: "Conditional Rendering"
 path: "wikis/programming/javascript/conditional-rendering"
 slug: "conditional-rendering"
