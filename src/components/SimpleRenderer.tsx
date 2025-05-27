@@ -11,6 +11,7 @@ import CustomHeading from './markdown/CustomHeading';
 import CustomParagraph from './markdown/CustomParagraph';
 import CustomLink from './markdown/CustomLink';
 import CustomCodeBlock from './markdown/CustomCodeBlock';
+import CustomQuote from './markdown/CustomQuote';
 import { extractMarkdownBody } from '@/lib/utils';
 
 interface SimpleRendererProps {
@@ -42,6 +43,7 @@ const SimpleRenderer: React.FC<SimpleRendererProps> = ({ content, setTocItems, a
           p: ({node, ...props}) => <CustomParagraph {...props} allNotes={allNotes} glossaryTerms={glossaryTerms} />,
           a: CustomLink,
           code: CustomCodeBlock,
+          blockquote: CustomQuote,
         }}
       >
         {markdownBody}

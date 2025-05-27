@@ -41,10 +41,8 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
               <MenuIcon className="h-6 w-6" />
             </Button>
           )}
-          <Link to="/" className="flex items-center text-xl font-bold text-primary font-geist-sans">
-            
-              <img src="/lovable-uploads/eace30af-50f3-4294-85ba-9fe71fe7921d.png" alt="Braindump Logo" className="h-5 w-5" />
-    
+          <Link to="/" className="flex items-center text-base font-bold text-primary font-geist-sans">
+            <img src="/logo.png" alt="Braindump Logo" className="h-8 w-8 mr-2" />
             Braindump
           </Link>
         </div>
@@ -54,9 +52,9 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
               <Search className="h-5 w-5" />
             </Button>
           ) : (
-            <Button 
-              variant="outline" 
-              className="h-9 px-3 text-muted-foreground text-sm justify-start w-40 sm:w-64" 
+            <Button
+              variant="outline"
+              className="h-9 px-3 text-muted-foreground text-sm justify-start w-40 sm:w-64"
               onClick={() => setIsCommandOpen(true)}
             >
               <Search className="h-4 w-4 mr-2" />
@@ -76,8 +74,8 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuItem className="p-0">
                 <div className="py-2 px-2 w-full">
-                   <p className="text-xs text-muted-foreground px-2 pb-1">Font</p>
-                   <FontToggle />
+                  <p className="text-xs text-muted-foreground px-2 pb-1">Font</p>
+                  <FontToggle />
                 </div>
               </DropdownMenuItem>
               {/* Add other menu items here if needed */}

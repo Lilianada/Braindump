@@ -14,10 +14,10 @@ const iconColors = [
   'text-yellow-400',   // level 0
   'text-emerald-500',  // level 1
   'text-sky-500',      // level 2
-  'text-purple-500',   // level 3
-  'text-orange-500',   // level 4
   'text-rose-500',     // level 5
   'text-teal-500',     // level 6+
+  'text-orange-500',   // level 4
+  'text-purple-500',   // level 3
 ];
 
 interface CollapsibleNavItemProps {
@@ -39,14 +39,14 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({ item, level = 0
         to={`/content/${item.path}`}
         style={{ paddingLeft: `${12 + level * 16}px` }}
         className={cn(
-          "flex items-center py-2 pr-3 rounded-md text-sm hover:bg-accent hover:text-accent-foreground transition-colors w-full group",
+          "flex items-center py-2 pr-3 rounded-md text-xs hover:bg-accent hover:text-accent-foreground transition-colors w-full group",
           isActive ? "bg-primary/10 text-primary font-semibold" : "text-foreground/80"
         )}
       >
         {item.type === 'folder' 
             ? <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive ? "text-primary": "")} /> 
             : <FileIcon className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive ? "text-primary": "")} />}
-        <span className="truncate flex-1 capitalize tex-sm">{item.title}</span>
+        <span className="truncate flex-1 capitalize tex-xs">{item.title}</span>
       </Link>
     );
   }
@@ -57,7 +57,7 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({ item, level = 0
         <button
           style={{ paddingLeft: `${12 + level * 16}px` }}
           className={cn(
-            "flex items-center justify-start w-full py-2 pr-3 rounded-md text-sm hover:bg-accent hover:text-accent-foreground transition-colors group",
+            "flex items-center justify-start w-full py-2 pr-3 rounded-md text-xs hover:bg-accent hover:text-accent-foreground transition-colors group",
             isActive && item.type === 'folder' ? "bg-accent text-accent-foreground font-medium" : "",
             location.pathname === `/content/${item.path}` ? "bg-primary/10 text-primary font-semibold" : "text-foreground/80"
           )}

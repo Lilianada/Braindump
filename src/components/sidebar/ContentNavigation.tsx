@@ -14,7 +14,7 @@ const ContentNavigation: React.FC<ContentNavigationProps> = ({ contentSections }
 
   return (
     <div>
-      <h3 className="px-3 mb-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Content Sections</h3>
+      <h3 className="px-3 mb-2 text-[10px] font-semibold uppercase text-muted-foreground tracking-wider">Content Sections</h3>
       <div className="space-y-0.5">
         {contentSections.map(item => (
           <CollapsibleNavItem key={item.id} item={item} />
