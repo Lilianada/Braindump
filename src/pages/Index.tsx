@@ -22,7 +22,7 @@ const IndexPage = () => {
   }, []);
 
   return (
-    <div className="container mx-auto px-0 py-8 animate-fade-in">
+    <div className="container mx-auto px-4 sm:px-8 py-8 animate-fade-in">
         <SimpleRenderer 
           content={homeContentRaw} 
           setTocItems={setTocItems} 
