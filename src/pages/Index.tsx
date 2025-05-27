@@ -1,8 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { getAllContentItems, ContentItem } from '@/content/mockData';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { TocItem } from '@/types';
@@ -14,8 +11,6 @@ const IndexPage = () => {
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
 
   useEffect(() => {
-    // These are still fetched for potential [[links]] or other interactions within the Home page content.
-    // If Home page content never links to items from content_files, this could be omitted.
     const items = getAllContentItems(); 
     setAllNotes(items);
     setGlossaryTerms(items.filter(item => item.type === 'glossary_term'));

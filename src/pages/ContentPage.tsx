@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useLocation, useOutletContext, Link, useNavigate } from 'react-router-dom';
 import { findContentByPath, getAllContentItems, ContentItem } from '@/content/mockData';
-import { AlertCircle, FileText, Info, Tag as TagIcon, CalendarDays, ArrowLeft, ArrowRight, Link2, Users, Folder } from 'lucide-react';
+import { AlertCircle, FileText, Info, Tag as TagIcon, CalendarDays, ArrowLeft, ArrowRight, Link2, Folder } from 'lucide-react';
 import SimpleRenderer from '@/components/SimpleRenderer';
-import { TocItem } from '@/types';
 import { AppContextType } from '@/components/Layout';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import LoadingGrid from '@/components/LoadingGrid';
 
 const ContentPage: React.FC = () => {
   const params = useParams();
@@ -170,9 +168,7 @@ const ContentPage: React.FC = () => {
 
   if (contentItem === undefined) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-muted-foreground">Loading content...</p>
-      </div>
+      <LoadingGrid />
     );
   }
 

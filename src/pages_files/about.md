@@ -10,28 +10,25 @@ lastUpdated: "2025-05-26"
 ---
 
 
-# About Braindump
 
-Braindump is your personal digital garden, a space to cultivate and connect your thoughts, learnings, and ideas over time. 
-Unlike a traditional blog or a fleeting note-taking app, a digital garden is a living collection of interconnected notes that evolve as you do.
+## About Me
 
-## Key Concepts
+Hi, my name is Lilian. I am an indie developer, content curator, lifestyle connoisseur, and personal trainer. At this point, I can call myself whatever I choose.
 
-*   **Atomic Notes:** Small, self-contained units of information focused on a single idea or concept.
-*   **Linking:** Creating connections between notes to build a web of knowledge, inspired by the Zettelkasten method.
-*   **Continuous Growth:** Notes are not static; they are meant to be revisited, updated, and expanded.
-*   **Personal Knowledge Management (PKM):** A system for capturing, organizing, and retrieving your personal knowledge.
+I write code for work, vibe code for fun, and read code for growth.
 
-This application aims to provide a simple yet powerful interface for you to manage your digital garden. 
-Think of it as a personal wiki, a commonplace book, and a journal, all rolled into one, where you can freely explore your intellectual landscape.
+I spend most mornings working out or cosplaying as the personal trainer of some rich person.
 
-## How It (Will) Work
+I surf the web for fun, enjoy going down *rabbit holes**, bookmarking links, *curating content* to read and revisit.
 
-Content is (conceptually) stored in simple text files (like Markdown with frontmatter for metadata), allowing for easy editing and portability. The application then renders this content, providing features like:
+I don’t enjoy social media because I dislike the *performative nature** where everyone feels pressured to entertain followers. I don’t enjoy being an entertainer but don’t mind being entertained. To me, entertaining means writing casually about topics I enjoy in less than 1000 words.
 
-*   A clear navigational structure through sidebars.
-*   (Planned) Table of Contents for longer notes.
-*   (Planned) Backlinks to see which other notes refer to the current one.
-*   (Planned) Tagging and search functionalities to easily find information.
+There aren’t many interesting things about me, but here are a few:
+- I have *8 piercings and more to come*.
+- I’ve gone blonde and ginger (ginger was my favorite).
+- My last relationship was 6 years ago (very crazy).
+- I’ve been in 2 situationships during that period (do not recommend).
+- I have no favorite artist, actor, movie, or song.
 
-Welcome to your Braindump. Start planting your thoughts!
+Find me elsewhere:  
+[Twitter](https://x.com/lilian_ada_) | [Instagram](https://instagram.com/defitcreative) | [LinkedIn](https://www.linkedin.com/in/lilianada) | [GitHub](https://www.github.com/lilianada) | [RSS](https://braindump.lilyslab.xyz/rss.xml)

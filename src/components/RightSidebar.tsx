@@ -114,17 +114,21 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
                         href={`#${item.id}`} 
                         className={cn(
                           "text-xs transition-colors custom-link block w-full",
-                           isActive ? "text-primary font-medium" : "text-foreground/70 hover:text-primary"
+                          isActive ? "text-primary font-medium" : "text-foreground/70 hover:text-primary"
                         )}
                         onClick={(e) => {
                           e.preventDefault();
-                          document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
-                          if (window.history.pushState) {
-                              window.history.pushState(null, '', `#${item.id}`);
-                          } else {
-                              window.location.hash = `#${item.id}`;
+                          const target = document.getElementById(item.id);
+                          if (target) {
+                            // Use a more subtle scroll behavior
+                            target.scrollIntoView({
+                              behavior: 'smooth',
+                              block: 'start',
+                              inline: 'nearest'
+                            });
+                            // Update URL without adding to history to prevent navigation issues
+                            window.history.replaceState(null, '', `#${item.id}`);
                           }
-                          // Consider calling setActiveTocItemId here if passed down, or rely on observer
                         }}
                       >
                         {item.text}

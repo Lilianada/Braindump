@@ -16,7 +16,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 324 5% 2%;
 
-    --primary: 350 65% 70%; /* Custom primary color */
+    --primary: 350 65% 60%; /* Custom primary color */
     --primary-foreground: 0 0% 100%; /* Text on primary color - white for good contrast */
 
     --secondary: 210 40% 96.1%;
@@ -117,7 +117,7 @@
 
   /* Custom link styling */
   .custom-link {
-    @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--custom-yellow))] hover:underline;
+    @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--primary))] hover:underline;
   }
 
   .custom-quote {
@@ -126,7 +126,7 @@
   
   /* Apply to prose links as well if needed */
   .prose a, .prose .dark\:prose-invert a { 
-     @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--custom-yellow))] no-underline hover:underline;
+     @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--primary))] dark:text-[hsl(var(--custom-yellow))] no-underline hover:underline;
   }
   
   /* Adjust prose default font size if body is 14px */
@@ -164,4 +164,16 @@
 .prose :where(pre):not(:where([class~=not-prose],[class~=not-prose] *)) {
   background-color: transparent;
   padding: 0;
+}
+
+/* Loading Grid Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(0.9) rotate(0deg);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.1) rotate(5deg);
+  }
 }

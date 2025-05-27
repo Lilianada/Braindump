@@ -13,15 +13,11 @@ const CustomHeading: React.FC<CustomHeadingProps> = ({ level, children, setTocIt
   useEffect(() => {
     if (text && id) { // Ensure text and id are valid before updating TOC
       setTocItems(prevItems => {
+        // Check if this item already exists in the TOC
         if (!prevItems.find(item => item.id === id)) {
           const newTocItem: TocItem = { id, text, level };
-          // Create a new array, add the item, then sort
-          const updatedItems = [...prevItems, newTocItem];
-          updatedItems.sort((a, b) => {
-            if (a.level !== b.level) return a.level - b.level;
-            return 0;
-          });
-          return updatedItems;
+          // Simply add the new item to the end of the array to maintain order
+          return [...prevItems, newTocItem];
         }
         return prevItems;
       });
