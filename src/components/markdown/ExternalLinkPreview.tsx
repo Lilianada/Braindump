@@ -1,9 +1,10 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { fetchLinkMetadata, LinkMetadata } from '@/lib/link-metadata';
 import { Skeleton } from "@/components/ui/skeleton";
-import { ExternalLink as ExternalLinkIcon } from "lucide-react"; // Renamed to avoid conflict
+import { ExternalLink as ExternalLinkIcon } from "lucide-react";
+import { useLinkMetadata } from '@/hooks/useLinkMetadata'; // Import the new hook
+// LinkMetadata interface can be removed if useLinkMetadata provides it or if not directly used here
 
 interface ExternalLinkPreviewProps {
   href: string;
@@ -14,39 +15,22 @@ interface ExternalLinkPreviewProps {
 }
 
 const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, children, className, target, rel }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [metadata, setMetadata] = useState<LinkMetadata | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Start loading true
+  // Note: isOpen state for HoverCard is managed internally by default if not controlled
+  // const [isOpen, setIsOpen] = useState(false); // Can be removed if not strictly needed for control
+  
+  const { metadata, loading: isLoading, error } // Use the hook
+    = useLinkMetadata(href);
 
-  useEffect(() => {
-    let isMounted = true;
-    
-    setIsLoading(true);
-    fetchLinkMetadata(href)
-      .then(data => {
-        if (isMounted && data) {
-          setMetadata(data);
-        }
-      })
-      .catch(error => {
-        if (isMounted) {
-          console.error("Error fetching metadata in component:", error);
-          setMetadata({ title: href, url: href, description: "External link" });
-        }
-      })
-      .finally(() => {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      });
-    
-    return () => {
-      isMounted = false;
-    };
-  }, [href]);
+  // Default content for when metadata is not fully loaded or available
+  const displayTitle = metadata?.title || href;
+  const displayUrl = metadata?.url || href;
+  const displayDescription = metadata?.description;
+  const displayImage = metadata?.image;
+  const displayFavicon = metadata?.favicon;
+  const displaySiteName = metadata?.siteName;
 
   return (
-    <HoverCard open={isOpen} onOpenChange={setIsOpen}>
+    <HoverCard /* open={isOpen} onOpenChange={setIsOpen} */ >
       <HoverCardTrigger asChild>
         <a href={href} className={className} target={target} rel={rel}>
           {children}
@@ -58,34 +42,50 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-3 w-full" />
             <Skeleton className="h-3 w-5/6" />
+            <Skeleton className="h-16 w-full mt-2" /> {/* Placeholder for image */}
           </div>
         )}
-        {!isLoading && metadata && (
-          <div>
-            {metadata.image && (
-              <img 
-                src={metadata.image} 
-                alt={metadata.title || 'Preview'}
-                className="max-h-32 w-full object-cover mb-2 rounded" 
-                onError={(e) => (e.currentTarget.style.display = 'none')} 
-              />
-            )}
-             <p className="flex justify-between font-semibold mb-1 text-sm uppercase">External Link to
-              <ExternalLinkIcon className="h-3 w-3 ml-1 inline shrink-0" />
-             </p>
-            {metadata.siteName && <p className="text-xs text-muted-foreground">{metadata.siteName}</p>}
-            {metadata.description && <p className="text-xs text-muted-foreground line-clamp-3">{metadata.description}</p>}
+        {!isLoading && error && (
+           <div className="flex flex-col space-y-1">
+            <p className="font-semibold mb-1 text-sm uppercase text-destructive">Preview Error</p>
+            <p className="text-xs text-muted-foreground line-clamp-3">{error}</p>
             <p className="text-xs text-muted-foreground mt-2 truncate">
-              <a href={metadata.url} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
-                {metadata.favicon && <img src={metadata.favicon} alt="" className="h-3 w-3 mr-1.5"/>}
-                <span className="truncate">{metadata.url}</span>
+              <a href={href} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
+                <ExternalLinkIcon className="h-3 w-3 mr-1.5 shrink-0" />
+                <span className="truncate">{href}</span>
               </a>
             </p>
           </div>
         )}
-        {!isLoading && !metadata && (
-          <div className="flex flex-col space-y-1">
-            <p className="text-xs text-muted-foreground">External link to:</p>
+        {!isLoading && !error && metadata && (
+          <div>
+            {displayImage && (
+              <img 
+                src={displayImage} 
+                alt={displayTitle}
+                className="max-h-32 w-full object-cover mb-2 rounded" 
+                onError={(e) => (e.currentTarget.style.display = 'none')} 
+              />
+            )}
+             <p className="flex justify-between font-semibold mb-1 text-sm uppercase">External Link
+              {/* Removed "to" as siteName or URL usually implies this */}
+              <ExternalLinkIcon className="h-3 w-3 ml-1 inline shrink-0" />
+             </p>
+            <h4 className="font-medium text-foreground mb-0.5 truncate">{displayTitle}</h4>
+            {displaySiteName && <p className="text-xs text-muted-foreground mb-1">{displaySiteName}</p>}
+            {displayDescription && <p className="text-xs text-muted-foreground line-clamp-3 mb-2">{displayDescription}</p>}
+            <p className="text-xs text-muted-foreground mt-2 truncate">
+              <a href={displayUrl} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
+                {displayFavicon && <img src={displayFavicon} alt="" className="h-3 w-3 mr-1.5"/>}
+                <span className="truncate">{displayUrl}</span>
+              </a>
+            </p>
+          </div>
+        )}
+         {/* Fallback for when metadata might be null but no error and not loading - e.g. initial state */}
+        {!isLoading && !error && !metadata && (
+           <div className="flex flex-col space-y-1">
+            <p className="text-xs text-muted-foreground">Loading preview for:</p>
             <div className="flex items-center">
               <span className="truncate text-sm font-medium">{href}</span>
               <a href={href} target="_blank" rel="noopener noreferrer" className="ml-1.5">
