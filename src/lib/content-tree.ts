@@ -1,8 +1,9 @@
-
 import { ContentItem } from '../types/content';
 import { getAllFileContentItems } from './content-loader';
 
 let allContentTreeCache: ContentItem[] | null = null;
+
+const NAVIGABLE_PAGE_TYPES: ContentItem['type'][] = ['note', 'topic', 'log', 'dictionary_entry', 'zettel'];
 
 // Builds a hierarchical tree from the flat list of file content items.
 // This includes creating "virtual" folder items based on path structure.
@@ -101,4 +102,24 @@ export const findContentByPath = (path: string): ContentItem | undefined => {
   };
   
   return searchInTree(allContentTreeCache || [], path);
+};
+
+// New function to flatten the tree into a sequenced list of navigable items
+export const getFlattenedNavigableTree = (forceRefresh: boolean = false): ContentItem[] => {
+  const tree = getContentTree(forceRefresh);
+  const navigableItems: ContentItem[] = [];
+
+  function flatten(items: ContentItem[]) {
+    for (const item of items) {
+      if (NAVIGABLE_PAGE_TYPES.includes(item.type)) {
+        navigableItems.push(item);
+      }
+      if (item.children && item.children.length > 0) {
+        flatten(item.children);
+      }
+    }
+  }
+
+  flatten(tree);
+  return navigableItems;
 };

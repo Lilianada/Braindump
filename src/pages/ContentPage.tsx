@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useLocation, useOutletContext, Link, useNavigate } from 'react-router-dom';
-import { findContentByPath, getAllContentItems, ContentItem } from '@/content/mockData';
+import { findContentByPath, getAllContentItems, ContentItem, getFlattenedNavigableTree } from '@/content/mockData';
 import { AlertCircle, FileText, Info, Tag as TagIcon, CalendarDays, ArrowLeft, ArrowRight, Link2, Folder } from 'lucide-react';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { AppContextType } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import LoadingGrid from '@/components/LoadingGrid';
+
+const NAVIGABLE_PAGE_TYPES: ContentItem['type'][] = ['note', 'topic', 'log', 'dictionary_entry', 'zettel'];
 
 const ContentPage: React.FC = () => {
   const params = useParams();
@@ -13,22 +15,26 @@ const ContentPage: React.FC = () => {
   const navigate = useNavigate();
   const [contentItem, setContentItem] = useState<ContentItem | null | undefined>(undefined);
   
-  const { tocItems, setTocItems, setCurrentContentItem, setAllNotesForContext, setActiveTocItemId } = useOutletContext<AppContextType>(); // Added tocItems
+  const { tocItems, setTocItems, setCurrentContentItem, setAllNotesForContext, setActiveTocItemId } = useOutletContext<AppContextType>();
 
   const [allNotesAndTopics, setAllNotesAndTopics] = useState<ContentItem[]>([]);
+  const [sequencedNavigableItems, setSequencedNavigableItems] = useState<ContentItem[]>([]); // New state for ordered navigation
   const [glossaryTerms, setGlossaryTerms] = useState<ContentItem[]>([]);
 
   useEffect(() => {
-    const allItems = getAllContentItems();
+    const allItems = getAllContentItems(true); // Force refresh to get latest
+    
+    // For backlinks, related notes, context - general pool of relevant content types
     const notesAndTopicsItems = allItems.filter(item => 
-      item.type === 'note' || 
-      item.type === 'topic' || 
-      item.type === 'log' || 
-      item.type === 'dictionary_entry'
-    ).sort((a, b) => a.path.localeCompare(b.path)); // Ensure a consistent order for prev/next
+      NAVIGABLE_PAGE_TYPES.includes(item.type) || item.type === 'glossary_term' // Include glossary terms for broader context if needed
+    ).sort((a, b) => a.path.localeCompare(b.path)); // Consistent order for these lists
     
     setAllNotesAndTopics(notesAndTopicsItems);
     setAllNotesForContext(notesAndTopicsItems); 
+
+    // For sequential prev/next navigation - ordered by tree structure
+    const sequencedItems = getFlattenedNavigableTree(true); // Force refresh here as well
+    setSequencedNavigableItems(sequencedItems);
 
     const terms = allItems.filter(item => item.type === 'glossary_term');
     setGlossaryTerms(terms);
@@ -38,14 +44,12 @@ const ContentPage: React.FC = () => {
       const item = findContentByPath(path);
       setContentItem(item);
       setCurrentContentItem(item); 
-      setTocItems([]); // Clear TOC items initially for the new page
-      setActiveTocItemId(null); // Reset active TOC item
+      setTocItems([]); 
+      setActiveTocItemId(null);
 
       if (item) {
         console.log("Content item found:", item);
-        console.log("Content item frontmatter:", item.frontmatter);
-        console.log("Content item lastUpdated:", item.lastUpdated);
-        console.log("Content item tags:", item.tags);
+        // ... keep existing code (console logs for item details)
       } else {
         setTocItems([]);
       }
@@ -56,7 +60,7 @@ const ContentPage: React.FC = () => {
       setActiveTocItemId(null);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params, location.pathname, setCurrentContentItem, setAllNotesForContext, setTocItems, setActiveTocItemId]); // Added setActiveTocItemId to dependencies
+  }, [params, location.pathname, setCurrentContentItem, setAllNotesForContext, setTocItems, setActiveTocItemId]);
 
   useEffect(() => {
     if (!contentItem || contentItem.type === 'folder' || !setActiveTocItemId) {
@@ -86,7 +90,7 @@ const ContentPage: React.FC = () => {
           });
           
           if (bestVisibleEntry) {
-            console.log("[TOC Debug] Active heading set by observer:", bestVisibleEntry.target.id); // Added console log
+            console.log("[TOC Debug] Active heading set by observer:", bestVisibleEntry.target.id);
             setActiveTocItemId(bestVisibleEntry.target.id);
           }
         },
@@ -109,7 +113,7 @@ const ContentPage: React.FC = () => {
 
   const backlinks = useMemo(() => {
     if (!contentItem || !allNotesAndTopics || allNotesAndTopics.length === 0) return [];
-    
+    // ... keep existing code (backlinks calculation logic using allNotesAndTopics)
     const currentTitleLower = contentItem.title.toLowerCase();
     const currentPath = `/content/${contentItem.path}`;
     const foundBacklinks: ContentItem[] = [];
@@ -140,7 +144,7 @@ const ContentPage: React.FC = () => {
     if (!contentItem || !contentItem.tags || contentItem.tags.length === 0 || !allNotesAndTopics || allNotesAndTopics.length === 0) {
       return [];
     }
-    
+    // ... keep existing code (relatedNotes calculation logic using allNotesAndTopics)
     const currentTags = new Set(contentItem.tags.map(tag => tag.toLowerCase()));
     const foundRelated: ContentItem[] = [];
 
@@ -154,17 +158,22 @@ const ContentPage: React.FC = () => {
   }, [contentItem, allNotesAndTopics]);
 
   const { prevItem, nextItem } = useMemo(() => {
-    if (!contentItem || allNotesAndTopics.length === 0 || contentItem.type === 'folder') {
+    // Use sequencedNavigableItems for prev/next logic
+    if (!contentItem || sequencedNavigableItems.length === 0 || contentItem.type === 'folder') {
       return { prevItem: null, nextItem: null };
     }
-    const currentIndex = allNotesAndTopics.findIndex(item => item.id === contentItem.id);
+    const currentIndex = sequencedNavigableItems.findIndex(item => item.id === contentItem.id);
     if (currentIndex === -1) {
+      // Fallback if current item not in sequenced list (should not happen for navigable types)
+      // This might happen if a 'folder' type page is somehow accessed directly and has prev/next
+      // Or if a non-navigable type page is accessed.
+      console.warn("Current item not found in sequenced navigable items for prev/next calculation:", contentItem.title, contentItem.type);
       return { prevItem: null, nextItem: null };
     }
-    const prev = currentIndex > 0 ? allNotesAndTopics[currentIndex - 1] : null;
-    const next = currentIndex < allNotesAndTopics.length - 1 ? allNotesAndTopics[currentIndex + 1] : null;
+    const prev = currentIndex > 0 ? sequencedNavigableItems[currentIndex - 1] : null;
+    const next = currentIndex < sequencedNavigableItems.length - 1 ? sequencedNavigableItems[currentIndex + 1] : null;
     return { prevItem: prev, nextItem: next };
-  }, [contentItem, allNotesAndTopics]);
+  }, [contentItem, sequencedNavigableItems]); // Changed dependency to sequencedNavigableItems
 
   if (contentItem === undefined) {
     return (
@@ -209,7 +218,7 @@ const ContentPage: React.FC = () => {
           <SimpleRenderer 
             content={markdownContentToRender} 
             setTocItems={setTocItems} 
-            allNotes={allNotesAndTopics}
+            allNotes={allNotesAndTopics} // SimpleRenderer still uses allNotesAndTopics for its [[link]] resolution
             glossaryTerms={glossaryTerms}
           />
         ) : (
@@ -301,7 +310,7 @@ const ContentPage: React.FC = () => {
       <SimpleRenderer 
         content={contentItem.content || ''} 
         setTocItems={setTocItems}
-        allNotes={allNotesAndTopics}
+        allNotes={allNotesAndTopics} // SimpleRenderer uses allNotesAndTopics for [[link]] resolution
         glossaryTerms={glossaryTerms}
       />
 
