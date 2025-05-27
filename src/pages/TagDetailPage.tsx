@@ -58,7 +58,7 @@ const TagDetailPage: React.FC = () => {
         <Card>
           <CardHeader>
             <div className="flex items-center space-x-2 mb-2">
-              <TagIcon className="h-6 w-6 text-primary" />
+             
               <CardTitle className="text-2xl font-semibold tracking-tight">
                 Content tagged with: <span className="text-primary capitalize">{decodedTagName}</span>
               </CardTitle>
@@ -73,8 +73,8 @@ const TagDetailPage: React.FC = () => {
                 {relatedItems.map(item => (
                   <li key={item.id} className="border-b pb-4 last:border-b-0 last:pb-0">
                     <Link to={`/content/${item.path}`} className="group">
-                      <h3 className="text-lg font-medium text-primary group-hover:underline flex items-center">
-                        <FileTextIcon className="h-5 w-5 mr-2 shrink-0" />
+                      <h3 className="text-base font-medium text-primary group-hover:underline flex items-center">
+                       
                         {item.title}
                       </h3>
                       {item.path && <p className="text-sm text-muted-foreground">Path: {item.path}</p>}
