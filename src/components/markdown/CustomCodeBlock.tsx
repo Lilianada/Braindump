@@ -46,7 +46,7 @@ const CustomCodeBlock: React.FC<CustomCodeBlockProps> = ({ node, inline, classNa
   };
 
   return match ? (
-    <div className="bg-muted text-foreground p-4 rounded-md overflow-x-auto my-4"> {/* Added my-4 for spacing */}
+    <div className="bg-muted p-4 rounded-md overflow-x-auto my-4"> {/* Added my-4 for spacing */}
       <SyntaxHighlighter
         style={transparentThemeStyle}
         language={match[1]}
@@ -59,7 +59,7 @@ const CustomCodeBlock: React.FC<CustomCodeBlockProps> = ({ node, inline, classNa
   ) : (
     // Fallback for code blocks without a language, or if match is null
     // This already uses bg-muted and desired styling. Added my-4 for spacing.
-    <pre className="not-prose bg-muted p-4 rounded-md overflow-x-auto my-4" {...props}>
+    <pre className="not-prose bg-muted text-foreground p-4 rounded-md overflow-x-auto my-4" {...props}>
       <code className={className}>
         {codeString}
       </code>
