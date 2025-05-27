@@ -43,7 +43,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           )}
           <Link to="/" className="flex items-center text-2xl font-bold text-primary font-geist-sans">
             <div className="bg-primary rounded-xl p-1 flex items-center justify-center mr-2"> {/* Adjusted padding and added flex centering */}
-              <img src="/lovable-uploads/eace30af-50f3-4294-85ba-9fe71fe7921d.png" alt="Braindump Logo" className="h-5 w-5" />
+              <img src="/lovable-uploads/3b5f7e39-d88c-43fa-a6d9-fa7e346e86fa.png" alt="Braindump Logo" className="h-5 w-5" />
             </div>
             Braindump
           </Link>
