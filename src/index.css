@@ -98,6 +98,7 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
+  /* ... keep existing code (font class definitions for body and html) */
   body.font-geist-sans { font-family: var(--font-geist-sans); }
   body.font-geist-mono { font-family: var(--font-geist-mono); }
   body.font-kalam { font-family: var(--font-kalam); }
@@ -105,9 +106,8 @@
   body.font-lancelot { font-family: var(--font-lancelot); }
   body.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
 
-  /* Ensure html also gets font for consistency if needed */
   html {
-    font-family: var(--font-geist-mono); /* Default font to Geist Mono */
+    font-family: var(--font-geist-mono); 
   }
   html.font-geist-sans { font-family: var(--font-geist-sans); }
   html.font-geist-mono { font-family: var(--font-geist-mono); }
@@ -115,6 +115,7 @@
   html.font-indie-flower { font-family: var(--font-indie-flower); }
   html.font-lancelot { font-family: var(--font-lancelot); }
   html.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
+
 
   /* Custom link styling */
   .custom-link {
@@ -134,5 +135,21 @@
   .prose :where(code):not(:where([class~="not-prose"] *))::before,
   .prose :where(code):not(:where([class~="not-prose"] *))::after {
     content: ""; /* Remove backticks from inline code in prose */
+  }
+
+  /* Styling for KaTeX display math blocks */
+  .katex-display > .katex { /* Target the inner .katex for more specific styling if .katex-display has other children */
+    @apply bg-muted p-4 rounded-md block my-4; /* block display, vertical margin */
+    overflow-x: auto; /* Handle wide equations */
+    overflow-y: hidden; /* Typically not needed for math */
+  }
+  /* For inline KaTeX, if a background is desired (more subtle) */
+  /* Remove prose's default styling for inline code if it interferes with CustomCodeBlock's inline styling */
+  .prose :where(code):not(:where([class~="not-prose"] *)) {
+    /* These are handled by CustomCodeBlock for inline code now */
+    background-color: transparent; 
+    padding: 0;
+    border-radius: 0;
+    font-weight: normal; /* reset prose defaults */
   }
 }

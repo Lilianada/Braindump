@@ -4,7 +4,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { prism as prismLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useTheme } from '@/contexts/ThemeContext';
-import MermaidDiagram from './MermaidDiagram'; // Added import
+import MermaidDiagram from './MermaidDiagram';
 
 interface CustomCodeBlockProps {
   className?: string;
@@ -20,31 +20,47 @@ const CustomCodeBlock: React.FC<CustomCodeBlockProps> = ({ node, inline, classNa
   const codeString = String(children).replace(/\n$/, '');
 
   if (inline) {
-    return <code className={className} {...props}>{children}</code>;
+    // For inline code, apply a subtle muted background, padding, and rounded corners.
+    // This makes it distinct but not as prominent as block code.
+    return <code className={`${className} bg-muted/50 dark:bg-muted/70 px-1 py-0.5 rounded text-sm`} {...props}>{children}</code>;
   }
 
   if (match && match[1] === 'mermaid') {
+    // MermaidDiagram now handles its own background and padding.
     return <MermaidDiagram chart={codeString} />;
   }
 
+  const baseStyle = theme === 'dark' ? okaidia : prismLight;
+  // Modify the syntax highlighter theme to have a transparent background
+  // and remove its own padding/margin/border-radius, as the wrapper div will handle it.
+  const transparentThemeStyle = {
+    ...baseStyle,
+    'pre[class*="language-"]': {
+      ...baseStyle['pre[class*="language-"]'],
+      background: 'transparent',
+      padding: '0', // Wrapper div handles padding
+      margin: '0',   // Wrapper div handles margin
+      borderRadius: '0', // Wrapper div handles border-radius
+      overflow: 'visible', // Wrapper div handles overflow
+    },
+  };
+
   return match ? (
-    <SyntaxHighlighter
-      style={theme === 'dark' ? okaidia : prismLight}
-      language={match[1]}
-      PreTag="div"
-      {...props}
-    >
-      {codeString}
-    </SyntaxHighlighter>
+    <div className="bg-muted p-4 rounded-md overflow-x-auto my-4"> {/* Added my-4 for spacing */}
+      <SyntaxHighlighter
+        style={transparentThemeStyle}
+        language={match[1]}
+        PreTag="div" // Use div to avoid <pre> inside <pre> if this component is wrapped by <pre> from react-markdown
+        {...props}
+      >
+        {codeString}
+      </SyntaxHighlighter>
+    </div>
   ) : (
     // Fallback for code blocks without a language, or if match is null
-    // Render as a simple pre/code block without syntax highlighting
-    // but ensure styling is consistent with prose.
-    // Using SyntaxHighlighter with a common language like 'text' or no language
-    // can provide consistent styling if desired.
-    // For now, a simple pre/code:
-    <pre className="not-prose bg-muted p-4 rounded-md overflow-x-auto">
-      <code className={className} {...props}>
+    // This already uses bg-muted and desired styling. Added my-4 for spacing.
+    <pre className="not-prose bg-muted p-4 rounded-md overflow-x-auto my-4" {...props}>
+      <code className={className}>
         {codeString}
       </code>
     </pre>
