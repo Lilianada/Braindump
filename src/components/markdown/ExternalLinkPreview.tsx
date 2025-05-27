@@ -74,7 +74,7 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
                 onError={(e) => (e.currentTarget.style.display = 'none')} 
               />
             )}
-             <h4 className="font-semibold mb-1 text-base truncate" title={metadata.title}>{metadata.title}</h4>
+          
             {metadata.siteName && <p className="text-xs text-muted-foreground mb-1">{metadata.siteName}</p>}
             {metadata.description && <p className="text-xs text-muted-foreground line-clamp-3">{metadata.description}</p>}
             <p className="text-xs text-muted-foreground mt-2 truncate">
