@@ -41,7 +41,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
               <MenuIcon className="h-6 w-6" />
             </Button>
           )}
-          <Link to="/" className="flex items-center text-base font-bold text-primary font-geist-sans">
+          <Link to="/" className="flex items-end text-base font-medium font-geist-sans">
             <img src="/logo.png" alt="Braindump Logo" className="h-8 w-8 mr-2" />
             Braindump
           </Link>

@@ -1,55 +1,71 @@
-import { useLocation, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Home, Search, ArrowLeft } from "lucide-react";
+import CommandPalette from "@/components/CommandPalette";
 
 const NotFound = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isCommandOpen, setIsCommandOpen] = useState(false);
 
   useEffect(() => {
     console.error(
       "404 Error: User attempted to access non-existent route:",
       location.pathname
     );
+    // Prevent scrolling
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="max-w-2xl w-full mx-auto text-center space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold text-foreground">
-            Oops! This page seems to have wandered off <span className="text-primary">🌿</span>
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Looks like the path you were searching for has taken a detour and is resting somewhere else in the garden.
+    <div className="fixed inset-0 flex items-center justify-center bg-background p-4 overflow-hidden">
+      <div className="max-w-md w-full mx-auto text-center space-y-6">
+        <div className="space-y-4">
+          <h1 className="text-7xl font-bold text-foreground">404</h1>
+          <h2 className="text-2xl font-semibold text-foreground">
+            Page Not Found
+          </h2>
+          <p className="text-muted-foreground">
+            The page you're looking for doesn't exist or has been moved.
           </p>
         </div>
         
-        <div className="bg-muted/50 dark:bg-muted/20 p-6 rounded-lg border border-border">
-          <p className="mb-4">
-            But don't worry, the garden is full of other interesting ideas and notes waiting to be explored!
-          </p>
-          
-          <div className="space-y-3 text-left max-w-md mx-auto">
-            <p className="font-medium text-foreground">Here are some places you might want to visit instead:</p>
-            <ul className="space-y-2 list-disc list-inside">
-              <li>
-                <Link to="/" className="text-primary hover:underline">
-                  Home
-                </Link> — Start fresh and explore the garden from the beginning.
-              </li>
-              <li>
-                <Link to="/dump" className="text-primary hover:underline">
-                  Explore the Garden
-                </Link> — Dive into the heart of Braindump and discover notes, wikis, and more.
-              </li>
-              <li>Use the search bar above to find what you're looking for.</li>
-            </ul>
-          </div>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate(-1)}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Go Back
+          </Button>
+          <Button asChild className="gap-2">
+            <Link to="/">
+              <Home className="h-4 w-4" />
+              Go Home
+            </Link>
+          </Button>
+          <Button 
+            variant="outline" 
+            className="gap-2"
+            onClick={() => setIsCommandOpen(true)}
+          >
+            <Search className="h-4 w-4" />
+            Search
+          </Button>
         </div>
         
-        <p className="text-sm text-muted-foreground mt-6">
-          Happy wandering! <span className="text-primary">🌱</span>
-        </p>
+        <div className="pt-6 border-t border-border mt-6">
+          <p className="text-sm text-muted-foreground">
+            Looking for something specific? Try using the search or browse our content.
+          </p>
+        </div>
       </div>
+      <CommandPalette open={isCommandOpen} onOpenChange={setIsCommandOpen} />
     </div>
   );
 };

@@ -237,7 +237,7 @@ const ContentPage: React.FC = () => {
   return (
     <article className="container mx-auto py-8 animate-fade-in">
       <header className="mb-8">
-        <h1 className="text-3xl font-semibold capitalize mb-2">{contentItem.title}</h1>
+        <h1 className="text-2xl font-semibold capitalize mb-2">{contentItem.title}</h1>
         
         <div className="mt-3 mb-1 text-xs text-muted-foreground space-y-1.5">
           {contentItem.frontmatter?.type && contentItem.type !== contentItem.frontmatter.type && (

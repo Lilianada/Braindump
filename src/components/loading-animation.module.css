@@ -1,0 +1,35 @@
+.loadingDots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 100%;
+  width: 100%;
+}
+
+.dot {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 50%;
+  background-color: hsl(var(--primary) / 0.7);
+  animation: wave 1.4s ease-in-out infinite;
+  transform: translateY(0);
+}
+
+@keyframes wave {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-15px);
+    opacity: 1;
+  }
+}
+
+/* Add staggered delays for each dot */
+.dot:nth-child(1) { animation-delay: 0s; }
+.dot:nth-child(2) { animation-delay: 0.16s; }
+.dot:nth-child(3) { animation-delay: 0.32s; }
+.dot:nth-child(4) { animation-delay: 0.48s; }
+.dot:nth-child(5) { animation-delay: 0.64s; }

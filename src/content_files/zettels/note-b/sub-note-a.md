@@ -4,7 +4,7 @@ title: "Sub Note A"
 path: "zettels/note-b/sub-note-a"
 slug: "sub-note-a"
 tags: 
-  - "zettel", 
+  - "zettel"
   - "note" 
   - "learning"
 type: "note"

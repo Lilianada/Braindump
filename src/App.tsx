@@ -29,10 +29,15 @@ const App = () => (
               <Route path="/about" element={<AboutPage />} />
               <Route path="/docs" element={<DocsPage />} />
               <Route path="/content/*" element={<ContentPage />} />
-              <Route path="/tags" element={<TagsPage />} /> {/* Add route for TagsPage */}
-              <Route path="/tags/:tagName" element={<TagDetailPage />} /> {/* Add route for TagDetailPage */}
-              <Route path="*" element={<NotFound />} />
+              <Route path="/tags" element={<TagsPage />} />
+              <Route path="/tags/:tagName" element={<TagDetailPage />} />
             </Route>
+            {/* Catch-all route outside of Layout to handle all unmatched routes */}
+            <Route path="*" element={
+              <div className="min-h-screen bg-background">
+                <NotFound />
+              </div>
+            } />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
