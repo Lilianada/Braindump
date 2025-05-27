@@ -4,7 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { TocItem } from '@/types';
 import { ContentItem } from '@/content/mockData'; // Import ContentItem
 import { cn } from '@/lib/utils';
-import { PanelLeft } from 'lucide-react'; // Icon for TOC title
+import { AlignLeft } from 'lucide-react'; // Icon for TOC title
 
 interface RightSidebarProps {
   tocItems: TocItem[];
@@ -92,7 +92,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
         <div className="space-y-8">
           <div>
             <h3 className="mb-3 text-sm font-semibold uppercase text-muted-foreground tracking-wider flex items-center">
-              <PanelLeft className="h-4 w-4 mr-2" /> On this page
+              <AlignLeft className="h-4 w-4 mr-2" /> On this page
             </h3>
             {tocItems && tocItems.length > 0 ? (
               <ul className="space-y-0.5"> {/* Reduced space-y */}
