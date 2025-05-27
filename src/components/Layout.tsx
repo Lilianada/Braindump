@@ -90,7 +90,7 @@ const Layout: React.FC = () => {
         <Popover open={isTocPopoverOpen} onOpenChange={setIsTocPopoverOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline" size="icon" className="rounded-full shadow-lg">
-              <AlignLeft className="h-5 w-5" />
+              <AlignLeft className="h-4 w-4" />
               <span className="sr-only">On This Page</span>
             </Button>
           </PopoverTrigger>
