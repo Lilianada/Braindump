@@ -9,9 +9,9 @@ interface MermaidDiagramProps {
 
 const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart }) => {
   const reactId = useId();
-  // Generate a CSS-safe ID for Mermaid by removing colons from reactId
-  const mermaidRenderId = `mermaid-svg-${reactId.replace(/:/g, '')}`;
-  const componentInstanceId = `mermaid-container-${reactId.replace(/:/g, '')}`;
+  // Generate a CSS-safe ID for Mermaid by removing colons and replacing with a random number
+  const mermaidRenderId = `mermaid-${reactId.replace(/[:.]/g, '')}-${Math.floor(Math.random() * 10000)}`;
+  const componentInstanceId = `mermaid-container-${reactId.replace(/[:.]/g, '')}`;
 
   const [svg, setSvg] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -24,7 +24,7 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart }) => {
       startOnLoad: false,
       securityLevel: 'loose',
       fontFamily: 'inherit',
-      themeCSS: 'margin: 0; display: block; max-width: 100%;', // Ensure SVG is responsive within its container
+      themeCSS: 'margin: 0; padding: 0; width: 100%; max-width: 100%;', // Ensure SVG is responsive within its container
       theme: theme === 'dark' ? 'dark' : 'default',
     });
 
@@ -32,7 +32,6 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart }) => {
       try {
         // Use the CSS-safe ID for mermaid.render
         const { svg: renderedSvg, bindFunctions } = await mermaid.render(mermaidRenderId, currentChart);
-        // The rendered SVG will have id={mermaidRenderId}
         setSvg(renderedSvg);
 
         if (bindFunctions && containerRef.current) {
@@ -41,21 +40,19 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart }) => {
         }
       } catch (error) {
         console.error('Error rendering Mermaid chart:', error);
-        // Ensure error message is also wrapped consistently if needed, but for now, basic error.
         setSvg(`<pre style="color: red; background-color: hsl(var(--muted)); padding: 1rem; border-radius: 0.375rem;">Error rendering Mermaid chart:\n${(error as Error).message}\n\nChart content:\n${currentChart}</pre>`);
       }
     }
 
     void renderChart();
-  }, [chart, mermaidRenderId, theme]); // mermaidRenderId is stable as it's derived from useId
+  }, [chart, mermaidRenderId, theme]);
 
-  // Use a unique key for the component instance for proper re-rendering on critical changes.
-  // Added bg-muted, padding, rounded corners, and overflow handling.
+  // Use a unique key for the component instance for proper re-rendering
   return (
     <div 
       key={componentInstanceId + '-' + theme} 
       ref={containerRef} 
-      className="bg-muted p-4 rounded-md overflow-x-auto my-4" // Added my-4 for vertical spacing similar to other blocks
+      className="bg-muted p-4 rounded-md overflow-x-auto my-4" 
       dangerouslySetInnerHTML={{ __html: svg }} 
     />
   );

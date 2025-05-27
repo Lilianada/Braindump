@@ -1,4 +1,3 @@
-
 @import url('https://unpkg.com/geist@1.4.2/dist/geist-sans.css');
 @import url('https://unpkg.com/geist@1.4.2/dist/geist-mono.css');
 
@@ -98,7 +97,6 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* ... keep existing code (font class definitions for body and html) */
   body.font-geist-sans { font-family: var(--font-geist-sans); }
   body.font-geist-mono { font-family: var(--font-geist-mono); }
   body.font-kalam { font-family: var(--font-kalam); }
@@ -121,39 +119,44 @@
   .custom-link {
     @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--custom-yellow))] hover:underline;
   }
+  
   /* Apply to prose links as well if needed */
-  .prose a, .prose .dark\:prose-invert a { /* Updated dark mode selector for prose */
+  .prose a, .prose .dark\:prose-invert a { 
      @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--custom-yellow))] no-underline hover:underline;
   }
-   /* Adjust prose default font size if body is 14px, Tailwind's prose might default to 16px */
+  
+  /* Adjust prose default font size if body is 14px */
   .prose {
     font-size: inherit; /* Inherit from body's 14px */
   }
+  
   .prose :where(p):not(:where([class~="not-prose"] *)) {
     font-size: inherit; /* Ensure paragraphs within prose also inherit */
   }
+  
+  /* Remove backticks from inline code in prose */
   .prose :where(code):not(:where([class~="not-prose"] *))::before,
   .prose :where(code):not(:where([class~="not-prose"] *))::after {
-    content: ""; /* Remove backticks from inline code in prose */
+    content: ""; 
   }
 
-  /* Styling for KaTeX display math blocks */
-  .katex-display > .katex { /* Target the inner .katex for more specific styling if .katex-display has other children */
-    @apply bg-muted p-4 rounded-md block my-4; /* block display, vertical margin */
-    overflow-x: auto; /* Handle wide equations */
-    overflow-y: hidden; /* Typically not needed for math */
+  /* Styling for KaTeX display math blocks - ensure uniform with other blocks */
+  .katex-display > .katex {
+    @apply bg-muted p-4 rounded-md block my-4; 
+    overflow-x: auto;
+    overflow-y: hidden;
   }
-  /* For inline KaTeX, if a background is desired (more subtle) */
-  /* Remove prose's default styling for inline code if it interferes with CustomCodeBlock's inline styling */
+  
+  /* Reset prose's default styling for code blocks */
   .prose :where(code):not(:where([class~="not-prose"] *)) {
-    /* These are handled by CustomCodeBlock for inline code now */
     background-color: transparent; 
     padding: 0;
     border-radius: 0;
-    font-weight: normal; /* reset prose defaults */
+    font-weight: normal;
   }
 }
 
+/* Remove pre styling from prose so CustomCodeBlock handles it */
 .prose :where(pre):not(:where([class~=not-prose],[class~=not-prose] *)) {
   background-color: transparent;
   padding: 0;
