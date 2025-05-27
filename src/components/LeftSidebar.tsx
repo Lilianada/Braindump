@@ -118,7 +118,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
               <ContentNavigation contentSections={contentSections} />
               <TagList tags={uniqueTags} onTagClick={handleTagClick} />
               <Separator />
-               <div className="text-xs font-geist-sans font-medium text-primary m-4 p-4">
+               <div className="text-xs uppercase font-geist-sans font-semibold text-primary p-4">
                Lily's Garden
                </div>
             </nav>
