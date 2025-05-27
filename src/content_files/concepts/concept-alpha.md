@@ -4,7 +4,10 @@ id: "concept-alpha"
 title: "Concept Alpha"
 path: "concepts/concept-alpha"
 type: "note"
-tags: ["new", "core-idea", "example"]
+tags: 
+  - "new" 
+  - "core-idea"
+  - "example"
 created: "2025-05-27"
 lastUpdated: "2025-05-27"
 author: "Test Author"
