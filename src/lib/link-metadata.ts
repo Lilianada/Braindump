@@ -2,43 +2,66 @@
 export interface LinkMetadata {
   title: string;
   description?: string;
-  image?: string; // API calls it image, could be a favicon or preview image
+  image?: string;
   url: string;
 }
 
 const linkMetadataCache = new Map<string, LinkMetadata>();
-const API_BASE_URL = 'https://api.linkpreview.net/'; // Using ?q=URL format
+
+// Preloaded metadata for common external links
+// This will be available immediately without API calls
+const preloadedMetadata: Record<string, LinkMetadata> = {
+  'https://x.com/lilian_ada_': {
+    title: 'Twitter / X',
+    description: 'Lilian Ada on Twitter',
+    url: 'https://x.com/lilian_ada_'
+  },
+  'https://instagram.com/defitcreative': {
+    title: 'Instagram',
+    description: 'Defit Creative on Instagram',
+    url: 'https://instagram.com/defitcreative'
+  },
+  'https://www.linkedin.com/in/lilianada': {
+    title: 'LinkedIn',
+    description: 'Lilian Ada on LinkedIn',
+    url: 'https://www.linkedin.com/in/lilianada'
+  },
+  'https://www.github.com/lilianada': {
+    title: 'GitHub',
+    description: 'Lilian Ada on GitHub',
+    url: 'https://www.github.com/lilianada'
+  },
+  'https://braindump.lilyslab.xyz/rss.xml': {
+    title: 'RSS Feed',
+    description: 'Braindump RSS Feed',
+    url: 'https://braindump.lilyslab.xyz/rss.xml'
+  }
+};
 
 export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | null> => {
+  // First check our cache
   if (linkMetadataCache.has(url)) {
     return linkMetadataCache.get(url) || null;
   }
-
-  try {
-    // The free tier of linkpreview.net works by passing the URL in the 'q' parameter without an API key.
-    // For higher rate limits or production use, an API key would be needed (?key=YOUR_KEY&q=URL).
-    const response = await fetch(`${API_BASE_URL}?q=${encodeURIComponent(url)}`);
-    
-    if (!response.ok) {
-      console.error(`Error fetching link metadata for ${url}: ${response.statusText}`);
-      return null;
-    }
-
-    const data = await response.json();
-
-    if (data && data.title) { // Basic check for valid data
-      const metadata: LinkMetadata = {
-        title: data.title,
-        description: data.description,
-        image: data.image,
-        url: data.url || url, // Fallback to original url if API doesn't return one
-      };
-      linkMetadataCache.set(url, metadata);
-      return metadata;
-    }
-    return null;
-  } catch (error) {
-    console.error(`Exception fetching link metadata for ${url}:`, error);
-    return null;
+  
+  // Then check preloaded data
+  if (url in preloadedMetadata) {
+    const metadata = preloadedMetadata[url];
+    linkMetadataCache.set(url, metadata);
+    return metadata;
   }
+
+  // If no preloaded data, return basic metadata without API call
+  // This avoids API failures and ensures immediate display
+  const basicMetadata: LinkMetadata = {
+    title: url,
+    description: 'External link',
+    url: url
+  };
+  
+  linkMetadataCache.set(url, basicMetadata);
+  return basicMetadata;
+
+  // Note: We've removed the API call to linkpreview.net since it was failing with 403 errors
+  // and we're now using preloaded data + fallbacks instead
 };

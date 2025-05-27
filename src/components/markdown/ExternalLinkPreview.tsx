@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { fetchLinkMetadata, LinkMetadata } from '@/lib/link-metadata';
-import { Skeleton } from "@/components/ui/skeleton"; // For loading state
+import { Skeleton } from "@/components/ui/skeleton";
+import { ExternalLink } from "lucide-react";
 
 interface ExternalLinkPreviewProps {
   href: string;
@@ -16,25 +17,17 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
   const [isOpen, setIsOpen] = useState(false);
   const [metadata, setMetadata] = useState<LinkMetadata | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
+  // Pre-fetch metadata when component mounts
   useEffect(() => {
     let isMounted = true;
-    if (isOpen && !metadata && !isLoading && !error) {
+    
+    if (!metadata) {
       setIsLoading(true);
       fetchLinkMetadata(href)
         .then(data => {
-          if (isMounted) {
-            if (data) {
-              setMetadata(data);
-            } else {
-              setError("Could not load preview.");
-            }
-          }
-        })
-        .catch(() => {
-          if (isMounted) {
-            setError("Failed to fetch preview.");
+          if (isMounted && data) {
+            setMetadata(data);
           }
         })
         .finally(() => {
@@ -43,10 +36,11 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
           }
         });
     }
+    
     return () => {
       isMounted = false;
     };
-  }, [isOpen, href, metadata, isLoading, error]);
+  }, [href, metadata]);
 
   return (
     <HoverCard open={isOpen} onOpenChange={setIsOpen}>
@@ -63,28 +57,34 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
             <Skeleton className="h-3 w-5/6" />
           </div>
         )}
-        {error && !isLoading && <p className="text-destructive">{error}</p>}
-        {!isLoading && !error && metadata && (
+        {!isLoading && metadata && (
           <div>
             {metadata.image && (
               <img 
                 src={metadata.image} 
                 alt="Preview" 
                 className="max-h-20 w-auto object-contain mb-2 rounded" 
-                onError={(e) => (e.currentTarget.style.display = 'none')} // Hide if image fails to load
+                onError={(e) => (e.currentTarget.style.display = 'none')} 
               />
             )}
             <h4 className="font-semibold mb-1 text-base truncate" title={metadata.title}>{metadata.title}</h4>
             {metadata.description && <p className="text-xs text-muted-foreground line-clamp-3">{metadata.description}</p>}
             <p className="text-xs text-muted-foreground mt-1 truncate">
-              <a href={metadata.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                {metadata.url}
+              <a href={metadata.url} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
+                <span className="truncate">{metadata.url}</span>
+                <ExternalLink className="h-3 w-3 ml-1 inline shrink-0" />
               </a>
             </p>
           </div>
         )}
-        {!isLoading && !error && !metadata && (
-          <p className="text-xs text-muted-foreground">No preview available. <a href={href} target="_blank" rel="noopener noreferrer" className="hover:underline">Open link</a></p>
+        {!isLoading && !metadata && (
+          <div className="flex flex-col">
+            <p className="text-xs text-muted-foreground mb-2">External link to</p>
+            <div className="flex items-center justify-between">
+              <span className="truncate text-sm">{href}</span>
+              <ExternalLink className="h-3 w-3 ml-1 shrink-0" />
+            </div>
+          </div>
         )}
       </HoverCardContent>
     </HoverCard>

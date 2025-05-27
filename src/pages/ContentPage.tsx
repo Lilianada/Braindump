@@ -7,7 +7,10 @@ import { AppContextType } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import LoadingGrid from '@/components/LoadingGrid';
 
-const NAVIGABLE_PAGE_TYPES: ContentItem['type'][] = ['note', 'topic', 'log', 'dictionary_entry', 'zettel'];
+const NAVIGABLE_PAGE_TYPES: ContentItem['type'][] = [
+  'note', 'topic', 'log', 'dictionary_entry', 'zettel', 
+  'glossary_term', 'book', 'language', 'concept'
+];
 
 const ContentPage: React.FC = () => {
   const params = useParams();
@@ -24,16 +27,17 @@ const ContentPage: React.FC = () => {
   useEffect(() => {
     const allItems = getAllContentItems(true); // Force refresh to get latest
     
-    // For backlinks, related notes, context - general pool of relevant content types
+    // For backlinks, related notes, context - include ALL content types
     const notesAndTopicsItems = allItems.filter(item => 
-      NAVIGABLE_PAGE_TYPES.includes(item.type) || item.type === 'glossary_term' // Include glossary terms for broader context if needed
+      item.type !== 'folder' // Include everything except folders
     ).sort((a, b) => a.path.localeCompare(b.path)); // Consistent order for these lists
     
     setAllNotesAndTopics(notesAndTopicsItems);
     setAllNotesForContext(notesAndTopicsItems); 
 
-    // For sequential prev/next navigation - ordered by tree structure
-    const sequencedItems = getFlattenedNavigableTree(true); // Force refresh here as well
+    // For sequential prev/next navigation - use flattened tree with ALL content types
+    const sequencedItems = getFlattenedNavigableTree(true);
+    console.log("Sequential navigation items count:", sequencedItems.length);
     setSequencedNavigableItems(sequencedItems);
 
     const terms = allItems.filter(item => item.type === 'glossary_term');

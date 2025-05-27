@@ -1,8 +1,9 @@
+
 export interface ContentItem {
   id: string;
   title: string;
   path: string; // e.g., "zettels/note-a" or "wikis/programming/javascript"
-  type: 'folder' | 'note' | 'topic' | 'glossary_term' | 'dictionary_entry' | 'log' | 'zettel'; // Added 'zettel'
+  type: 'folder' | 'note' | 'topic' | 'glossary_term' | 'dictionary_entry' | 'log' | 'zettel' | 'book' | 'language' | 'concept';
   content?: string; // Markdown or plain text content
   frontmatter?: Record<string, any>; // For parsed frontmatter from MD files
   children?: ContentItem[]; // For folder structures derived from file system

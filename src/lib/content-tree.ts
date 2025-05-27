@@ -1,10 +1,14 @@
+
 import { ContentItem } from '../types/content';
 import { getAllFileContentItems } from './content-loader';
 
 let allContentTreeCache: ContentItem[] | null = null;
 
-// Added 'glossary_term' to include these in navigation.
-const NAVIGABLE_PAGE_TYPES: ContentItem['type'][] = ['note', 'topic', 'log', 'dictionary_entry', 'zettel', 'glossary_term'];
+// Updated to include ALL navigable page types including books, glossary, language, logs
+const NAVIGABLE_PAGE_TYPES: ContentItem['type'][] = [
+  'note', 'topic', 'log', 'dictionary_entry', 'zettel', 
+  'glossary_term', 'book', 'language', 'concept'
+];
 
 // Builds a hierarchical tree from the flat list of file content items.
 // This includes creating "virtual" folder items based on path structure.
@@ -105,14 +109,15 @@ export const findContentByPath = (path: string): ContentItem | undefined => {
   return searchInTree(allContentTreeCache || [], path);
 };
 
-// New function to flatten the tree into a sequenced list of navigable items
+// Updated to include ALL content types in the flattened tree
 export const getFlattenedNavigableTree = (forceRefresh: boolean = false): ContentItem[] => {
   const tree = getContentTree(forceRefresh);
   const navigableItems: ContentItem[] = [];
 
   function flatten(items: ContentItem[]) {
     for (const item of items) {
-      if (NAVIGABLE_PAGE_TYPES.includes(item.type)) {
+      // Include ALL content types that aren't folders
+      if (item.type !== 'folder') {
         navigableItems.push(item);
       }
       if (item.children && item.children.length > 0) {
@@ -122,5 +127,12 @@ export const getFlattenedNavigableTree = (forceRefresh: boolean = false): Conten
   }
 
   flatten(tree);
+  
+  // Debug log to check what content types are included
+  console.log("Flattened navigable tree item types:", 
+    navigableItems.map(item => item.type)
+      .filter((value, index, self) => self.indexOf(value) === index)
+  );
+  
   return navigableItems;
 };
