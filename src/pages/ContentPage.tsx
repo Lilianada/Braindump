@@ -157,12 +157,25 @@ const ContentPage: React.FC = () => {
     if (!contentItem || allNotesAndTopics.length === 0 || contentItem.type === 'folder') {
       return { prevItem: null, nextItem: null };
     }
-    const currentIndex = allNotesAndTopics.findIndex(item => item.id === contentItem.id);
+    
+    // Create a new sorted array to ensure consistent ordering
+    const sortedItems = [...allNotesAndTopics].sort((a, b) => {
+      // First sort by path to maintain a consistent order
+      const pathCompare = a.path.localeCompare(b.path);
+      if (pathCompare !== 0) return pathCompare;
+      
+      // If paths are the same, sort by title
+      return a.title.localeCompare(b.title);
+    });
+    
+    const currentIndex = sortedItems.findIndex(item => item.id === contentItem.id);
     if (currentIndex === -1) {
       return { prevItem: null, nextItem: null };
     }
-    const prev = currentIndex > 0 ? allNotesAndTopics[currentIndex - 1] : null;
-    const next = currentIndex < allNotesAndTopics.length - 1 ? allNotesAndTopics[currentIndex + 1] : null;
+    
+    const prev = currentIndex > 0 ? sortedItems[currentIndex - 1] : null;
+    const next = currentIndex < sortedItems.length - 1 ? sortedItems[currentIndex + 1] : null;
+    
     return { prevItem: prev, nextItem: next };
   }, [contentItem, allNotesAndTopics]);
 

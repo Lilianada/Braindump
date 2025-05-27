@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Info, FileText as FileTextIcon } from 'lucide-react';
+import { Home, Info, FileText as FileTextIcon, TagIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface NavLinkProps {
@@ -32,6 +32,7 @@ const pages = [
   { to: "/", icon: Home, label: "Home", exact: true },
   { to: "/about", icon: Info, label: "About" },
   { to: "/docs", icon: FileTextIcon, label: "Docs" },
+  { to: "/tags", icon: TagIcon, label: "Tags" },
 ];
 
 const PageLinks: React.FC = () => {

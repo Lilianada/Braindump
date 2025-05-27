@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getAllContentItems, ContentItem } from '@/content/mockData';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { FileText as FileTextIcon, Tag as TagIcon } from 'lucide-react';
+import { ArrowLeft, FileText as FileTextIcon, Tag as TagIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { getNormalizedTags } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
@@ -55,6 +55,12 @@ const TagDetailPage: React.FC = () => {
   return (
     <ScrollArea className="h-full">
       <div className="container mx-auto px-4 py-8">
+      <div className="mb-6 text-left">
+          <Link to="/tags" className="text-sm text-primary hover:underline flex items-center space-x-2">
+            <ArrowLeft className='h-4 w-4' aria-label='Back button'/>
+            View all tags
+          </Link>
+        </div>
         <Card>
           <CardHeader>
             <div className="flex items-center space-x-2 mb-2">
@@ -101,11 +107,7 @@ const TagDetailPage: React.FC = () => {
             )}
           </CardContent>
         </Card>
-        <div className="mt-6 text-center">
-          <Link to="/tags" className="text-sm text-primary hover:underline">
-            View all tags
-          </Link>
-        </div>
+        
       </div>
     </ScrollArea>
   );
