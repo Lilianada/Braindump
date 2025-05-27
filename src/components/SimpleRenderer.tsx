@@ -2,6 +2,8 @@
 import React, { useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math'; // Added
+import rehypeKatex from 'rehype-katex'; // Added
 import { TocItem } from '@/types';
 import { ContentItem } from '@/content/mockData';
 
@@ -30,7 +32,8 @@ const SimpleRenderer: React.FC<SimpleRendererProps> = ({ content, setTocItems, a
   return (
     <div className="prose dark:prose-invert max-w-none text-foreground space-y-3 text-sm">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={[remarkGfm, remarkMath]} // Added remarkMath
+        rehypePlugins={[rehypeKatex]} // Added rehypeKatex
         components={{
           h1: (props) => <CustomHeading {...props} level={1} setTocItems={setTocItems} />,
           h2: (props) => <CustomHeading {...props} level={2} setTocItems={setTocItems} />,
