@@ -1,0 +1,30 @@
+
+/* Ensures the React Flow container takes up available space */
+.note-graph-container {
+  width: 100%;
+  height: 100%; /* This will be controlled by parent */
+  background-color: hsl(var(--background));
+}
+
+.react-flow__node-default {
+  /* Example: Add specific styles for default nodes if needed */
+  /* background-color: hsl(var(--card)); */
+  /* color: hsl(var(--card-foreground)); */
+  /* border: 1px solid hsl(var(--border)); */
+  /* padding: 10px 15px; */
+  /* border-radius: var(--radius); */
+  font-size: 13px;
+}
+
+.react-flow__edge-path {
+  /* stroke: hsl(var(--primary)); */ /* Default edge color */
+}
+
+.react-flow__attribution {
+  background: hsl(var(--background) / 0.8) !important;
+  padding: 2px 4px !important;
+  font-size: 10px !important;
+  border-radius: var(--radius-sm) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+

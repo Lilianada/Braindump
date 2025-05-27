@@ -1,0 +1,138 @@
+
+/* Based on xy-theme.css from React Flow context */
+.react-flow {
+    /* Custom Variables */
+    --xy-theme-selected: #F57DBD;
+    --xy-theme-hover: #C5C5C5;
+    --xy-theme-edge-hover: black;
+    --xy-theme-color-focus: #E8E8E8;
+
+    /* Built-in Variables see https://reactflow.dev/learn/customization/theming */
+    --xy-node-border-default: 1px solid hsl(var(--border));
+  
+    --xy-node-boxshadow-default: 
+      0px 3.54px 4.55px 0px hsla(var(--card-foreground-rgb),0.02), 
+      0px 3.54px 4.55px 0px hsla(var(--card-foreground-rgb),0.05), 
+      0px 0.51px 1.01px 0px hsla(var(--card-foreground-rgb),0.1);
+  
+    --xy-node-border-radius-default: var(--radius); /* Uses Tailwind radius */
+  
+    --xy-handle-background-color-default: hsl(var(--background));
+    --xy-handle-border-color-default: hsl(var(--border));
+  
+    --xy-edge-label-color-default: hsl(var(--muted-foreground));
+    --xy-node-color-default: hsl(var(--popover-foreground));
+    --xy-node-background-color-default: hsl(var(--popover));
+}
+
+.react-flow.dark { 
+    --xy-node-boxshadow-default: 
+    0px 3.54px 4.55px 0px rgba(255, 255, 255, 0.05),
+    0px 3.54px 4.55px 0px rgba(255, 255, 255, 0.13),
+    0px 0.51px 1.01px 0px rgba(255, 255, 255, 0.2);  
+    --xy-theme-color-focus: #535353; /* Keep or adjust for dark theme focus */
+    --xy-node-border-default: 1px solid hsl(var(--border));
+    --xy-handle-background-color-default: hsl(var(--popover));
+    --xy-handle-border-color-default: hsl(var(--border));
+    --xy-edge-label-color-default: hsl(var(--muted-foreground));
+    --xy-node-color-default: hsl(var(--popover-foreground));
+    --xy-node-background-color-default: hsl(var(--popover));
+}
+
+/* Customizing Default Theming */
+.react-flow__node {
+    box-shadow: var(--xy-node-boxshadow-default);
+    border-radius: var(--xy-node-border-radius-default);
+    background-color: var(--xy-node-background-color-default);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px 15px;
+    font-size: 12px;
+    flex-direction: column;
+    border: var(--xy-node-border-default);
+    color: var(--xy-node-color, var(--xy-node-color-default));
+    min-width: 80px; /* Ensure nodes are not too small */
+}
+
+.react-flow__node.selectable:focus {
+    box-shadow: 0px 0px 0px 2px hsl(var(--primary) / 0.5); /* Focus ring with primary color */
+    border-color: hsl(var(--primary));
+}
+
+.react-flow__node.selectable:focus:active {
+    box-shadow: var(--xy-node-boxshadow-default);
+}
+
+.react-flow__node.selectable:hover {
+    border-color: hsl(var(--primary) / 0.7);
+}
+
+.react-flow__node.selectable.selected,
+.react-flow__node.selected {
+    border-color: hsl(var(--primary));
+    box-shadow: 0px 0px 0px 2px hsl(var(--primary) / 0.7), var(--xy-node-boxshadow-default);
+}
+
+.react-flow__node-group {
+    background-color: hsl(var(--primary) / 0.1);
+    border-color: hsl(var(--primary) / 0.5);
+}
+
+.react-flow__edge.selectable:hover .react-flow__edge-path,
+.react-flow__edge.selectable.selected .react-flow__edge-path,
+.react-flow__edge.selected .react-flow__edge-path {
+    stroke: hsl(var(--primary)); /* Edge color when hovered/selected */
+}
+
+.react-flow__handle {
+    background-color: var(--xy-handle-background-color-default);
+    border: 1px solid var(--xy-handle-border-color-default);
+}
+
+.react-flow__handle.connectionindicator:hover {
+    pointer-events: all;
+    border-color: hsl(var(--primary));
+    background-color: hsl(var(--background));
+}
+
+.react-flow__handle.connectionindicator:focus , 
+.react-flow__handle.connectingfrom,
+.react-flow__handle.connectingto {
+    border-color: hsl(var(--primary));
+}
+
+.react-flow__node-resizer {
+    border-radius: 0;
+    border: none;
+}
+
+.react-flow__resize-control.handle {
+    background-color: hsl(var(--background));
+    border-color: hsl(var(--primary));
+    border-radius: 0;
+    width: 5px;
+    height: 5px;
+}
+
+.react-flow__background {
+    background-color: hsl(var(--background));
+}
+.react-flow__controls button {
+    background-color: hsl(var(--popover));
+    border-bottom: 1px solid hsl(var(--border));
+    fill: hsl(var(--popover-foreground));
+}
+.react-flow__controls button:hover {
+    background-color: hsl(var(--accent));
+}
+.react-flow__minimap {
+    background-color: hsl(var(--popover));
+    border: 1px solid hsl(var(--border));
+}
+.react-flow__minimap-node {
+    fill: hsl(var(--primary) / 0.5);
+    stroke: none;
+}
+
