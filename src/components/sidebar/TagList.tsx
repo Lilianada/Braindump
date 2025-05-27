@@ -15,7 +15,7 @@ const TagList: React.FC<TagListProps> = ({ tags, onTagClick }) => {
 
   return (
     <div>
-      <h3 className="px-3 mb-2 text-[10px] font-medium uppercase text-muted-foreground tracking-wider">Tags</h3>
+      <h3 className="px-3 mb-2 text-[10px] font-medium uppercase text-muted-foreground tracking-wider hover-bg-primary/70">Tags</h3>
       <div className="flex flex-wrap gap-2 px-3">
         {tags.map(tag => (
           <Badge 

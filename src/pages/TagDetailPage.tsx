@@ -59,7 +59,7 @@ const TagDetailPage: React.FC = () => {
             <div className="flex items-center space-x-2 mb-2">
               <TagIcon className="h-6 w-6 text-primary" />
               <CardTitle className="text-2xl font-semibold tracking-tight">
-                Content tagged with: <span className="text-primary">{decodedTagName}</span>
+                Content tagged with: <span className="text-primary capitalize">{decodedTagName}</span>
               </CardTitle>
             </div>
             <CardDescription>
