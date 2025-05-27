@@ -13,6 +13,7 @@ import {
   Node,
   Panel,
   useReactFlow,
+  BackgroundVariant, // Import BackgroundVariant
 } from '@xyflow/react';
 import { useNavigate } from 'react-router-dom';
 
@@ -98,7 +99,7 @@ const NoteGraph: React.FC = () => {
       >
         <Controls />
         <MiniMap nodeStrokeWidth={3} zoomable pannable />
-        <Background gap={16} color="hsl(var(--border))" variant="dots" />
+        <Background gap={16} color="hsl(var(--border))" variant={BackgroundVariant.Dots} /> {/* Changed "dots" to BackgroundVariant.Dots */}
         <Panel position="top-right">
           <Button onClick={loadGraphData} variant="outline" size="sm" className="shadow-md">
             <RefreshCw className="h-4 w-4 mr-2" />
