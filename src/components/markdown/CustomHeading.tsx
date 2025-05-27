@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { TocItem } from '@/types';
 import { generateSlug } from '@/lib/stringUtils';
@@ -11,27 +12,33 @@ const CustomHeading: React.FC<CustomHeadingProps> = ({ level, children, setTocIt
   const id = generateSlug(text);
 
   useEffect(() => {
-    if (text && id) { // Ensure text and id are valid before updating TOC
+    if (text && id) {
       setTocItems(prevItems => {
-        // Check if this item already exists in the TOC
         if (!prevItems.find(item => item.id === id)) {
           const newTocItem: TocItem = { id, text, level };
-          // Simply add the new item to the end of the array to maintain order
           return [...prevItems, newTocItem];
         }
         return prevItems;
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, text, level]); // setTocItems is stable, no need to include
+  }, [id, text, level]);
 
   const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
-  let className = "";
-  if (level === 1) className = "capitalize text-2xl font-medium mt-5 mb-3 pb-1.5";
-  if (level === 2) className = "capitalize text-xl font-medium mt-4 mb-2 pb-1";
-  if (level === 3) className = "capitalize text-lg font-medium mt-3 mb-1.5";
+  let className = "font-semibold"; // Common style for all headings
+
+  // Obsidian-like heading styles
+  if (level === 1) { // e.g., "Goals MOC"
+    className += " text-3xl lg:text-4xl mt-8 mb-6 text-[hsl(var(--foreground-strong))]";
+  } else if (level === 2) { // e.g., "So, you want to chart a course?"
+    className += " text-2xl lg:text-3xl mt-10 mb-4 pb-2 border-b-2 border-primary text-[hsl(var(--foreground-strong))]";
+  } else if (level === 3) {
+    className += " text-xl lg:text-2xl mt-8 mb-3 text-foreground";
+  }
+  // Add more levels if needed
 
   return <HeadingTag id={id} className={className}>{children}</HeadingTag>;
 };
 
 export default CustomHeading;
+

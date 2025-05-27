@@ -1,3 +1,4 @@
+
 @import url('https://unpkg.com/geist@1.4.2/dist/geist-sans.css');
 @import url('https://unpkg.com/geist@1.4.2/dist/geist-mono.css');
 
@@ -7,81 +8,85 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* Light mode background */
-    --foreground: 324 5% 2%; /* Light mode text */
+    /* Light Mode Theme (Obsidian-inspired counterpart) */
+    --background: 0 0% 100%; /* White background */
+    --foreground: 220 20% 25%; /* Dark grey text */
+    --foreground-strong: 220 20% 15%; /* Darker grey for strong text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 324 5% 2%;
+    --card: 0 0% 98%;
+    --card-foreground: 220 20% 25%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 324 5% 2%;
+    --popover-foreground: 220 20% 25%;
 
-    --primary: 350 65% 60%; /* Custom primary color */
-    --primary-foreground: 0 0% 100%; /* Text on primary color - white for good contrast */
+    --primary: 310 60% 55%; /* Magenta accent */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 94%; /* Light grey for secondary elements */
+    --secondary-foreground: 220 20% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 94%; /* Muted background for tags */
+    --muted-foreground: 220 20% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 180 70% 40%; /* Darker Teal/Cyan for links on light bg */
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 350 65% 70%; /* Ring color to match primary */
+    --border: 0 0% 88%; /* Light grey border */
+    --input: 0 0% 92%;
+    --ring: 310 60% 60%;
 
     --radius: 0.5rem;
 
     /* Custom font variables */
-    --font-geist-sans: "Geist Sans", sans-serif;
+    --font-geist-sans: "Geist Sans", system-ui, sans-serif;
     --font-geist-mono: "Geist Mono", monospace;
     --font-kalam: "Kalam", cursive;
     --font-indie-flower: "Indie Flower", cursive;
     --font-lancelot: "Lancelot", cursive;
     --font-cormorant-upright: "Cormorant Upright", serif;
-
-    /* Custom yellow for wiki links */
-    --custom-yellow: 42 92% 42%; /* A nice, noticeable yellow */
-    --custom-yellow-foreground: 324 5% 2%; /* Dark text for yellow background in light mode if needed */
+    
+    /* Link color */
+    --link-color: 180 70% 40%; /* Darker Teal for light mode links */
+    --link-hover-color: 180 70% 35%;
   }
 
   .dark {
-    --background: 324 5% 2%; /* Dark mode background */
-    --foreground: 210 40% 98%; /* Dark mode text */
+    /* Dark Mode Theme (Obsidian-inspired) */
+    --background: 222 20% 12%; /* Very dark blue/grey */
+    --foreground: 220 15% 88%; /* Off-white text */
+    --foreground-strong: 220 20% 95%; /* Brighter white for strong text */
 
-    --card: 324 5% 2%;
-    --card-foreground: 210 40% 98%;
+    --card: 222 20% 15%; /* Slightly lighter dark for cards */
+    --card-foreground: 220 15% 88%;
 
-    --popover: 324 5% 2%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222 20% 10%; /* Darker for popovers */
+    --popover-foreground: 220 15% 88%;
 
-    --primary: 350 65% 70%; /* Custom primary color */
-    --primary-foreground: 0 0% 100%;
+    --primary: 310 70% 65%; /* Vibrant Magenta accent */
+    --primary-foreground: 220 15% 95%;
 
-    --secondary: 217.2 4% 18%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 222 20% 18%; /* Dark muted for secondary elements */
+    --secondary-foreground: 220 15% 80%;
 
-    --muted: 217.2 4% 18%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 222 20% 18%; /* Muted background for tags */
+    --muted-foreground: 220 15% 70%;
 
-    --accent: 217.2 4% 18%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 180 60% 55%; /* Bright Teal/Cyan for accents (can be link color too) */
+    --accent-foreground: 222 20% 12%;
 
-    --destructive: 0 90% 60%;
+    --destructive: 0 70% 55%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 4% 18%;
-    --input: 217.2 4% 18%;
-    --ring: 350 65% 70%; /* Ring color to match primary */
+    --border: 222 20% 25%; /* Subtle border */
+    --input: 222 20% 20%;
+    --ring: 310 70% 70%;
     
-    /* Custom yellow for wiki links in dark mode */
-    --custom-yellow: 45 90% 55%; /* Same yellow, usually pops well on dark */
-    --custom-yellow-foreground: 210 40% 98%; /* Light text for yellow background in dark mode if needed */
+    /* Link color */
+    --link-color: 180 60% 55%; /* Bright Teal/Cyan for dark mode links */
+    --link-hover-color: 180 60% 65%;
   }
 }
 
@@ -92,11 +97,12 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-geist-mono); /* Default font to Geist Mono */
-    font-size: 14px; /* Set base body font size */
+    font-family: var(--font-geist-sans); /* Default font to Geist Sans */
+    font-size: 14px; 
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
+  /* ... keep existing code (font body classes) */
   body.font-geist-sans { font-family: var(--font-geist-sans); }
   body.font-geist-mono { font-family: var(--font-geist-mono); }
   body.font-kalam { font-family: var(--font-kalam); }
@@ -105,8 +111,9 @@
   body.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
 
   html {
-    font-family: var(--font-geist-mono); 
+    font-family: var(--font-geist-sans); /* Default font to Geist Sans */
   }
+  /* ... keep existing code (font html classes) */
   html.font-geist-sans { font-family: var(--font-geist-sans); }
   html.font-geist-mono { font-family: var(--font-geist-mono); }
   html.font-kalam { font-family: var(--font-kalam); }
@@ -115,18 +122,19 @@
   html.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
 
 
-  /* Custom link styling */
+  /* Custom link styling - remove background, use new link color */
   .custom-link {
-    @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--primary))] hover:underline;
+    @apply text-[hsl(var(--link-color))] no-underline hover:text-[hsl(var(--link-hover-color))] hover:underline;
   }
 
+  /* ... keep existing code (custom-quote) */
   .custom-quote {
     @apply bg-[hsl(var(--custom-yellow))]/40 text-sm dark:bg-[hsl(var(--custom-yellow))]/80 px-1 py-0.5 dark:text-[hsl(var(--primary))] font-geist-mono my-2;
   }
   
-  /* Apply to prose links as well if needed */
+  /* Apply to prose links as well - remove background, use new link color */
   .prose a, .prose .dark\:prose-invert a { 
-     @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--primary))] dark:text-[hsl(var(--custom-yellow))] no-underline hover:underline;
+     @apply text-[hsl(var(--link-color))] no-underline hover:text-[hsl(var(--link-hover-color))] hover:underline;
   }
   
   /* Adjust prose default font size if body is 14px */
@@ -136,6 +144,12 @@
   
   .prose :where(p):not(:where([class~="not-prose"] *)) {
     font-size: inherit; /* Ensure paragraphs within prose also inherit */
+  }
+
+  /* Style for strong/bold text */
+  .prose :where(strong):not(:where([class~="not-prose"] *)), 
+  .prose strong {
+    @apply text-[hsl(var(--foreground-strong))];
   }
   
   /* Remove backticks from inline code in prose */
@@ -154,9 +168,11 @@
   /* Reset prose's default styling for code blocks */
   .prose :where(code):not(:where([class~="not-prose"] *)) {
     background-color: transparent; 
-    padding: 0;
-    border-radius: 0;
-    font-weight: normal;
+    @apply text-muted-foreground; /* Give inline code a subtle color */
+    padding: 0.1em 0.3em;
+    border-radius: 0.2em;
+    font-size: 0.9em;
+    border: 1px solid hsl(var(--border));
   }
 }
 
@@ -166,7 +182,13 @@
   padding: 0;
 }
 
-/* Loading Grid Animation */
+/* Style for hr, which is used by Separator if not overridden, or by prose */
+.prose hr {
+  @apply border-primary my-8; /* Use primary color for dividers */
+}
+
+
+/* ... keep existing code (Loading Grid Animation) */
 @keyframes pulse {
   0%, 100% {
     opacity: 0.2;
@@ -177,3 +199,4 @@
     transform: scale(1.1) rotate(5deg);
   }
 }
+
