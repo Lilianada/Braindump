@@ -1,3 +1,4 @@
+
 // Parser for frontmatter and content from raw markdown string
 export function parseFrontmatterAndContent(rawContent: string): { frontmatter: Record<string, any>; content: string } {
   // console.log('[Parser] Starting frontmatter parsing...');
@@ -70,18 +71,4 @@ export function parseFrontmatterAndContent(rawContent: string): { frontmatter: R
 
   // console.log('[Parser] Parsing complete. Final frontmatter:', JSON.stringify(frontmatter, null, 2));
   return { frontmatter, content };
-}
-
-export interface Heading {
-  level: number;
-  text: string;
-  id: string;
-}
-
-export function parseContent(markdownContent: string): { headings: Heading[] } {
-  // Placeholder implementation.
-  // In a real scenario, you'd parse the markdown to find headings.
-  // For now, return an empty array to fix the build.
-  // console.log("Placeholder parseContent called for:", markdownContent?.substring(0,50));
-  return { headings: [] };
 }

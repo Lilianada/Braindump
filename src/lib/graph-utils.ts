@@ -1,6 +1,5 @@
 
-// Changed getAllContentItems to getAllFileContentItems
-import { getAllFileContentItems } from './content-loader'; 
+import { getAllContentItems } from './content-loader';
 import { ContentItem } from '@/types/content';
 import { Node, Edge, MarkerType } from '@xyflow/react';
 
@@ -12,8 +11,7 @@ interface GraphData {
 }
 
 export function generateGraphData(): GraphData {
-  // Changed getAllContentItems to getAllFileContentItems
-  const allNotes = getAllFileContentItems(false); 
+  const allNotes = getAllContentItems(false);
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
@@ -37,7 +35,7 @@ export function generateGraphData(): GraphData {
         y: Math.floor(index / columns) * spacingY + Math.random() * 20 - 10,
       },
       data: { label: note.title },
-      type: 'default', 
+      type: 'default', // Or 'input', 'output' based on connections, or custom
     });
 
     if (note.content) {
@@ -46,8 +44,9 @@ export function generateGraphData(): GraphData {
         const linkedNoteTitle = match[1].toLowerCase();
         const targetNote = noteMapByTitle.get(linkedNoteTitle);
 
-        if (targetNote && targetNote.path !== note.path) { 
+        if (targetNote && targetNote.path !== note.path) { // Ensure target exists and is not self-reference for this basic edge
           const edgeId = `e-${note.path}-${targetNote.path}`;
+          // Avoid duplicate edges
           if (!edges.find(e => e.id === edgeId)) {
             edges.push({
               id: edgeId,
@@ -62,7 +61,7 @@ export function generateGraphData(): GraphData {
       }
     }
   });
-  // console.log(`Generated ${nodes.length} nodes and ${edges.length} edges.`);
+  console.log(`Generated ${nodes.length} nodes and ${edges.length} edges.`);
   return { nodes, edges };
 }
 
