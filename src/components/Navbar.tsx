@@ -44,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           )}
           <Link to="/" className="text-2xl font-bold text-primary font-geist-sans">
             <div className="bg-primary rounded-xl px-2 py-1">
-            <Brain className="h-5 w-5" aria-labelled= />
+            <Brain className="h-5 w-5" aria-label="Icon" />
             Braindump
             </div>
           </Link>
