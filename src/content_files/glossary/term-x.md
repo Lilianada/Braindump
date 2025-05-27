@@ -1,13 +1,9 @@
-
 ---
 id: "term-x"
 title: "Term X"
 path: "glossary/term-x"
 slug: "term-x"
-tags:
-  - "new"
-  - "core-idea"
-  - "example"
+tags: ["definition", "words", "glossary"]
 type: "glossary_term"
 created: "2025-05-26"
 lastUpdated: "2025-05-26"

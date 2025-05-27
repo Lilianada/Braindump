@@ -1,14 +1,10 @@
-
 ---
-id: "log-001"
-title: "Log 001"
-path: "daily-logs/001"
+id: "about"
+title: "About"
+path: "/about"
 slug: "log-001"
-type: ["log"]
-tags:
-  - "new"
-  - "core-idea"
-  - "example"
+type: "about"
+tags: ["about"]
 created: "2025-05-26"
 lastUpdated: "2025-05-26"
 ---
