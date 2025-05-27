@@ -116,7 +116,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
               <PageLinks />
               <ContentNavigation contentSections={contentSections} />
               <TagList tags={uniqueTags} onTagClick={handleTagClick} />
-               <div className="text-xs font-indie-flower font-medium text-primary">
+               <div className="text-xs font-indie-flower font-medium text-primary my-4">
                Lily's Garden
                </div>
             </nav>
