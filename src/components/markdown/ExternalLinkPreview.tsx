@@ -74,14 +74,16 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
                 onError={(e) => (e.currentTarget.style.display = 'none')} 
               />
             )}
-          
-            {metadata.siteName && <p className="text-xs text-muted-foreground mb-1">{metadata.siteName}</p>}
+             <p className="flex justify-between font-semibold mb-1 text-sm uppercase">External Link to
+              <ExternalLinkIcon className="h-3 w-3 ml-1 inline shrink-0" />
+             </p>
+            {metadata.siteName && <p className="text-xs text-muted-foreground">{metadata.siteName}</p>}
             {metadata.description && <p className="text-xs text-muted-foreground line-clamp-3">{metadata.description}</p>}
             <p className="text-xs text-muted-foreground mt-2 truncate">
               <a href={metadata.url} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
                 {metadata.favicon && <img src={metadata.favicon} alt="" className="h-3 w-3 mr-1.5"/>}
                 <span className="truncate">{metadata.url}</span>
-                <ExternalLinkIcon className="h-3 w-3 ml-1 inline shrink-0" />
+               
               </a>
             </p>
           </div>
