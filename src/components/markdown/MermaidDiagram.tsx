@@ -1,5 +1,4 @@
 
-```typescript
 import React, { useEffect, useId, useRef, useState } from 'react';
 import mermaid from 'mermaid';
 import { useTheme } from '@/contexts/ThemeContext'; // Using our existing ThemeContext
@@ -52,5 +51,3 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart }) => {
 };
 
 export default MermaidDiagram;
-
-```
