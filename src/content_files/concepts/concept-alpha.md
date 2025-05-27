@@ -1,4 +1,3 @@
-
 ---
 id: "concept-alpha"
 title: "Concept Alpha"
