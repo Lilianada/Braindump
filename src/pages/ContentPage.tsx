@@ -243,7 +243,7 @@ const ContentPage: React.FC = () => {
       <header className="mb-8">
         <h1 className="text-3xl font-semibold capitalize mb-2">{contentItem.title}</h1>
         
-        <div className="mt-3 mb-6 text-sm text-muted-foreground space-y-1.5">
+        <div className="mt-3 mb-1 text-xs text-muted-foreground space-y-1.5">
           {contentItem.frontmatter?.type && contentItem.type !== contentItem.frontmatter.type && (
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
@@ -265,18 +265,6 @@ const ContentPage: React.FC = () => {
               <CalendarDays className="h-4 w-4" />
               <span>Last Updated: {new Date(contentItem.lastUpdated).toLocaleDateString()}</span>
             </div>
-          )}
-          {contentItem.frontmatter?.author && (
-             <div className="flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              <span>Author: {contentItem.frontmatter.author}</span>
-             </div>
-          )}
-          {contentItem.frontmatter?.source && (
-             <div className="flex items-center gap-2">
-              <Link2 className="h-4 w-4" />
-              <span>Source: {contentItem.frontmatter.source}</span>
-             </div>
           )}
           {category && (
              <div className="flex items-center gap-2">
@@ -300,14 +288,14 @@ const ContentPage: React.FC = () => {
         </div>
 
         {contentItem.tags && contentItem.tags.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center text-sm text-muted-foreground mb-2 gap-2">
+          <div className="mb-6 flex items-center gap-2">
+            <div className="flex items-center text-xs text-muted-foreground gap-2">
               <TagIcon className="h-4 w-4" />
               <span>Tags:</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {contentItem.tags.filter(tag => !tag.toLowerCase().startsWith('category:')).map(tag => (
-                <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
+                <Badge key={tag} variant="secondary" className="text-xs font-medium">{tag}</Badge>
               ))}
             </div>
           </div>

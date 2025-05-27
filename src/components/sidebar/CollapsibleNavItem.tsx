@@ -58,7 +58,7 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({ item, level = 0
           style={{ paddingLeft: `${12 + level * 16}px` }}
           className={cn(
             "flex items-center justify-start w-full py-2 pr-3 rounded-md text-xs hover:bg-accent hover:text-accent-foreground transition-colors group",
-            isActive && item.type === 'folder' ? "bg-accent text-accent-foreground font-medium" : "",
+            // isActive && item.type === 'folder' ? "bg-accent text-accent-foreground font-medium" : "",
             location.pathname === `/content/${item.path}` ? "bg-primary/10 text-primary font-semibold" : "text-foreground/80"
           )}
         >

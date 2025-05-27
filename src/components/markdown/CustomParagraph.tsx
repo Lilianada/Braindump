@@ -6,8 +6,6 @@ import { renderInteractiveText } from '@/lib/markdown/renderInteractiveText';
 interface CustomParagraphProps extends React.PropsWithChildren<unknown> {
   allNotes: ContentItem[];
   glossaryTerms: ContentItem[];
-  // node is passed by react-markdown but we don't use it directly here
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   node?: any; 
 }
 
@@ -17,9 +15,6 @@ const CustomParagraph: React.FC<CustomParagraphProps> = ({ children, allNotes, g
       return renderInteractiveText(node, allNotes, glossaryTerms, keyPrefix);
     }
     if (React.isValidElement(node) && node.props.children) {
-      // If the element is a link (<a> tag from markdown), its children might be simple text
-      // or already processed. We want to avoid re-processing if it's already a custom link.
-      // However, react-markdown typically gives us text children here.
       const processedChildren = React.Children.map(node.props.children, (child, index) => 
         processNode(child, `${keyPrefix}-child-${index}`)
       );
@@ -32,7 +27,7 @@ const CustomParagraph: React.FC<CustomParagraphProps> = ({ children, allNotes, g
     processNode(child, `p-${index}`)
   );
 
-  return <p>{processedChildren}</p>;
+  return <p className='font-normal'>{processedChildren}</p>;
 };
 
 export default CustomParagraph;
