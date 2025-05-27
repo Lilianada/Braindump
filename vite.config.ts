@@ -12,15 +12,19 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [
+    // Ensure nodePolyfills runs before other plugins that might interact with module resolution
+    // or before Vite's default handling of Node built-ins.
+    {
+      ...nodePolyfills({
+        // To exclude specific polyfills, add them to this list.
+        // For example, if you don't want to polyfill 'fs', add 'fs: false'
+        // However, for globSync and fs.readFileSync to work, we need them.
+        protocolImports: true, // Recommended for full compatibility
+      }),
+      enforce: 'pre', // Run this plugin before Vite's core plugins
+    },
     react(),
-    mode === 'development' &&
-    componentTagger(),
-    nodePolyfills({
-      // To exclude specific polyfills, add them to this list.
-      // For example, if you don't want to polyfill 'fs', add 'fs: false'
-      // However, for globSync and fs.readFileSync to work, we need them.
-      protocolImports: true, // Recommended for full compatibility
-    }),
+    mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -35,4 +39,3 @@ export default defineConfig(({ mode }) => ({
   //   },
   // },
 }));
-
