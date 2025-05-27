@@ -1,4 +1,5 @@
 
+```typescript
 import React, { useEffect, useId, useRef, useState } from 'react';
 import mermaid from 'mermaid';
 import { useTheme } from '@/contexts/ThemeContext'; // Using our existing ThemeContext
@@ -11,7 +12,8 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart }) => {
   const id = `mermaid-diagram-${useId()}`;
   const [svg, setSvg] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
-  const { effectiveTheme } = useTheme(); // effectiveTheme gives 'dark' or 'light'
+  const { theme } // Changed from effectiveTheme to theme
+ = useTheme(); 
 
   useEffect(() => {
     const currentChart = chart; // Capture chart for the effect closure
@@ -21,17 +23,14 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart }) => {
       securityLevel: 'loose',
       fontFamily: 'inherit',
       themeCSS: 'margin: 1.5rem auto 0;', // As per example
-      theme: effectiveTheme === 'dark' ? 'dark' : 'default',
+      theme: theme === 'dark' ? 'dark' : 'default', // Changed from effectiveTheme
     });
 
     async function renderChart() {
       try {
-        // console.log(`[MermaidDiagram] Rendering chart with id: ${id} and theme: ${effectiveTheme}`);
+        // console.log(`[MermaidDiagram] Rendering chart with id: ${id} and theme: ${theme}`);
         // console.log(`[MermaidDiagram] Chart content:\n${currentChart}`);
         
-        // Ensure the container exists for mermaid to find, though it renders to string here.
-        // If mermaid needs a live DOM element for `render`, this approach needs adjustment.
-        // However, `mermaid.render` typically generates SVG string.
         const { svg: renderedSvg, bindFunctions } = await mermaid.render(id, currentChart);
         setSvg(renderedSvg);
 
@@ -40,16 +39,18 @@ const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart }) => {
         }
       } catch (error) {
         console.error('Error rendering Mermaid chart:', error);
-        // Display error in the chart's place
         setSvg(`<pre style="color: red;">Error rendering Mermaid chart:\n${(error as Error).message}\n\nChart content:\n${currentChart}</pre>`);
       }
     }
 
     void renderChart();
-  }, [chart, id, effectiveTheme]);
+  }, [chart, id, theme]); // Changed from effectiveTheme
 
   // Using a key on the div to force re-render if svg content changes significantly (e.g. error -> chart)
-  return <div key={id + effectiveTheme} ref={containerRef} dangerouslySetInnerHTML={{ __html: svg }} />;
+  // Also, include 'theme' in the key to ensure re-render on theme change if Mermaid SVG itself doesn't change styling dynamically based on CSS vars for theme.
+  return <div key={`${id}-${theme}`} ref={containerRef} dangerouslySetInnerHTML={{ __html: svg }} />;
 };
 
 export default MermaidDiagram;
+
+```
