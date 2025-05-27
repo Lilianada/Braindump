@@ -32,7 +32,17 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
   return (
     <HoverCard /* open={isOpen} onOpenChange={setIsOpen} */ >
       <HoverCardTrigger asChild>
-        <a href={href} className={className} target={target} rel={rel}>
+        <a
+          href={href}
+          target={target}
+          rel={rel}
+          className={cn("inline-flex items-center gap-1 hover:underline underline-offset-2", className)}
+          onClick={(e) => {
+            if (!href || href.startsWith('#')) {
+              e.preventDefault();
+            }
+          }}
+        >
           {children}
         </a>
       </HoverCardTrigger>
