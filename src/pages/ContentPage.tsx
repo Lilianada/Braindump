@@ -216,7 +216,7 @@ const ContentPage: React.FC = () => {
       <div className="container mx-auto py-4 animate-fade-in">
         <header className="mb-8 flex items-center gap-3">
           <div>
-            <h1 className="capitalize text-xl font-semibold">{contentItem.title}</h1>
+            <h1 className="capitalize text-2xl font-semibold">{contentItem.title}</h1>
             <p className="text-sm text-muted-foreground">
               Path: /content/{contentItem.path}
             </p>
