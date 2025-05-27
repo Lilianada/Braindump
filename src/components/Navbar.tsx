@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Ellipsis, Menu as MenuIcon, Brain } from 'lucide-react';
+import { Search, Ellipsis, Menu as MenuIcon } from 'lucide-react'; // Removed Brain import
 import ThemeToggle from './ThemeToggle';
 import FontToggle from './FontToggle';
 import { Button } from '@/components/ui/button';
@@ -11,8 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import CommandPalette from './CommandPalette'; // We will create this
-import { useIsMobile } from '@/hooks/use-mobile'; // Assuming this hook exists
+import CommandPalette from './CommandPalette';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface NavbarProps {
   onToggleSidebar?: () => void; // For mobile sidebar toggle
@@ -42,9 +41,9 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
               <MenuIcon className="h-6 w-6" />
             </Button>
           )}
-          <Link to="/" className="flex text-2xl font-bold text-primary font-geist-sans">
-            <div className="bg-primary rounded-xl px-2 py-1">
-            <Brain className="h-5 w-5" aria-label="Icon" />
+          <Link to="/" className="flex items-center text-2xl font-bold text-primary font-geist-sans">
+            <div className="bg-primary rounded-xl p-1 flex items-center justify-center mr-2"> {/* Adjusted padding and added flex centering */}
+              <img src="/lovable-uploads/eace30af-50f3-4294-85ba-9fe71fe7921d.png" alt="Braindump Logo" className="h-5 w-5" />
             </div>
             Braindump
           </Link>
