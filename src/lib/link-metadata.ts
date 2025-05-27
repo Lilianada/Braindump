@@ -1,4 +1,5 @@
-import { getLinkPreview, Preview } from 'link-preview-js';
+
+import { getLinkPreview, LinkPreview } from 'link-preview-js';
 
 export interface LinkMetadata {
   title: string;
@@ -67,12 +68,12 @@ export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | nul
     // For client-side, a CORS proxy can help. Let's assume one is available or not needed for some URLs.
     // If no proxy, direct fetch: const preview = await getLinkPreview(url);
     // Using a simple public CORS proxy for demonstration. Replace with a more robust solution if needed.
-    const proxyUrl = `https://cors-anywhere.herokuapp.com/`; // A common public proxy, might be rate-limited or unreliable.
+    // const proxyUrl = `https://cors-anywhere.herokuapp.com/`; // A common public proxy, might be rate-limited or unreliable.
                                                           // For a real app, host your own or use a service.
                                                           // Or, if link-preview-js handles this internally or it's not an issue, remove proxy.
                                                           // For now, let's try direct fetching first, as proxies can be problematic.
     
-    const preview = await getLinkPreview(url) as Preview; // Type assertion corrected to use Preview
+    const preview = await getLinkPreview(url) as LinkPreview; // Corrected type assertion to use LinkPreview
 
     const metadata: LinkMetadata = {
       title: preview.title || url,
@@ -97,3 +98,4 @@ export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | nul
     return basicMetadata;
   }
 };
+
