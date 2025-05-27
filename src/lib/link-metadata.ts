@@ -1,5 +1,5 @@
 
-import { getLinkPreview, LinkPreview } from 'link-preview-js';
+import { getLinkPreview } from 'link-preview-js';
 
 export interface LinkMetadata {
   title: string;
@@ -51,6 +51,7 @@ const preloadedMetadata: Record<string, LinkMetadata> = {
   }
 };
 
+
 export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | null> => {
   if (linkMetadataCache.has(url)) {
     return linkMetadataCache.get(url) || null;
@@ -73,16 +74,23 @@ export const fetchLinkMetadata = async (url: string): Promise<LinkMetadata | nul
                                                           // Or, if link-preview-js handles this internally or it's not an issue, remove proxy.
                                                           // For now, let's try direct fetching first, as proxies can be problematic.
     
-    const preview = await getLinkPreview(url) as LinkPreview; // Corrected type assertion to use LinkPreview
+    const preview = await getLinkPreview(url); // Removed explicit type assertion
+
+    // The 'preview' object here will have its type inferred by TypeScript.
+    // We expect it to have properties like title, description, images, favicons, etc.
+    // based on the 'link-preview-js' library's return type for getLinkPreview.
 
     const metadata: LinkMetadata = {
+      // Ensure that all accessed properties on 'preview' are handled safely,
+      // especially if they might be optional.
       title: preview.title || url,
       description: preview.description,
-      image: preview.images && preview.images.length > 0 ? preview.images[0] : undefined,
-      favicon: preview.favicons && preview.favicons.length > 0 ? preview.favicons[0] : undefined,
+      // Type checking for images and favicons as arrays of strings:
+      image: Array.isArray(preview.images) && preview.images.length > 0 ? preview.images[0] : undefined,
+      favicon: Array.isArray(preview.favicons) && preview.favicons.length > 0 ? preview.favicons[0] : undefined,
       siteName: preview.siteName,
       url: preview.url || url,
-      contentType: preview.contentType as string | undefined, // Ensure contentType is string or undefined
+      contentType: typeof preview.contentType === 'string' ? preview.contentType : undefined,
     };
     linkMetadataCache.set(url, metadata);
     return metadata;
