@@ -20,7 +20,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return localTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   });
   const [font, setFontState] = useState<Font>(() => {
-    return (localStorage.getItem('braindump-font') as Font | null) || 'geist-sans'; // Default to Geist Sans
+    return (localStorage.getItem('braindump-font') as Font | null) || 'geist-mono'; // Default to Geist Mono
   });
 
   useEffect(() => {
@@ -69,4 +69,3 @@ export const useTheme = () => {
   }
   return context;
 };
-
