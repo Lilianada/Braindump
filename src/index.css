@@ -16,7 +16,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 348 69.5% 56.8%; /* Custom primary color */
+    --primary: 350 65% 70%; /* Custom primary color */
     --primary-foreground: 0 0% 100%; /* Text on primary color - white for good contrast */
 
     --secondary: 210 40% 96.1%;
@@ -33,7 +33,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 348 69.5% 56.8%; /* Ring color to match primary */
+    --ring: 350 65% 70%; /* Ring color to match primary */
 
     --radius: 0.5rem;
 
@@ -60,7 +60,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 348 69.5% 56.8%; /* Custom primary color */
+    --primary: 350 65% 70%; /* Custom primary color */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -77,7 +77,7 @@
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 348 69.5% 56.8%; /* Ring color to match primary */
+    --ring: 350 65% 70%; /* Ring color to match primary */
     
     /* Custom yellow for wiki links in dark mode */
     --custom-yellow: 45 90% 55%; /* Same yellow, usually pops well on dark */
@@ -118,6 +118,10 @@
   /* Custom link styling */
   .custom-link {
     @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--custom-yellow))] hover:underline;
+  }
+
+  .custom-quote {
+    @apply bg-yellow-300 text-sm dark:bg-[hsl(var(--custom-yellow))] px-1 py-0.5 text-background font-geist-mono my-2;
   }
   
   /* Apply to prose links as well if needed */

@@ -12,16 +12,22 @@ lastUpdated: "2025-05-27"
 author: "Test Author"
 source: "Example Source"
 ---
-# Concept Alpha
 
 This concept discusses fundamental ideas.
 It is related to [[brave]] and also mentions [[001]].
 
 We should also define **Term X** here again to see the popover. This page also mentions **Brave** character.
 
-## Sub-section for Alpha
+### Sub-section for Alpha
 Some details regarding the alpha concept. This section helps to illustrate TOC generation.
 
-### Deeper Dive into Alpha
+#### Deeper Dive into Alpha
 More granular details for the Table of Contents.
 This is a test sentence with a [[State Management]] link.
+
+> This is a quote that will be styled with the yellow background and black text. Allow me eat my food. - Georgia Goat
+
+Here's a product I built that I am very proud of.
+I might be my only user now but I know with time, when people find this product, they'll love it just as much as I love it.
+Explore
+→ https://notes.lilyslab.xyz/
