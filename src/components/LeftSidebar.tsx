@@ -5,6 +5,7 @@ import { getContentTree, getAllContentItems, ContentItem } from '@/content/mockD
 import { cn } from '@/lib/utils';
 import { getNormalizedTags } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import PageLinks from './sidebar/PageLinks';
 import ContentNavigation from './sidebar/ContentNavigation';
 import TagList from './sidebar/TagList';
@@ -116,7 +117,8 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
               <PageLinks />
               <ContentNavigation contentSections={contentSections} />
               <TagList tags={uniqueTags} onTagClick={handleTagClick} />
-               <div className="text-xs font-indie-flower font-medium text-primary my-4">
+              <Separator />
+               <div className="text-xs font-geist-sans font-medium text-primary m-4 p-4">
                Lily's Garden
                </div>
             </nav>
