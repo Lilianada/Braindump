@@ -6,12 +6,12 @@ let allContentTreeCache: ContentItem[] | null = null;
 
 // Builds a hierarchical tree from the flat list of file content items.
 // This includes creating "virtual" folder items based on path structure.
-export const getContentTree = (forceRefresh: boolean = false): ContentItem[] => {
+export const getContentTree = async (forceRefresh: boolean = false): Promise<ContentItem[]> => {
   if (allContentTreeCache && !forceRefresh) {
     return allContentTreeCache;
   }
 
-  const fileItems = getAllFileContentItems(forceRefresh);
+  const fileItems = await getAllFileContentItems(forceRefresh);
   const allItemsMap: Map<string, ContentItem> = new Map();
   const rootItems: ContentItem[] = [];
 

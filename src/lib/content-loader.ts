@@ -1,105 +1,109 @@
 
-import { globSync } from 'glob';
-import matter from 'gray-matter';
-import fs from 'fs';
-import path from 'path';
-import { ContentItem, Frontmatter } from '../types/content'; // Ensure Frontmatter is imported
-import { parseContent } from './content-parser'; // Ensure parseContent is imported
-import { generateSlug } from './stringUtils'; // Changed from slugify to generateSlug
+import { ContentItem, Frontmatter } from '../types/content';
+import { parseFrontmatterAndContent } from './markdown';
 
-const CONTENT_DIR = 'src/content_files';
 let allFileContentItemsCache: ContentItem[] | null = null;
 
-const normalizePath = (p: string): string => p.replace(/\\/g, '/');
+const normalizePath = (p: string): string => p.split('/').filter(Boolean).join('/');
 
-const loadFileContent = (filePath: string): ContentItem | null => {
+const extractPathInfo = (filePath: string) => {
+  const normalizedPath = normalizePath(filePath);
+  const parts = normalizedPath.split('/');
+  const fileName = parts.pop() || '';
+  const baseName = fileName.replace(/\.md$/, '');
+  return { parts, fileName, baseName };
+};
+
+const createContentItem = (filePath: string, content: string): ContentItem | null => {
   try {
-    const fileContent = fs.readFileSync(filePath, 'utf-8');
-    const { data, content } = matter(fileContent);
-    const frontmatter = data as Frontmatter;
+    const { frontmatter, content: markdownContent } = parseFrontmatterAndContent(content);
+    const { parts, baseName } = extractPathInfo(filePath);
 
-    const relativePath = normalizePath(path.relative(CONTENT_DIR, filePath));
-    const itemPath = relativePath.replace(/\.md$/, '');
-
-    // Use generateSlug instead of slugify
-    const id = frontmatter.id || generateSlug(frontmatter.title || '') || generateSlug(path.basename(itemPath));
-    const title = frontmatter.title || path.basename(itemPath).replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    // Generate ID from title or filename
+    const id = frontmatter.id || 
+              (frontmatter.title ? frontmatter.title.toLowerCase().replace(/\s+/g, '-') : 
+              baseName.toLowerCase().replace(/\s+/g, '-'));
     
-    const typeMatch = itemPath.match(/^([a-zA-Z0-9_-]+)\//);
-    // Adjusted inferredType to handle 'zettel' or other types correctly
-    const inferredType = typeMatch ? typeMatch[1].replace(/s$/, '') : 'page'; 
+    // Generate title from frontmatter or filename
+    const title = frontmatter.title || 
+                 baseName.split('-').map(word => 
+                   word.charAt(0).toUpperCase() + word.slice(1)
+                 ).join(' ');
 
-    let itemType = frontmatter.type || inferredType;
-    // Fallback if path is at root of content_files or if type is ambiguous
-    if (itemType === 'content_files' || itemType === 'src' || !itemType) { 
-        itemType = 'page';
-    }
+    // Determine content type
+    const typeMatch = parts[0];
+    const inferredType = typeMatch ? typeMatch.replace(/s$/, '') : 'page';
+    const itemType = frontmatter.type || inferredType;
 
-    const stats = fs.statSync(filePath);
-    const created = frontmatter.created || stats.birthtime.toISOString();
-    const lastUpdated = frontmatter.lastUpdated || stats.mtime.toISOString();
-
+    // Create the content item
     const item: ContentItem = {
       id,
       title,
-      path: itemPath,
-      type: itemType as ContentItem['type'], // Cast to ensure type safety
-      tags: frontmatter.tags || [],
-      content: content.trim(),
+      path: parts.join('/'),
+      type: itemType as ContentItem['type'],
+      tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : 
+           (frontmatter.tags ? [frontmatter.tags] : []),
+      content: markdownContent.trim(),
       frontmatter,
-      created,
-      lastUpdated,
+      created: frontmatter.created || new Date().toISOString(),
+      lastUpdated: frontmatter.lastUpdated || new Date().toISOString(),
       children: [],
     };
     return item;
   } catch (error) {
-    console.error(`Error loading file ${filePath}:`, error);
+    console.error(`Error processing content item ${filePath}:`, error);
     return null;
   }
 };
 
-export const getAllFileContentItems = (forceRefresh: boolean = false): ContentItem[] => {
+// Load all markdown files using Vite's import.meta.glob
+export const getAllFileContentItems = async (forceRefresh: boolean = false): Promise<ContentItem[]> => {
   if (allFileContentItemsCache && !forceRefresh) {
     return allFileContentItemsCache;
   }
 
-  const files = globSync(normalizePath(path.join(CONTENT_DIR, '**/*.md')));
-  const items: ContentItem[] = [];
-
-  files.forEach(file => {
-    const normalizedFile = normalizePath(file);
-    const item = loadFileContent(normalizedFile);
-    if (item) {
-      items.push(item);
-    }
-  });
-  
-  allFileContentItemsCache = items.sort((a, b) => a.title.localeCompare(b.title));
-  // console.log(`[content-loader] Loaded ${allFileContentItemsCache.length} file content items.`);
-  return allFileContentItemsCache;
-};
-
-export const parseContentItem = (item: ContentItem) => {
-  if (!item.content) return { ...item, toc: [] };
-  // Ensure parseContent is called correctly
-  const { headings } = parseContent(item.content); 
-  return {
-    ...item,
-    toc: headings, 
-  };
-};
-
-export const findFileContentByPath = (itemPath: string, forceRefresh: boolean = false): ContentItem | undefined => {
-  const items = getAllFileContentItems(forceRefresh);
-  const foundItem = items.find(item => item.path === itemPath);
-  if (foundItem) {
-    return parseContentItem(foundItem);
+  try {
+    // Import all markdown files from content_files and pages_files
+    const contentModules = import.meta.glob('/src/content_files/**/*.md', { as: 'raw', eager: true });
+    const pagesModules = import.meta.glob('/src/pages_files/**/*.md', { as: 'raw', eager: true });
+    
+    // Process content files
+    const contentItems = Object.entries(contentModules)
+      .map(([path, content]) => createContentItem(path, content as string))
+      .filter((item): item is ContentItem => item !== null);
+    
+    // Process pages files
+    const pagesItems = Object.entries(pagesModules)
+      .map(([path, content]) => createContentItem(path, content as string))
+      .filter((item): item is ContentItem => item !== null);
+    
+    // Combine and dedupe items by path
+    const itemsMap = new Map<string, ContentItem>();
+    [...contentItems, ...pagesItems].forEach(item => {
+      itemsMap.set(item.path, item);
+    });
+    
+    const items = Array.from(itemsMap.values());
+    allFileContentItemsCache = items;
+    return items;
+  } catch (error) {
+    console.error('Error loading content files:', error);
+    return [];
   }
-  return undefined;
 };
 
-export const getAllParsedFileContentItems = (forceRefresh: boolean = false): ContentItem[] => {
-  const items = getAllFileContentItems(forceRefresh);
+export const parseContentItem = (item: ContentItem): ContentItem => {
+  // Since we're already parsing the content in createContentItem,
+  // we can just return the item as is
+  return item;
+};
+
+export const findFileContentByPath = async (itemPath: string, forceRefresh: boolean = false): Promise<ContentItem | undefined> => {
+  const items = await getAllFileContentItems(forceRefresh);
+  return items.find(item => item.path === itemPath);
+};
+
+export const getAllParsedFileContentItems = async (forceRefresh: boolean = false): Promise<ContentItem[]> => {
+  const items = await getAllFileContentItems(forceRefresh);
   return items.map(item => parseContentItem(item));
 };
-
