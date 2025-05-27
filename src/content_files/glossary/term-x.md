@@ -3,7 +3,10 @@ id: "term-x"
 title: "Term X"
 path: "glossary/term-x"
 slug: "term-x"
-tags: ["definition", "words", "glossary"]
+tags: 
+  - "definition" 
+  - "words" 
+  - "glossary"
 type: "glossary_term"
 created: "2025-05-26"
 lastUpdated: "2025-05-26"

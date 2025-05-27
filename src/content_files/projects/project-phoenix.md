@@ -3,7 +3,10 @@ id: "project-phoenix"
 title: "Project Phoenix"
 path: "projects/project-phoenix"
 type: "topic"
-tags: ["tech", "project", "log"]
+tags: 
+  - "tech" 
+  - "project" 
+  - "log"
 created: "2025-05-27"
 lastUpdated: "2025-05-27"
 ---
