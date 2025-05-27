@@ -40,3 +40,4 @@ export const extractMarkdownBody = (markdownContent: string | undefined | null):
   // If we didn't find frontmatter pattern or it's malformed, return the original content
   return markdownContent.trim();
 };
+

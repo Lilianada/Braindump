@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getAllContentItems, ContentItem } from '@/content/mockData';
@@ -7,6 +6,28 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText as FileTextIcon, Tag as TagIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { getNormalizedTags } from '@/lib/utils';
+
+/**
+ * Extracts the main body of a Markdown string by removing YAML frontmatter.
+ * Frontmatter must be at the very top of the file, delimited by '---' lines.
+ * @param markdownContent The raw Markdown content, possibly with frontmatter.
+ * @returns The Markdown content without frontmatter, or an empty string if input is null/undefined.
+ */
+function extractMarkdownBody(markdownContent: string | undefined | null): string {
+  if (!markdownContent) return '';
+
+  // Remove leading whitespace/newlines for robustness
+  const trimmed = markdownContent.replace(/^\s*/, '');
+
+  // Match and remove YAML frontmatter at the top of the file
+  // This matches '---' at start of file, then any content (including newlines), then another '---' at the start of a line
+  const frontmatterRegex = /^---[\s\S]*?^---\s*\n?/m;
+
+  if (frontmatterRegex.test(trimmed)) {
+    return trimmed.replace(frontmatterRegex, '').trim();
+  }
+  return trimmed;
+}
 
 const TagDetailPage: React.FC = () => {
   const { tagName } = useParams<{ tagName: string }>();
@@ -58,10 +79,10 @@ const TagDetailPage: React.FC = () => {
                       {item.path && <p className="text-sm text-muted-foreground">Path: {item.path}</p>}
                       {item.content && (
                         <p className="text-sm text-foreground/80 mt-1 line-clamp-2">
-                          {item.content.substring(0, 150)}...
+                          {extractMarkdownBody(item.content).substring(0, 150)}...
                         </p>
                       )}
-                       {item.tags && (
+                      {item.tags && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           {getNormalizedTags(item.tags).map(tag => (
                             tag && <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>

@@ -40,9 +40,9 @@ const TagsPage: React.FC = () => {
             {uniqueTags.length > 0 ? (
               <div className="flex flex-wrap gap-3">
                 {uniqueTags.map(tag => (
-                  <Link key={tag} to={`/tags/${encodeURIComponent(tag)}`}>
-                    <Badge variant="secondary" className="text-sm px-3 py-1.5 hover:bg-accent cursor-pointer">
-                      <TagIcon className="h-4 w-4 mr-2" />
+                  <Link key={tag} to={`/tags/${encodeURIComponent(tag)}`} className="text-sm font-medium">
+                    <Badge variant="secondary" className="text-sm px-3 py-1.5 hover:bg-primary/60 cursor-pointer">
+                      <TagIcon className="h-3 w-3 mr-1" />
                       {tag}
                     </Badge>
                   </Link>
