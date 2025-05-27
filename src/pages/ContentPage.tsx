@@ -213,7 +213,7 @@ const ContentPage: React.FC = () => {
 
   if (contentItem.type === 'folder') {
     return (
-      <div className="container mx-auto py-8 animate-fade-in">
+      <div className="container mx-auto py-4 animate-fade-in">
         <header className="mb-8 flex items-center gap-3">
           <Folder className="h-8 w-8 text-muted-foreground" />
           <div>

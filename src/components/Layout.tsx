@@ -11,7 +11,7 @@ import { TocItem } from '@/types';
 import { ContentItem } from '@/content/mockData';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { ListOrdered, PanelLeft } from 'lucide-react';
+import { ListOrdered, AlignLeft } from 'lucide-react';
 
 export interface AppContextType {
   tocItems: TocItem[]; // Added tocItems
@@ -90,7 +90,7 @@ const Layout: React.FC = () => {
         <Popover open={isTocPopoverOpen} onOpenChange={setIsTocPopoverOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline" size="icon" className="rounded-full shadow-lg">
-              <ListOrdered className="h-5 w-5" />
+              <AlignLeft className="h-5 w-5" />
               <span className="sr-only">On This Page</span>
             </Button>
           </PopoverTrigger>
@@ -98,7 +98,7 @@ const Layout: React.FC = () => {
             <ScrollArea ref={popoverScrollAreaRef} className="max-h-72 scrollbar-hide">
               <div className="p-4">
                 <h3 className="mb-3 text-sm font-semibold uppercase text-muted-foreground tracking-wider flex items-center">
-                  <PanelLeft className="h-4 w-4 mr-2" /> On this page
+                  <AlignLeft className="h-4 w-4 mr-2" /> On this page
                 </h3>
                 {tocItems && tocItems.length > 0 ? (
                   <ul className="space-y-0.5">
