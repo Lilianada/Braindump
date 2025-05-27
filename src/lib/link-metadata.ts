@@ -9,6 +9,7 @@ export interface LinkMetadata {
   siteName?: string;
   url: string;
   contentType?: string;
+  mediaType?: string; // e.g., 'website', 'article', 'video', etc.
 }
 
 const linkMetadataCache = new Map<string, LinkMetadata>();

@@ -23,7 +23,7 @@ source: "Book Author, Book Title, Year"
 - Point 2
 
 ## Memorable Quotes
-> "Quote from the book."
+> Quote from the book.
 
 ## My Reflections
 - What I learned, questions, or connections.

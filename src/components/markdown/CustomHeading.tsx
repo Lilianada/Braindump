@@ -27,9 +27,9 @@ const CustomHeading: React.FC<CustomHeadingProps> = ({ level, children, setTocIt
 
   const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
   let className = "";
-  if (level === 1) className = "capitalize text-2xl font-medium mt-5 mb-3 pb-1.5";
-  if (level === 2) className = "capitalize text-xl font-medium mt-4 mb-2 pb-1";
-  if (level === 3) className = "capitalize text-lg font-medium mt-3 mb-1.5";
+  if (level === 1) className = "capitalize text-2xl font-semibold mt-5 mb-3 pb-1.5";
+  if (level === 2) className = "capitalize text-xl font-semibold mt-4 mb-2 pb-1";
+  if (level === 3) className = "capitalize text-lg font-semibold mt-3 mb-1.5";
 
   return <HeadingTag id={id} className={className}>{children}</HeadingTag>;
 };
