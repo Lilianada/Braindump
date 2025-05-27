@@ -1,5 +1,5 @@
 
-# Introduction
+## Introduction
 
 Welcome to Braindump — my [[digital garden]] and [[personal knowledge management]] space of evolving knowledge where I collect, connect, and grow ideas over time.
 

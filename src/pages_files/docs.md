@@ -1,5 +1,5 @@
 
-# Documentation
+## Documentation
 
 This documentation page will guide you on how to use Braindump effectively. As the application evolves, this section will be updated with more detailed information.
 

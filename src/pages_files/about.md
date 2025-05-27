@@ -1,14 +1,3 @@
----
-id: "about"
-title: "About"
-path: "/about"
-slug: "log-001"
-type: "about"
-tags: ["about"]
-created: "2025-05-26"
-lastUpdated: "2025-05-26"
----
-
 
 
 ## About Me
