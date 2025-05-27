@@ -7,6 +7,7 @@ import { getNormalizedTags } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PageLinks from './sidebar/PageLinks';
 import ContentNavigation from './sidebar/ContentNavigation';
+import VisualizationLinks from './sidebar/VisualizationLinks'; // Import VisualizationLinks
 
 interface LeftSidebarProps {
   isOpen?: boolean;
@@ -93,15 +94,16 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
       {isOpen && <div onClick={onClose} className="fixed inset-0 bg-black/50 z-30 md:hidden" aria-hidden="true" />}
       
       <div className={cn(
-        "fixed top-0 left-0 h-[calc(100vh-4rem)] md:h-full w-72 bg-background border-r border-border flex flex-col z-40 transition-transform duration-300 ease-in-out overflow-y-auto",
+        "fixed top-0 left-0 h-[calc(100vh-4rem)] md:h-full w-72 bg-background border-r border-border flex flex-col z-40 transition-transform duration-300 ease-in-out overflow-y-auto", // Changed this from ScrollArea wrapper to simple div with overflow-y-auto for direct control
         isOpen ? "translate-x-0" : "-translate-x-full",
         "md:relative md:translate-x-0 md:pt-0"
       )}>
-        <ScrollArea className="h-full w-full">
+        <ScrollArea className="h-full w-full"> {/* ScrollArea now wraps the content div */}
           <div className="px-4 py-4">
             <nav className="space-y-6">
               <PageLinks />
               <ContentNavigation contentSections={contentSections} />
+              <VisualizationLinks /> {/* Add VisualizationLinks */}
               {/* <TagList tags={uniqueTags} onTagClick={handleTagClick} /> */}
               {/* <Separator />
                <div className="text-xs uppercase font-geist-sans font-semibold text-primary p-4">

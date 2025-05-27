@@ -8,8 +8,9 @@ import IndexPage from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
 import DocsPage from "./pages/DocsPage";
 import ContentPage from "./pages/ContentPage";
-import TagsPage from "./pages/TagsPage"; // Import TagsPage
-import TagDetailPage from "./pages/TagDetailPage"; // Import TagDetailPage
+import TagsPage from "./pages/TagsPage"; 
+import TagDetailPage from "./pages/TagDetailPage"; 
+import GraphViewPage from "./pages/GraphViewPage"; // Add import for GraphViewPage
 import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -31,6 +32,7 @@ const App = () => (
               <Route path="/content/*" element={<ContentPage />} />
               <Route path="/tags" element={<TagsPage />} />
               <Route path="/tags/:tagName" element={<TagDetailPage />} />
+              <Route path="/graph-view" element={<GraphViewPage />} /> {/* Add route for GraphViewPage */}
             </Route>
             {/* Catch-all route outside of Layout to handle all unmatched routes */}
             <Route path="*" element={
