@@ -6,6 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { FileText as FileTextIcon, Tag as TagIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { getNormalizedTags } from '@/lib/utils';
+import ReactMarkdown from 'react-markdown';
 
 /**
  * Extracts the main body of a Markdown string by removing YAML frontmatter.
@@ -77,11 +78,13 @@ const TagDetailPage: React.FC = () => {
                         {item.title}
                       </h3>
                       {item.path && <p className="text-sm text-muted-foreground">Path: {item.path}</p>}
-                      {item.content && (
-                        <p className="text-sm text-foreground/80 mt-1 line-clamp-2">
-                          {extractMarkdownBody(item.content).substring(0, 150)}...
-                        </p>
-                      )}
+                     {item.content && (
+  <div className="text-sm text-foreground/80 mt-1 line-clamp-2">
+    <ReactMarkdown>
+      {extractMarkdownBody(item.content).substring(0, 150) + "..."}
+    </ReactMarkdown>
+  </div>
+)}
                       {item.tags && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           {getNormalizedTags(item.tags).map(tag => (
