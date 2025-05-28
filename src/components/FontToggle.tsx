@@ -12,6 +12,7 @@ import {
 const fonts: { value: Font; label: string }[] = [
   { value: 'geist-mono', label: 'Geist Mono' },
   { value: 'geist-sans', label: 'Geist Sans' },
+  { value: 'satoshi', label: 'Satoshi' },
   { value: 'kalam', label: 'Kalam' },
   { value: 'indie-flower', label: 'Indie Flower' },
   { value: 'lancelot', label: 'Lancelot' },

@@ -119,7 +119,7 @@ const Layout: React.FC = () => {
                           <a 
                             href={`#${item.id}`} 
                             className={cn(
-                              "text-xs transition-colors custom-link block w-full",
+                              "text-xs transition-colors internal-link block w-full",
                               isActive ? "text-primary font-medium" : "text-foreground/70 hover:text-primary"
                             )}
                             onClick={(e) => handleTocItemClick(e, item.id)}

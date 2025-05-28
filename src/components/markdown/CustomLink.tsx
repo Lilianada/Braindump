@@ -12,7 +12,7 @@ const CustomLink: React.FC<CustomLinkProps> = ({ href, children }) => {
     return (
       <ExternalLinkPreview 
         href={href} 
-        className="custom-link" 
+        className="external-link" 
         target="_blank" 
         rel="noopener noreferrer"
       >
@@ -24,12 +24,12 @@ const CustomLink: React.FC<CustomLinkProps> = ({ href, children }) => {
   if (href && href.match(/^(\/?content\/.*|\/?zettels\/.*|\/?concepts\/.*|\/?projects\/.*)$/)) {
     // Ensure the link starts with a / for react-router-dom
     const internalPath = href.startsWith('/') ? href : `/${href}`;
-    return <Link to={internalPath} className="custom-link">{children}</Link>;
+    return <Link to={internalPath} className="internal-link">{children}</Link>;
   }
   // Fallback for other types of links or mailto, etc.
   // For non-http/https links that aren't internal, we still render them as <a>
   // but without the preview component.
-  return <a href={href} className="custom-link">{children}</a>;
+  return <a href={href} className="internal-link">{children}</a>;
 };
 
 export default CustomLink;

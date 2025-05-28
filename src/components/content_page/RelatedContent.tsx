@@ -25,7 +25,7 @@ const RelatedContent: React.FC<RelatedContentProps> = ({ backlinks, relatedNotes
           <ul className="space-y-1.5">
             {backlinks.map(item => (
               <li key={`mobile-backlink-${item.id}`}>
-                <Link to={`/content/${item.path}`} className="text-sm custom-link">
+                <Link to={`/content/${item.path}`} className="text-sm internal-link">
                   {item.title}
                 </Link>
               </li>
@@ -43,7 +43,7 @@ const RelatedContent: React.FC<RelatedContentProps> = ({ backlinks, relatedNotes
           <ul className="space-y-1.5">
             {relatedNotes.map(item => (
               <li key={`mobile-related-${item.id}`}>
-                <Link to={`/content/${item.path}`} className="text-xs custom-link">
+                <Link to={`/content/${item.path}`} className="text-xs internal-link">
                   {item.title}
                 </Link>
               </li>

@@ -113,7 +113,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
                       <a 
                         href={`#${item.id}`} 
                         className={cn(
-                          "text-xs transition-colors custom-link block w-full",
+                          "text-xs transition-colors internal-link block w-full",
                           isActive ? "text-primary font-medium" : "text-foreground/70 hover:text-primary"
                         )}
                         onClick={(e) => {
@@ -150,7 +150,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
                   <ul className="space-y-1.5">
                     {backlinks.map(item => (
                       <li key={`backlink-${item.id}`}>
-                        <Link to={`/content/${item.path}`} className="text-xs text-foreground/70 hover:text-primary transition-colors custom-link">
+                        <Link to={`/content/${item.path}`} className="text-xs text-foreground/70 hover:text-primary transition-colors internal-link">
                           {item.title}
                         </Link>
                       </li>
@@ -167,7 +167,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
                   <ul className="space-y-1.5">
                     {relatedNotes.map(item => (
                       <li key={`related-${item.id}`}>
-                        <Link to={`/content/${item.path}`} className="text-xs text-foreground/70 hover:text-primary transition-colors custom-link">
+                        <Link to={`/content/${item.path}`} className="text-xs text-foreground/70 hover:text-primary transition-colors internal-link">
                           {item.title}
                         </Link>
                       </li>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { ContentItem } from '@/types/content'; // Assuming ContentItem is in src/types/content.ts
-import { FileText, CalendarDays, Info, Tag as TagIcon, Folder } from 'lucide-react';
+import { FileText, CalendarDays, Info, Tag as TagIcon, Folder, Sprout, TreePalm } from 'lucide-react';
 
 interface ContentHeaderProps {
   contentItem: ContentItem;
@@ -24,18 +24,18 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ contentItem }) => {
         )}
          <div className="flex items-center gap-2">
             <FileText className="h-4 w-4" />
-            <span>Type (System): {contentItem.type}</span>
+            <span>Type: {contentItem.type}</span>
           </div>
         {contentItem.created && (
           <div className="flex items-center gap-2">
-            <CalendarDays className="h-4 w-4" />
-            <span>Created: {new Date(contentItem.created).toLocaleDateString()}</span>
+            <Sprout className="h-4 w-4" />
+            <span>Planted: {new Date(contentItem.created).toLocaleDateString()}</span>
           </div>
         )}
         {contentItem.lastUpdated && (
           <div className="flex items-center gap-2">
-            <CalendarDays className="h-4 w-4" />
-            <span>Last Updated: {new Date(contentItem.lastUpdated).toLocaleDateString()}</span>
+            <TreePalm className="h-4 w-4" />
+            <span>Last Tended: {new Date(contentItem.lastUpdated).toLocaleDateString()}</span>
           </div>
         )}
         {category && (
@@ -44,7 +44,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ contentItem }) => {
             <span>Category: {category}</span>
           </div>
         )}
-        {contentItem.frontmatter && Object.entries(contentItem.frontmatter)
+        {/* {contentItem.frontmatter && Object.entries(contentItem.frontmatter)
           .filter(([key]) => !['id', 'title', 'path', 'type', 'tags', 'created', 'lastUpdated', 'author', 'source', 'slug', 'content', 'category'].includes(key.toLowerCase()))
           .map(([key, value]) => {
             if (value === undefined || value === null || (Array.isArray(value) && value.length === 0)) return null;
@@ -56,7 +56,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ contentItem }) => {
               </div>
             );
           })
-        }
+        } */}
       </div>
 
       {contentItem.tags && contentItem.tags.filter(tag => !tag.toLowerCase().startsWith('category:')).length > 0 && (

@@ -40,7 +40,7 @@ const ContentBody: React.FC<ContentBodyProps> = ({ contentItem, allNotesAndTopic
               <ul className="list-disc list-inside space-y-1">
                 {contentItem.children.map(child => (
                   <li key={child.id}>
-                    <Link to={`/content/${child.path}`} className="custom-link">
+                    <Link to={`/content/${child.path}`} className="internal-link">
                       {child.title} ({child.type})
                     </Link>
                   </li>

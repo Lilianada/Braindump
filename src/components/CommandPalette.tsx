@@ -87,7 +87,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
           >
-            <ArrowUpDown className="mr-2 h-4 w-4" />
+            <ArrowUpDown className="mr-2 h-3 w-3" />
             <span>Sort Items...</span>
           </CommandItem>
           <CommandItem
@@ -99,7 +99,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             }}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
           >
-            <FilterIcon className="mr-2 h-4 w-4" />
+            <FilterIcon className="mr-2 h-3 w-3" />
             <span>Filter Items...</span>
           </CommandItem>
           <CommandItem
@@ -108,7 +108,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             onSelect={handleViewAllTags}
             className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
           >
-            <TagsIcon className="mr-2 h-4 w-4" />
+            <TagsIcon className="mr-2 h-3 w-3" />
             <span>View All Tags</span>
           </CommandItem>
         </CommandGroup>
@@ -126,7 +126,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
                 onSelect={() => handleSelectContent(item.path)}
                 className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
               >
-                <FileText className="mr-2 h-4 w-4" />
+                <FileText className="mr-2 h-3 w-3" />
                 <span>{item.title}</span>
                 <span className="text-xs text-muted-foreground ml-auto">{item.type}</span>
               </CommandItem>
@@ -145,7 +145,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
                   onSelect={() => handleSelectContent(category.path)}
                   className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
                 >
-                  <FolderOpen className="mr-2 h-4 w-4" />
+                  <FolderOpen className="mr-2 h-3 w-3" />
                   <span>{category.title}</span>
                 </CommandItem>
               ))}
@@ -159,12 +159,12 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
             <CommandGroup heading="Tags">
               {uniqueTags.map((tag) => (
                 <CommandItem
-                  key={`tag-${tag}`} /* Fixed potential duplicate key issue if tag names can be non-unique across different contexts, ensure tag is unique identifier here */
-                  value={tag} /* `value` is used for search, ensure it's distinct or `cmdk` might have issues */
+                  key={`tag-${tag}`} 
+                  value={tag}
                   onSelect={() => handleSelectTag(tag)}
                   className="data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
                 >
-                  <Tag className="mr-2 h-4 w-4" />
+                  <Tag className="mr-2 h-3 w-3" />
                   <span>{tag}</span>
                 </CommandItem>
               ))}
