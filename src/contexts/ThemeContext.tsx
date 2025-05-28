@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Theme = 'light' | 'dark';
-export type Font = 'geist-mono' | 'geist-sans' | 'kalam' | 'indie-flower' | 'lancelot' | 'cormorant-upright'; // Updated fonts
+export type Font = 'geist-mono' | 'geist-sans' | 'satoshi' | 'kalam' | 'indie-flower' | 'lancelot' | 'cormorant-upright'; // Updated fonts
 
 interface ThemeContextType {
   theme: Theme;
@@ -34,7 +34,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const body = window.document.body;
     const html = window.document.documentElement;
     // Updated font list
-    ['font-geist-mono', 'font-geist-sans', 'font-kalam', 'font-indie-flower', 'font-lancelot', 'font-cormorant-upright'].forEach(cls => {
+    ['font-geist-mono', 'font-geist-sans', 'font-kalam', 'font-indie-flower', 'font-lancelot', 'font-cormorant-upright', 'font-satoshi'].forEach(cls => {
       body.classList.remove(cls);
       html.classList.remove(cls);
     });
