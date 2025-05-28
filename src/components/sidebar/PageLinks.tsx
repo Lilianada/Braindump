@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Tag, FlaskConical } from 'lucide-react';
+import { Home, Tag, FlaskConical, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface PageLinksProps {
@@ -12,7 +12,7 @@ const PageLinks: React.FC<PageLinksProps> = ({ onItemClick }) => {
   const location = useLocation();
 
   const links = [
-    { to: "/", icon: Home, label: "Home"},
+    { to: "/", icon: Home, label: "Home", exact: true },
   { to: "/about", icon: Info, label: "About" },
   { to: "/docs", icon: FileTextIcon, label: "Docs" },
   { to: "/tags", icon: TagIcon, label: "Tags" },
