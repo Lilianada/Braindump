@@ -20,7 +20,7 @@ const PageLinks: React.FC<PageLinksProps> = ({ onItemClick }) => {
 
   return (
     <div>
-      <h3 className="px-3 mb-2 text-[10px] font-semibold uppercase text-muted-foreground tracking-wider">Navigation</h3>
+      <h3 className="px-3 mb-2 text-[10px] font-semibold uppercase text-muted-foreground tracking-wider">Pages</h3>
       <div className="space-y-0.5">
         {links.map(({ to, label, icon: Icon }) => (
           <Link
