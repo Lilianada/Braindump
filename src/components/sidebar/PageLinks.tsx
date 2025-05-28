@@ -12,7 +12,7 @@ const PageLinks: React.FC<PageLinksProps> = ({ onItemClick }) => {
   const location = useLocation();
 
   const links = [
-    { to: "/", icon: Home, label: "Home", exact: true },
+    { to: "/", icon: Home, label: "Home"},
   { to: "/about", icon: Info, label: "About" },
   { to: "/docs", icon: FileTextIcon, label: "Docs" },
   { to: "/tags", icon: TagIcon, label: "Tags" },
