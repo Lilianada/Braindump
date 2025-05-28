@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Tag, FlaskConical, Info } from 'lucide-react';
+import { Home, Tag, FileTextIcon, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface PageLinksProps {
