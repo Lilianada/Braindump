@@ -17,6 +17,7 @@ const fonts: { value: Font; label: string }[] = [
   { value: 'indie-flower', label: 'Indie Flower' },
   { value: 'lancelot', label: 'Lancelot' },
   { value: 'cormorant-upright', label: 'Cormorant Upright' },
+  { value: 'nitti', label: 'Nitti' },
 ];
 
 const FontToggle: React.FC = () => {

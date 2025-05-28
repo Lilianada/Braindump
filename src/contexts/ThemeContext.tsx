@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Theme = 'light' | 'dark';
-export type Font = 'geist-mono' | 'geist-sans' | 'satoshi' | 'kalam' | 'indie-flower' | 'lancelot' | 'cormorant-upright'; // Updated fonts
+export type Font = 'geist-mono' | 'geist-sans' | 'satoshi' | 'kalam' | 'indie-flower' | 'lancelot' | 'cormorant-upright' | 'nitti'; // Updated fonts
 
 interface ThemeContextType {
   theme: Theme;
