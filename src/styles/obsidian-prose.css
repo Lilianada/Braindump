@@ -1,0 +1,242 @@
+/* Obsidian Vault-like Prose Styling (inspired by Image 2) */
+/* Place this _after_ your base styles. Only styles prose elements, not links. */
+
+.prose {
+  /* Base background and padding for the "vault" look. */
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  border-radius: 18px;
+  box-shadow: none;
+  color: hsl(var(--foreground));
+  font-family: var(--font-satoshi), var(--font-geist-mono), monospace;
+  font-size: 1.04em;
+  line-height: 1.7;
+}
+
+.prose h1, .prose h2, .prose h3 {
+  font-family: var(--font-satoshi), var(--font-geist-sans), sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-top: 2.2em;
+  margin-bottom: 0.25em;
+  color: #b8bfff; /* soft lilac for headings */
+  background: none;
+  line-height: 1.23;
+}
+
+.prose h1 {
+  font-size: 2.1em;
+  margin-top: 1.4em;
+}
+
+.prose h2 {
+  font-size: 1.38em;
+  margin-top: 1.3em;
+  border-bottom: none;
+}
+
+.prose h3 {
+  font-size: 1.16em;
+}
+
+.prose strong {
+  color: #e4d8ff; /* softer highlight for bold */
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.prose em {
+  color: #8be7ff;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+/* Headings with extra emphasis (like "Goals MOC") */
+.prose h1, .prose h2 {
+  background: none;
+  display: block;
+  padding: 0;
+}
+
+/* Section subtitles (like "So, you want to chart a course?") */
+.prose h4, .prose h5 {
+  color: #e4d8ff;
+  font-size: 1.08em;
+  font-weight: 600;
+  margin-top: 1.5em;
+  border-bottom: none;
+}
+
+/* Divider for sections (the cyan/purple line with icon) */
+.prose .section-divider {
+  border: none;
+  border-top: 1.5px solid #3ffff3;
+  margin: 2.5em 0 2em 0;
+  position: relative;
+}
+.prose .section-divider::after {
+  content: "⎋";
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: -0.95em;
+  transform: translateX(-50%);
+  background: transparent;
+  color: #e4d8ff;
+  font-size: 1.3em;
+  font-family: var(--font-geist-mono), monospace;
+  padding: 0 0.2em;
+  opacity: 0.7;
+}
+
+/* Tag pill styles */
+.prose .tag-pill, .prose .tag {
+  background: #21232e;
+  color: #8be7ff;
+  border: 1.5px solid #28304a;
+  border-radius: 1.2em;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.86em;
+  padding: 0.19em 0.89em;
+  margin: 0 0.2em 0.35em 0;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  display: inline-block;
+  vertical-align: middle;
+  box-shadow: 0 1px 0 #2e3150;
+}
+
+/* Subtle faded horizontal link group divider */
+.prose .tag-divider {
+  font-size: 1.3em;
+  color: #3ffff3;
+  opacity: 0.5;
+  margin: 0 1.1em;
+  vertical-align: middle;
+}
+
+/* List styling (ul/ol) */
+.prose ul, .prose ol {
+  margin: 1em 0 1em 1.3em;
+  padding-left: 0.6em;
+}
+
+.prose ul > li {
+  margin-bottom: 0.25em;
+  padding-left: 0.1em;
+  line-height: 1.6;
+  color: #b6bccd;
+  font-weight: 400;
+}
+.prose ul > li > ul > li {
+  color: #9fb3c8;
+}
+
+.prose li::marker {
+  color: #8be7ff;
+  font-size: 1em;
+}
+
+/* Bullet lines */
+.prose ul > li::before {
+  content: '';
+}
+
+/* Blockquotes */
+.prose blockquote {
+  border-left: 3px solid #8be7ff;
+  background: rgba(139, 231, 255, 0.08);
+  margin: 1.5em 0;
+  padding: 0.8em 1.1em 0.8em 1.4em;
+  font-style: italic;
+  color: #b6bccd;
+  border-radius: 0.4em;
+}
+
+/* Inline code (no backticks, slight background) */
+.prose code {
+  background: #19202c;
+  color: #ffb5f2;
+  border-radius: 0.33em;
+  font-size: 0.98em;
+  padding: 0.13em 0.45em;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 400;
+}
+
+/* Code blocks */
+.prose pre {
+  background: #161722;
+  color: #c5c4d4;
+  font-family: var(--font-geist-mono), monospace;
+  border-radius: 0.38em;
+  padding: 1.1em 1.35em;
+  margin: 1.4em 0;
+  font-size: 1em;
+  overflow-x: auto;
+  border: 1px solid #26263b;
+}
+
+/* Paragraphs */
+.prose p {
+  margin: 0.7em 0;
+  color: #b6bccd;
+  font-size: 1em;
+}
+
+/* Wiki-style links, e.g. Notable Wins MOC */
+.prose .wikilink {
+  color: #8be7ff;
+  text-decoration: underline;
+  text-decoration-color: #8be7ff77;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.prose .wikilink:hover {
+  color: #fff;
+  text-decoration-color: #fff;
+}
+
+/* "wins" highlight (like in "record the 'wins'") */
+.prose .highlight {
+  color: #fffbe6;
+  background: #8be7ff22;
+  border-radius: 0.21em;
+  padding: 0 0.32em;
+  font-weight: 700;
+}
+
+.prose hr {
+  border: none;
+  border-top: 1.5px solid #3ffff3;
+  opacity: 0.4;
+  margin: 2.2em 0;
+}
+
+/* Misc tweaks */
+.prose .faded-link {
+  color: #7b89a5;
+  font-size: 0.98em;
+  font-style: italic;
+  text-decoration: underline dotted #8be7ff88;
+}
+
+.prose .callout, .prose .admonition {
+  background: #202338;
+  border-left: 3px solid #8be7ff;
+  color: #cfe1f6;
+  padding: 1em 1.2em;
+  margin: 1.3em 0;
+  border-radius: 0.45em;
+  font-size: 1em;
+}
+
+/* Responsive for mobile */
+@media (max-width: 600px) {
+  .prose {
+    font-size: 0.98em;
+    padding: 0 0.1em;
+  }
+}

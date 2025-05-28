@@ -25,12 +25,12 @@ const NotFound = () => {
     <div className="fixed inset-0 flex items-center justify-center bg-background p-4 overflow-hidden">
       <div className="max-w-md w-full mx-auto text-center space-y-6">
         <div className="space-y-4">
-          <h1 className="text-7xl font-bold text-foreground">404</h1>
-          <h2 className="text-2xl font-semibold text-foreground">
-            Page Not Found
+          <h1 className="text-5xl font-bold text-foreground"> Oops!</h1>
+          <h2 className="text-xl font-semibold text-foreground">
+           This page seems to have wandered off...
           </h2>
           <p className="text-muted-foreground">
-            The page you're looking for doesn't exist or has been moved.
+          Looks like the path you were searching for has taken a detour and is resting somewhere else in the garden. But don't worry, the garden is full of other interesting ideas and notes waiting to be explored!
           </p>
         </div>
         
