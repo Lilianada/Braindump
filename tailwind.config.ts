@@ -75,6 +75,7 @@ export default {
         'indie-flower': ['"Indie Flower"', 'cursive'],
         'lancelot': ['"Lancelot"', 'cursive'], 
         'cormorant-upright': ['"Cormorant Upright"', 'serif'],
+        'satoshi': ['var(--font-satoshi)'],
       },
 			keyframes: {
 				'accordion-down': {

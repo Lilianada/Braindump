@@ -1,23 +1,116 @@
 @import url('https://unpkg.com/geist@1.4.2/dist/geist-sans.css');
 @import url('https://unpkg.com/geist@1.4.2/dist/geist-mono.css');
 
+/* Satoshi Light */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Satoshi Regular */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Regular.woff2') format('woff2'),
+    url('/fonts/Satoshi-Regular.woff') format('woff'),
+    url('/fonts/Satoshi-Regular.ttf') format('truetype'),
+    url('/fonts/Satoshi-Regular.eot') format('embedded-opentype'),
+    url('/fonts/Satoshi-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Satoshi Medium */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Satoshi Bold */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Satoshi Black */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-BlackItalic.otf') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* Light mode background */
-    --foreground: 324 5% 2%; /* Light mode text */
+    --background: 0 0% 100%;
+    /* Light mode background */
+    --foreground: 253 23% 8%;
+    /* Light mode text */
 
     --card: 0 0% 100%;
-    --card-foreground: 324 5% 2%;
+    --card-foreground: 253 23% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 324 5% 2%;
+    --popover-foreground: 253 23% 8%;
 
-    --primary: 350 65% 60%; /* Custom primary color */
-    --primary-foreground: 0 0% 100%; /* Text on primary color - white for good contrast */
+    --primary: 350 65% 60%;
+    /* Custom primary color */
+    --primary-foreground: 0 0% 100%;
+    /* Text on primary color - white for good contrast */
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -33,7 +126,8 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 350 65% 70%; /* Ring color to match primary */
+    --ring: 350 65% 70%;
+    /* Ring color to match primary */
 
     --radius: 0.5rem;
 
@@ -44,23 +138,32 @@
     --font-indie-flower: "Indie Flower", cursive;
     --font-lancelot: "Lancelot", cursive;
     --font-cormorant-upright: "Cormorant Upright", serif;
+    --font-satoshi: "Satoshi", sans-serif;
 
     /* Custom yellow for wiki links */
-    --custom-yellow: 42 92% 42%; /* A nice, noticeable yellow */
-    --custom-yellow-foreground: 324 5% 2%; /* Dark text for yellow background in light mode if needed */
+    --custom-yellow: 48 100% 80%;
+    --custom-yellow-foreground: 253 23% 8%;
+
+    /* Custom blue for italic texts */
+    --custom-blue: 195 65% 60%;
+
+    --primary-light: 350 100% 84%;
   }
 
   .dark {
-    --background: 324 5% 2%; /* Dark mode background */
-    --foreground: 210 40% 98%; /* Dark mode text */
+    --background: 253 23% 8%;
+    /* Dark mode background */
+    --foreground: 210 40% 98%;
+    /* Dark mode text */
 
-    --card: 324 5% 2%;
+    --card: 253 23% 8%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 324 5% 2%;
+    --popover: 253 23% 8%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 350 65% 70%; /* Custom primary color */
+    --primary: 350 65% 70%;
+    /* Custom primary color */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 217.2 4% 18%;
@@ -77,11 +180,15 @@
 
     --border: 217.2 4% 18%;
     --input: 217.2 4% 18%;
-    --ring: 350 65% 70%; /* Ring color to match primary */
-    
+    --ring: 350 65% 70%;
+    /* Ring color to match primary */
+
     /* Custom yellow for wiki links in dark mode */
-    --custom-yellow: 45 90% 55%; /* Same yellow, usually pops well on dark */
-    --custom-yellow-foreground: 210 40% 98%; /* Light text for yellow background in dark mode if needed */
+    --custom-yellow: 48 100% 70%;
+    --custom-yellow-foreground: 210 40% 98%;
+    /* Light text for yellow background in dark mode if needed */
+
+    --custom-blue: 195 65% 60%;
   }
 }
 
@@ -92,68 +199,145 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-geist-mono); /* Default font to Geist Mono */
-    font-size: 14px; /* Set base body font size */
+    font-family: var(--font-geist-mono);
+    /* Default font to Geist Mono */
+    font-size: 14px;
+    /* Set base body font size */
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  body.font-geist-sans { font-family: var(--font-geist-sans); }
-  body.font-geist-mono { font-family: var(--font-geist-mono); }
-  body.font-kalam { font-family: var(--font-kalam); }
-  body.font-indie-flower { font-family: var(--font-indie-flower); }
-  body.font-lancelot { font-family: var(--font-lancelot); }
-  body.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
+  body.font-geist-sans {
+    font-family: var(--font-geist-sans);
+  }
+
+  body.font-geist-mono {
+    font-family: var(--font-geist-mono);
+  }
+
+  body.font-kalam {
+    font-family: var(--font-kalam);
+  }
+
+  body.font-indie-flower {
+    font-family: var(--font-indie-flower);
+  }
+
+  body.font-lancelot {
+    font-family: var(--font-lancelot);
+  }
+
+  body.font-cormorant-upright {
+    font-family: var(--font-cormorant-upright);
+  }
 
   html {
-    font-family: var(--font-geist-mono); 
+    font-family: var(--font-geist-mono);
   }
-  html.font-geist-sans { font-family: var(--font-geist-sans); }
-  html.font-geist-mono { font-family: var(--font-geist-mono); }
-  html.font-kalam { font-family: var(--font-kalam); }
-  html.font-indie-flower { font-family: var(--font-indie-flower); }
-  html.font-lancelot { font-family: var(--font-lancelot); }
-  html.font-cormorant-upright { font-family: var(--font-cormorant-upright); }
+
+  html.font-geist-sans {
+    font-family: var(--font-geist-sans);
+  }
+
+  html.font-geist-mono {
+    font-family: var(--font-geist-mono);
+  }
+
+  html.font-kalam {
+    font-family: var(--font-kalam);
+  }
+
+  html.font-indie-flower {
+    font-family: var(--font-indie-flower);
+  }
+
+  html.font-lancelot {
+    font-family: var(--font-lancelot);
+  }
+
+  html.font-cormorant-upright {
+    font-family: var(--font-cormorant-upright);
+  }
 
 
   /* Custom link styling */
-  .custom-link {
-    @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--primary))] hover:underline;
+  .external-link {
+    @apply bg-[hsl(var(--primary))]/20 dark:bg-[hsl(var(--primary))]/20 px-1 py-0.5 rounded-sm text-[hsl(var(--primary))] dark:text-[hsl(var(--primary-light))] no-underline hover:underline;
+  }
+
+  .internal-link {
+    @apply text-primary hover:text-primary/90 transition-colors;
+    text-decoration: underline;
+    text-decoration-color: hsl(var(--primary-light) / 0.5);
+    text-decoration-thickness: 0.5em;
+    text-underline-offset: -0.2em;
+    text-decoration-skip-ink: none;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  }
+
+  .internal-link:hover {
+    text-decoration-color: hsl(var(--primary-light));
+  }
+
+  .dark .internal-link {
+    text-decoration-color: hsl(var(--primary) / 0.8);
+    color: hsl(var(--foreground));
+  }
+  
+  .dark .internal-link:hover {
+    text-decoration-color: hsl(var(--primary-light) / 1);
+  }
+
+  /* Style external links (now with internal style) */
+  .prose a[href^='http'],
+  .prose .dark\:prose-invert a[href^='http'] {
+    @apply external-link;
+  }
+
+  /* Style internal links (now with external style) */
+  .prose a:not([href^='http']):not(.external-link),
+  .prose .dark\:prose-invert a:not([href^='http']):not(.external-link) {
+    @apply internal-link;
   }
 
   .custom-quote {
     @apply bg-[hsl(var(--custom-yellow))]/40 text-sm dark:bg-[hsl(var(--custom-yellow))]/80 px-1 py-0.5 dark:text-[hsl(var(--primary))] font-geist-mono my-2;
   }
-  
-  /* Apply to prose links as well if needed */
-  .prose a, .prose .dark\:prose-invert a { 
-     @apply bg-[hsl(var(--custom-yellow))]/20 dark:bg-[hsl(var(--custom-yellow))]/30 px-1 py-0.5 rounded-sm text-[hsl(var(--primary))] dark:text-[hsl(var(--custom-yellow))] no-underline hover:underline;
-  }
-  
+
   /* Adjust prose default font size if body is 14px */
   .prose {
-    font-size: inherit; /* Inherit from body's 14px */
+    font-size: inherit;
+    /* Inherit from body's 14px */
   }
-  
+
+  .prose strong {
+    @apply text-purple-400;
+  }
+
+  .prose em {
+    @apply text-[hsl(var(--custom-blue))];
+  }
+
   .prose :where(p):not(:where([class~="not-prose"] *)) {
-    font-size: inherit; /* Ensure paragraphs within prose also inherit */
+    font-size: inherit;
+    /* Ensure paragraphs within prose also inherit */
   }
-  
+
   /* Remove backticks from inline code in prose */
   .prose :where(code):not(:where([class~="not-prose"] *))::before,
   .prose :where(code):not(:where([class~="not-prose"] *))::after {
-    content: ""; 
+    content: "";
   }
 
   /* Styling for KaTeX display math blocks - ensure uniform with other blocks */
-  .katex-display > .katex {
-    @apply bg-muted p-4 rounded-md block my-4; 
+  .katex-display>.katex {
+    @apply bg-muted p-4 rounded-md block my-4;
     overflow-x: auto;
     overflow-y: hidden;
   }
-  
+
   /* Reset prose's default styling for code blocks */
   .prose :where(code):not(:where([class~="not-prose"] *)) {
-    background-color: transparent; 
+    background-color: transparent;
     padding: 0;
     border-radius: 0;
     font-weight: normal;
@@ -161,17 +345,20 @@
 }
 
 /* Remove pre styling from prose so CustomCodeBlock handles it */
-.prose :where(pre):not(:where([class~=not-prose],[class~=not-prose] *)) {
+.prose :where(pre):not(:where([class~=not-prose], [class~=not-prose] *)) {
   background-color: transparent;
   padding: 0;
 }
 
 /* Loading Grid Animation */
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.2;
     transform: scale(0.9) rotate(0deg);
   }
+
   50% {
     opacity: 0.4;
     transform: scale(1.1) rotate(5deg);
