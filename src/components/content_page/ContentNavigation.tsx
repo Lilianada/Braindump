@@ -16,23 +16,26 @@ const ContentNavigation: React.FC<ContentNavigationProps> = ({ prevItem, nextIte
   }
 
   return (
-    <div className="mt-12 pt-8 flex justify-between items-center">
+    <div className="mt-12 pt-8 flex justify-between items-center gap-4">
       {prevItem ? (
-        <Button variant="outline" asChild>
-          <Link to={`/content/${prevItem.path}`}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            {prevItem.title}
+        <Button variant="outline" asChild className="flex-1 max-w-48">
+          <Link to={`/content/${prevItem.path}`} className="flex items-center justify-center sm:justify-start">
+            <ArrowLeft className="h-4 w-4 mr-0 sm:mr-2 flex-shrink-0" />
+            <span className="hidden sm:inline truncate">{prevItem.title}</span>
+            <span className="sm:hidden text-xs">Prev</span>
           </Link>
         </Button>
-      ) : <div />} {/* Empty div to maintain layout with justify-between */}
+      ) : <div className="flex-1 max-w-48" />}
+      
       {nextItem ? (
-        <Button variant="outline" asChild>
-          <Link to={`/content/${nextItem.path}`}>
-            {nextItem.title}
-            <ArrowRight className="ml-2 h-4 w-4" />
+        <Button variant="outline" asChild className="flex-1 max-w-48">
+          <Link to={`/content/${nextItem.path}`} className="flex items-center justify-center sm:justify-end">
+            <span className="hidden sm:inline truncate mr-0 sm:mr-2">{nextItem.title}</span>
+            <span className="sm:hidden text-xs mr-2">Next</span>
+            <ArrowRight className="h-4 w-4 flex-shrink-0" />
           </Link>
         </Button>
-      ) : <div />} {/* Empty div to maintain layout with justify-between */}
+      ) : <div className="flex-1 max-w-48" />}
     </div>
   );
 };

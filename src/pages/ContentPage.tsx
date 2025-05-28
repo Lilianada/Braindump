@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useLocation, useOutletContext, useNavigate } from 'react-router-dom';
 import { findContentByPath, getAllContentItems, getFlattenedNavigableTree } from '@/content/mockData';
@@ -165,17 +166,19 @@ const ContentPage: React.FC = () => {
   
   if (contentItem.type === 'folder') {
     return (
-      <ContentBody
-        contentItem={contentItem}
-        allNotesAndTopics={allNotesAndTopics}
-        glossaryTerms={glossaryTerms}
-        setTocItems={setTocItems}
-      />
+      <div className="px-4 sm:px-6 lg:px-8">
+        <ContentBody
+          contentItem={contentItem}
+          allNotesAndTopics={allNotesAndTopics}
+          glossaryTerms={glossaryTerms}
+          setTocItems={setTocItems}
+        />
+      </div>
     );
   }
 
   return (
-    <article className="container mx-auto py-8 animate-fade-in">
+    <article className="container mx-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
       <ContentHeader contentItem={contentItem} />
       <ContentBody
         contentItem={contentItem}

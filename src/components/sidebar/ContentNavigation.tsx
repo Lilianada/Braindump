@@ -5,9 +5,10 @@ import CollapsibleNavItem from './CollapsibleNavItem';
 
 interface ContentNavigationProps {
   contentSections: ContentItem[];
+  onItemClick?: (item: ContentItem) => void;
 }
 
-const ContentNavigation: React.FC<ContentNavigationProps> = ({ contentSections }) => {
+const ContentNavigation: React.FC<ContentNavigationProps> = ({ contentSections, onItemClick }) => {
   if (contentSections.length === 0) {
     return null;
   }
@@ -17,7 +18,7 @@ const ContentNavigation: React.FC<ContentNavigationProps> = ({ contentSections }
       <h3 className="px-3 mb-2 text-[10px] font-semibold uppercase text-muted-foreground tracking-wider">Content Sections</h3>
       <div className="space-y-0.5">
         {contentSections.map(item => (
-          <CollapsibleNavItem key={item.id} item={item} />
+          <CollapsibleNavItem key={item.id} item={item} onItemClick={onItemClick} />
         ))}
       </div>
     </div>

@@ -116,7 +116,8 @@ interface CollapsibleNavItemProps {
   item: ContentItem;
   level?: number;
   isLast?: boolean;
-  parentIsLast?: boolean[]; // Correct: boolean[], not string[]
+  parentIsLast?: boolean[];
+  onItemClick?: (item: ContentItem) => void;
 }
 
 const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
@@ -124,6 +125,7 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
   level = 0,
   isLast = false,
   parentIsLast = [],
+  onItemClick,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -133,6 +135,14 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
   const hasChildren = item.children && item.children.length > 0;
   const colorClass = iconColors[Math.min(level, iconColors.length - 1)];
   const iconMargin = "mr-1";
+
+  const handleLinkClick = (e: React.MouseEvent) => {
+    // Don't stop propagation for folders since they need to expand/collapse
+    // Only call onItemClick for files to close sidebar
+    if (item.type !== 'folder' && onItemClick) {
+      onItemClick(item);
+    }
+  };
 
   // For lines: Build an array for each ancestor whether it was last
   // To do so, pass down an array of booleans for path to here.
@@ -207,6 +217,7 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
         {renderLines()}
         <Link
           to={`/content/${item.path}`}
+          onClick={handleLinkClick}
           style={{ paddingLeft: `${12 + level * 16}px`, position: "relative", zIndex: 1 }}
           className={cn(
             "flex items-center py-2 pr-3 rounded-md text-xs hover:bg-accent hover:text-accent-foreground transition-colors w-full group",
@@ -237,7 +248,10 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
             <Link
               to={`/content/${item.path}`}
               className="flex items-center truncate flex-1"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleLinkClick(e);
+              }}
             >
               {item.type === 'folder'
                 ? <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive && item.type === 'folder' ? "text-accent-foreground" : (location.pathname === `/content/${item.path}` ? "text-primary" : ""))} />
@@ -255,6 +269,7 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
               level={level + 1}
               isLast={idx === item.children.length - 1}
               parentIsLast={[...parentIsLast, isLast]}
+              onItemClick={onItemClick}
             />
           ))}
         </CollapsibleContent>

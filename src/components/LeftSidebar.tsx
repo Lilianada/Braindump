@@ -7,7 +7,7 @@ import { getNormalizedTags } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PageLinks from './sidebar/PageLinks';
 import ContentNavigation from './sidebar/ContentNavigation';
-import VisualizationLinks from './sidebar/VisualizationLinks'; // Import VisualizationLinks
+import VisualizationLinks from './sidebar/VisualizationLinks';
 
 interface LeftSidebarProps {
   isOpen?: boolean;
@@ -54,6 +54,13 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
         onClose();
     }
   };
+
+  const handleItemClick = (item: ContentItem) => {
+    // Only close sidebar on mobile when clicking on files (not folders)
+    if (onClose && isOpen && item.type !== 'folder') {
+      onClose();
+    }
+  };
   
   useEffect(() => {
     if (isOpen && onClose) {
@@ -65,7 +72,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
           onClose();
         }
       };
-      // Close sidebar on navigation
+      
       history.pushState = function (...args) {
         handleClose();
         return originalPushState.apply(this, args);
@@ -74,7 +81,6 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
         return originalReplaceState.apply(this, args);
       };
 
-      
       window.addEventListener('popstate', handleClose);
 
       return () => {
@@ -85,35 +91,44 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
     }
   }, [isOpen, onClose, navigate]);
 
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <aside className={cn(
-      "fixed md:sticky top-0 left-0 h-screen md:h-[calc(100vh-4rem)] md:top-16 pt-16 md:pt-0 w-72 bg-background border-r border-border flex-col z-40 md:z-30 transition-transform duration-300 ease-in-out",
-      "md:flex md:flex-col", 
-      isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0" 
-    )}>
-      {isOpen && <div onClick={onClose} className="fixed inset-0 bg-black/50 z-30 md:hidden" aria-hidden="true" />}
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div 
+          onClick={handleOverlayClick}
+          className="fixed inset-0 bg-black/50 z-30 md:hidden" 
+          aria-hidden="true" 
+        />
+      )}
       
-      <div className={cn(
-        "fixed top-0 left-0 h-[calc(100vh-4rem)] md:h-full w-72 bg-background border-r border-border flex flex-col z-40 transition-transform duration-300 ease-in-out overflow-y-auto", // Changed this from ScrollArea wrapper to simple div with overflow-y-auto for direct control
-        isOpen ? "translate-x-0" : "-translate-x-full",
-        "md:relative md:translate-x-0 md:pt-0"
+      {/* Sidebar */}
+      <aside className={cn(
+        "fixed md:sticky top-0 left-0 h-screen md:h-[calc(100vh-4rem)] md:top-16 pt-16 md:pt-0 w-72 bg-background border-r border-border flex-col z-40 md:z-30 transition-transform duration-300 ease-in-out",
+        "md:flex md:flex-col", 
+        isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0" 
       )}>
-        <ScrollArea className="h-full w-full"> {/* ScrollArea now wraps the content div */}
-          <div className="px-4 py-4">
-            <nav className="space-y-6">
-              <PageLinks />
-              <ContentNavigation contentSections={contentSections} />
-              <VisualizationLinks /> {/* Add VisualizationLinks */}
-              {/* <TagList tags={uniqueTags} onTagClick={handleTagClick} /> */}
-              {/* <Separator />
-               <div className="text-xs uppercase font-geist-sans font-semibold text-primary p-4">
-               Lily's Garden
-               </div> */}
-            </nav>
-          </div>
-        </ScrollArea>
-      </div>
-    </aside>
+        <div className="h-full w-full overflow-hidden">
+          <ScrollArea className="h-full w-full">
+            <div className="px-4 py-4">
+              <nav className="space-y-6">
+                <PageLinks onItemClick={() => onClose?.()} />
+                <ContentNavigation contentSections={contentSections} onItemClick={handleItemClick} />
+                <VisualizationLinks onItemClick={() => onClose?.()} />
+              </nav>
+            </div>
+          </ScrollArea>
+        </div>
+      </aside>
+    </>
   );
 };
 
