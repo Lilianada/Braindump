@@ -1,13 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getAllContentItems } from '@/content/mockData';
 import { Tag as TagIcon, Search } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { getNormalizedTags } from '@/lib/utils';
+import { useFirebaseNotes } from '@/hooks/useFirebaseNotes';
 
 type TagWithCount = {
   tag: string;
@@ -18,23 +18,24 @@ const TagsPage: React.FC = () => {
   const [tags, setTags] = useState<TagWithCount[]>([]);
   const [filteredTags, setFilteredTags] = useState<TagWithCount[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  
+  const { data: firebaseNotes, isLoading, error } = useFirebaseNotes();
 
   useEffect(() => {
-    const allItems = getAllContentItems();
-    const tagMap = new Map<string, number>();
-    allItems.forEach(item => {
-      getNormalizedTags(item.tags).forEach(tag => {
-        if (tag) tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+    if (firebaseNotes && firebaseNotes.length > 0) {
+      const tagMap = new Map<string, number>();
+      firebaseNotes.forEach(item => {
+        getNormalizedTags(item.tags).forEach(tag => {
+          if (tag) tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+        });
       });
-    });
-    const tagsArray = Array.from(tagMap.entries())
-      .map(([tag, count]) => ({ tag, count }))
-      .sort((a, b) => b.count - a.count); // Sort by count descending
-    setTags(tagsArray);
-    setFilteredTags(tagsArray);
-    setIsLoading(false);
-  }, []);
+      const tagsArray = Array.from(tagMap.entries())
+        .map(([tag, count]) => ({ tag, count }))
+        .sort((a, b) => b.count - a.count);
+      setTags(tagsArray);
+      setFilteredTags(tagsArray);
+    }
+  }, [firebaseNotes]);
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
@@ -50,7 +51,16 @@ const TagsPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <span className="text-lg font-medium text-muted-foreground animate-pulse">Loading tags...</span>
+        <span className="text-lg font-medium text-muted-foreground animate-pulse">Loading tags from Firebase...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <span className="text-lg font-medium text-destructive">Error loading tags from Firebase</span>
+        <span className="text-sm text-muted-foreground mt-2">Please check your Firebase configuration</span>
       </div>
     );
   }
@@ -81,6 +91,7 @@ const TagsPage: React.FC = () => {
           <div className="flex gap-6 text-sm text-muted-foreground">
             <span>Total: {tags.length} tags</span>
             {searchTerm && <span>Found: {filteredTags.length} tags</span>}
+            <span>From Firebase: {firebaseNotes?.length || 0} notes</span>
           </div>
         </div>
 
@@ -117,7 +128,7 @@ const TagsPage: React.FC = () => {
                 <p className="text-muted-foreground text-sm">Try adjusting your search term</p>
               </>
             ) : (
-              <p className="text-muted-foreground text-lg">No tags found.</p>
+              <p className="text-muted-foreground text-lg">No tags found in Firebase notes.</p>
             )}
           </div>
         )}

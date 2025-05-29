@@ -1,12 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getAllContentItems, ContentItem } from '@/content/mockData';
+import { ContentItem } from '@/types/content';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ArrowLeft, FileText as FileTextIcon, Tag as TagIcon } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { getNormalizedTags } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
+import { useFirebaseNotes } from '@/hooks/useFirebaseNotes';
 
 /**
  * Extracts the main body of a Markdown string by removing YAML frontmatter.
@@ -33,29 +35,44 @@ function extractMarkdownBody(markdownContent: string | undefined | null): string
 const TagDetailPage: React.FC = () => {
   const { tagName } = useParams<{ tagName: string }>();
   const [relatedItems, setRelatedItems] = useState<ContentItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const decodedTagName = tagName ? decodeURIComponent(tagName) : '';
+  
+  const { data: firebaseNotes, isLoading, error } = useFirebaseNotes();
 
   useEffect(() => {
-    if (decodedTagName) {
-      const allItems = getAllContentItems();
-      const filteredItems = allItems.filter(item => {
+    if (decodedTagName && firebaseNotes) {
+      const filteredItems = firebaseNotes.filter(item => {
         const normalizedItemTags = getNormalizedTags(item.tags);
         return normalizedItemTags.includes(decodedTagName);
       });
       setRelatedItems(filteredItems);
     }
-    setIsLoading(false);
-  }, [decodedTagName]);
+  }, [decodedTagName, firebaseNotes]);
 
   if (isLoading) {
-    return <div className="container mx-auto px-4 py-8">Loading content for tag: {decodedTagName}...</div>;
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <span className="text-lg font-medium text-muted-foreground animate-pulse">
+          Loading content for tag from Firebase: {decodedTagName}...
+        </span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <span className="text-lg font-medium text-destructive">
+          Error loading content from Firebase
+        </span>
+      </div>
+    );
   }
 
   return (
     <ScrollArea className="h-full">
       <div className="container mx-auto px-4 py-8">
-      <div className="mb-6 text-left">
+        <div className="mb-6 text-left">
           <Link to="/tags" className="text-sm text-primary hover:underline flex items-center space-x-2">
             <ArrowLeft className='h-4 w-4' aria-label='Back button'/>
             View all tags
@@ -64,13 +81,12 @@ const TagDetailPage: React.FC = () => {
         <Card>
           <CardHeader>
             <div className="flex items-center space-x-2 mb-2">
-             
               <CardTitle className="text-2xl font-semibold tracking-tight">
                 Content tagged with: <span className="text-primary capitalize">{decodedTagName}</span>
               </CardTitle>
             </div>
             <CardDescription>
-              Found {relatedItems.length} item(s) matching this tag.
+              Found {relatedItems.length} item(s) matching this tag from Firebase.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -80,17 +96,16 @@ const TagDetailPage: React.FC = () => {
                   <li key={item.id} className="border-b pb-4 last:border-b-0 last:pb-0">
                     <Link to={`/content/${item.path}`} className="group">
                       <h3 className="text-base font-medium text-primary group-hover:underline flex items-center">
-                       
                         {item.title}
                       </h3>
                       {item.path && <p className="text-sm text-muted-foreground">Path: {item.path}</p>}
-                     {item.content && (
-  <div className="text-sm text-foreground/80 mt-1 line-clamp-2">
-    <ReactMarkdown>
-      {extractMarkdownBody(item.content).substring(0, 150) + "..."}
-    </ReactMarkdown>
-  </div>
-)}
+                      {item.content && (
+                        <div className="text-sm text-foreground/80 mt-1 line-clamp-2">
+                          <ReactMarkdown>
+                            {extractMarkdownBody(item.content).substring(0, 150) + "..."}
+                          </ReactMarkdown>
+                        </div>
+                      )}
                       {item.tags && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           {getNormalizedTags(item.tags).map(tag => (
@@ -103,11 +118,10 @@ const TagDetailPage: React.FC = () => {
                 ))}
               </ul>
             ) : (
-              <p className="text-muted-foreground">No content found for this tag.</p>
+              <p className="text-muted-foreground">No content found for this tag in Firebase.</p>
             )}
           </CardContent>
         </Card>
-        
       </div>
     </ScrollArea>
   );

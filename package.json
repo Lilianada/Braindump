@@ -52,6 +52,7 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.0",
     "express": "^4.21.2",
+    "firebase": "^11.8.1",
     "geist": "^1.4.2",
     "input-otp": "^1.2.4",
     "link-preview-js": "^3.1.0",
