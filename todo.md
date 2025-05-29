@@ -129,3 +129,67 @@ To scale **Braindump** from a local-only digital garden to a cloud-powered, user
    * Use `shadcn/ui`, Lucide icons, and Tailwind CSS for consistent design
 
 ---
+Connect this app to Firebase using this firebase keys to be added to an enironment variable file.
+  Fetch notes from a collection called 'notes'
+  
+# Firebase Configuration
+NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyB6p3ykaccCLuiH6jm8NP8wPKDc7NW9ltA
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=portfolio-dash-00.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=portfolio-dash-00
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=portfolio-dash-00.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=841618368132
+NEXT_PUBLIC_FIREBASE_APP_ID=1:841618368132:web:8525c942639c95580684d1
+
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=YOUR_MEASUREMENT_ID
+
+
+To efficiently generate backlinks and related notes on the frontend **without causing hydration issues or slowing load times**, consider this strategy:
+
+---
+
+### Efficient Frontend Backlink & Related Notes Strategy
+
+1. **Pre-Index Notes at Build Time or in a Lightweight Cache**  
+   - During your site’s build process (SSG) or initial app load, create an **in-memory index** mapping note IDs/titles to the notes that reference them.  
+   - This avoids scanning all notes on every page load and prevents hydration mismatches in React.  
+   - For client-side apps, fetch a precomputed backlinks index JSON from your backend or CDN.
+
+2. **Lazy Load Backlinks & Related Notes**  
+   - Render the main note content immediately.  
+   - Load backlinks and related notes asynchronously after initial render (e.g., using React’s `useEffect` or Suspense).  
+   - Show a lightweight placeholder or spinner to avoid blocking UI.
+
+3. **Backlink Computation Logic**  
+   - Backlinks: For the current note, look up in the precomputed index which notes link to it.  
+   - Related Notes: Compute similarity scores client-side based on shared tags or content overlap.
+
+4. **Sorting Related Notes**  
+   - Sort by **number of shared tags** (descending) as a primary criterion — notes sharing more tags are more relevant.  
+   - Optionally, incorporate:  
+     - Recency (last updated date)  
+     - Link strength (number of backlinks between notes)  
+     - Content similarity (using lightweight text similarity or embeddings if feasible)
+
+5. **Pagination or Limit Results**  
+   - Limit backlinks/related notes to a reasonable number (e.g., top 5 or 10) to keep UI clean and performant.
+
+---
+
+### Why This Works
+
+- **Build-time indexing** shifts heavy computation off the client, preventing slowdowns and hydration issues.  
+- **Lazy loading** keeps initial page load snappy and improves perceived performance.  
+- **Simple sorting by shared tags** is fast and effective for relevance without complex algorithms.  
+- **Limiting results** prevents overwhelming the user and the UI.
+
+---
+
+### Additional Tips
+
+- Use **React.memo** or similar caching to avoid unnecessary re-renders.  
+- If using Next.js, leverage **Incremental Static Regeneration (ISR)** to keep your index fresh.  
+- Consider integrating lightweight search/indexing libraries (e.g., [Lunr.js](https://lunrjs.com/)) client-side for more advanced related note similarity.
+
+---
+Remove implementation for fetching external links
+                                                                              Remo
