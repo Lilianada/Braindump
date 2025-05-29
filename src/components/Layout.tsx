@@ -69,9 +69,9 @@ const Layout: React.FC = () => {
       <Navbar onToggleSidebar={toggleLeftSidebar} />
       <div className="flex flex-1 pt-16 overflow-hidden">
         <LeftSidebar isOpen={isLeftSidebarOpen} onClose={() => setIsLeftSidebarOpen(false)} />
-        <main className="flex-1 flex max-w-2xl mx-auto text-justify w-full overflow-x-hidden">
+        <main className="flex-1 flex max-w-full overflow-x-hidden">
           <ScrollArea className="flex-1 h-[calc(100vh-4rem)] scrollbar-hide overflow-y-auto">
-            <div className={cn("container p-0 mx-auto w-full max-w-4xl")}>
+            <div className={cn("container p-0  max-w-2xl mx-auto text-justify w-full")}>
                <Outlet context={{ tocItems, setTocItems, setCurrentContentItem, setAllNotesForContext, activeTocItemId, setActiveTocItemId } satisfies AppContextType} />
             </div>
           </ScrollArea>
