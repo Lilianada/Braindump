@@ -2,6 +2,29 @@
 import { useEffect, useState } from 'react';
 import { LinkMetadata } from '@/lib/link-metadata';
 
+function extractTitleFromUrl(url: string): string {
+  try {
+    const urlObj = new URL(url);
+    const hostname = urlObj.hostname.replace('www.', '');
+    
+    // Extract path segments for better titles
+    const pathSegments = urlObj.pathname.split('/').filter(segment => segment.length > 0);
+    
+    if (pathSegments.length > 0) {
+      // Use the last meaningful path segment as title
+      const lastSegment = pathSegments[pathSegments.length - 1];
+      const cleanSegment = lastSegment.replace(/[-_]/g, ' ').replace(/\.(html|php|asp|jsp)$/i, '');
+      if (cleanSegment.length > 0) {
+        return `${cleanSegment} | ${hostname}`;
+      }
+    }
+    
+    return hostname;
+  } catch (error) {
+    return url;
+  }
+}
+
 export function useLinkMetadata(url: string | undefined) {
   const [metadata, setMetadata] = useState<LinkMetadata | null>(null);
   const [loading, setLoading] = useState(false);
@@ -15,39 +38,34 @@ export function useLinkMetadata(url: string | undefined) {
       return;
     }
 
-    const fetchMetadata = async () => {
+    const generateMetadata = () => {
       setLoading(true);
       setError(null);
       
       try {
-        const response = await fetch(`/api/link-metadata?url=${encodeURIComponent(url)}`);
+        const urlObj = new URL(url);
+        const hostname = urlObj.hostname.replace('www.', '');
         
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || 'Failed to fetch metadata');
-        }
-        
-        const data = await response.json();
         const metadata: LinkMetadata = {
-          title: data.title || new URL(url).hostname,
-          description: data.description || '',
-          url: data.url || url,
-          image: data.image,
-          siteName: data.siteName || new URL(url).hostname,
-          mediaType: data.mediaType || 'website',
-          contentType: data.contentType || 'text/html',
+          title: extractTitleFromUrl(url),
+          description: `External link to ${hostname}`,
+          url: url,
+          siteName: hostname,
+          mediaType: 'website',
+          contentType: 'text/html',
         };
+        
         setMetadata(metadata);
       } catch (err) {
-        console.error('Error fetching link metadata:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch metadata');
+        console.error('Error processing URL:', err);
+        setError('Invalid URL');
         
         // Set fallback metadata
         const fallbackMetadata: LinkMetadata = {
-          title: new URL(url).hostname,
-          description: '',
+          title: url,
+          description: 'External link',
           url: url,
-          siteName: new URL(url).hostname,
+          siteName: 'External Site',
           mediaType: 'website',
           contentType: 'text/html',
         };
@@ -57,9 +75,9 @@ export function useLinkMetadata(url: string | undefined) {
       }
     };
 
-    fetchMetadata();
+    // Small delay to simulate loading state briefly
+    setTimeout(generateMetadata, 100);
   }, [url]);
   
   return { metadata, loading, error };
 }
-

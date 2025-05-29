@@ -1,13 +1,9 @@
 
 import express from 'express';
 import path from 'path';
-import linkMetadataRouter from './link-metadata';
 
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001; // Use a different port than Vite, e.g., 3001
-
-// API route
-app.use('/api/link-metadata', linkMetadataRouter);
 
 // In production, Vite builds to 'dist'. Express can serve these static files.
 // This part is mainly for a production setup.
@@ -22,8 +18,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(PORT, () => {
-  console.log(`Express server for link metadata running at http://localhost:${PORT}`);
+  console.log(`Express server running at http://localhost:${PORT}`);
   if (process.env.NODE_ENV !== 'production') {
-    console.log('In development, Vite dev server should proxy /api requests to this server.');
+    console.log('In development, Vite dev server should proxy requests to this server.');
   }
 });
