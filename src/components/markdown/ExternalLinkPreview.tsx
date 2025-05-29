@@ -63,12 +63,10 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
                 External Link
                 <ExternalLinkIcon className="h-3 w-3 ml-1 inline shrink-0" />
               </p>
-              <h4 className="font-medium text-foreground mb-0.5 truncate">{displayTitle}</h4>
               {displaySiteName && <p className="text-xs text-muted-foreground mb-1">{displaySiteName}</p>}
               {displayDescription && <p className="text-xs text-muted-foreground line-clamp-3 mb-2">{displayDescription}</p>}
               <p className="text-xs text-muted-foreground mt-2 truncate">
                 <a href={displayUrl} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
-                  {displayFavicon && <img src={displayFavicon} alt="" className="h-3 w-3 mr-1.5"/>}
                   <span className="">{displayUrl}</span>
                 </a>
               </p>
