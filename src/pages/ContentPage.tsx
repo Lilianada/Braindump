@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useLocation, useOutletContext, useNavigate } from 'react-router-dom';
 import { findContentByPath, getAllContentItems, getFlattenedNavigableTree } from '@/content/mockData';
@@ -10,6 +9,7 @@ import ContentHeader from '@/components/content_page/ContentHeader';
 import ContentBody from '@/components/content_page/ContentBody';
 import RelatedContent from '@/components/content_page/RelatedContent';
 import ContentNavigation from '@/components/content_page/ContentNavigation';
+import ContentBreadcrumb from '@/components/content_page/ContentBreadcrumb';
 
 const ContentPage: React.FC = () => {
   const params = useParams();
@@ -156,38 +156,46 @@ const ContentPage: React.FC = () => {
     return { prevItem: prev, nextItem: next };
   }, [contentItem, sequencedNavigableItems]);
 
+  const currentPath = params['*'] || '';
+
   if (contentItem === undefined) {
     return <LoadingGrid />;
   }
 
   if (!contentItem) {
-    return <ContentNotFoundDisplay path={params['*']} />;
+    return <ContentNotFoundDisplay path={currentPath} />;
   }
   
   if (contentItem.type === 'folder') {
     return (
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="animate-fade-in">
+        <ContentBreadcrumb path={contentItem.path} />
+        <div className="px-4 sm:px-6 lg:px-8">
+          <ContentBody
+            contentItem={contentItem}
+            allNotesAndTopics={allNotesAndTopics}
+            glossaryTerms={glossaryTerms}
+            setTocItems={setTocItems}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <article className="animate-fade-in">
+      <ContentBreadcrumb path={contentItem.path} />
+      <div className="container mx-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-8">
+        <ContentHeader contentItem={contentItem} />
         <ContentBody
           contentItem={contentItem}
           allNotesAndTopics={allNotesAndTopics}
           glossaryTerms={glossaryTerms}
           setTocItems={setTocItems}
         />
+        <RelatedContent backlinks={backlinks} relatedNotes={relatedNotes} />
+        <ContentNavigation prevItem={prevItem} nextItem={nextItem} />
       </div>
-    );
-  }
-
-  return (
-    <article className="container mx-auto py-4 sm:py-6 lg:py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
-      <ContentHeader contentItem={contentItem} />
-      <ContentBody
-        contentItem={contentItem}
-        allNotesAndTopics={allNotesAndTopics}
-        glossaryTerms={glossaryTerms}
-        setTocItems={setTocItems}
-      />
-      <RelatedContent backlinks={backlinks} relatedNotes={relatedNotes} />
-      <ContentNavigation prevItem={prevItem} nextItem={nextItem} />
     </article>
   );
 };
