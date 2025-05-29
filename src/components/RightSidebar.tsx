@@ -91,7 +91,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
       <ScrollArea ref={scrollAreaRef} className="h-full px-4 py-6 scrollbar-hide"> {/* Added scrollbar-hide */}
         <div className="space-y-8">
           <div>
-            <h3 className="mb-3 text-sm font-semibold uppercase text-muted-foreground tracking-wider flex items-center">
+            <h3 className="mb-3 text-xs font-semibold uppercase text-muted-foreground tracking-wider flex items-center">
               <AlignLeft className="h-4 w-4 mr-2" /> On this page
             </h3>
             {tocItems && tocItems.length > 0 ? (
