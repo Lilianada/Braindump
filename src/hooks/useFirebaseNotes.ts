@@ -7,7 +7,7 @@ export const useFirebaseNotes = () => {
     queryKey: ['firebase-notes'],
     queryFn: fetchNotesFromFirebase,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes (was cacheTime)
   });
 };
 
@@ -17,6 +17,6 @@ export const useFirebaseNoteByPath = (path: string) => {
     queryFn: () => fetchNoteByPath(path),
     enabled: !!path,
     staleTime: 5 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
+    gcTime: 10 * 60 * 1000, // 10 minutes (was cacheTime)
   });
 };
