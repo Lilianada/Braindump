@@ -79,7 +79,7 @@ export const renderInteractiveText = (
         parts.push(
           <HoverCard key={`${baseKey}-wikilink-missing-${partIndex}`}>
             <HoverCardTrigger asChild>
-              <span className="internal-link !text-destructive cursor-help">
+              <span className="internal-link !text-custom-yellow cursor-help">
                 {`[[${wikiLinkTitle}]]`}
               </span>
             </HoverCardTrigger>
