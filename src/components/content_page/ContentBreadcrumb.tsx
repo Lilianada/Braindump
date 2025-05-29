@@ -20,7 +20,7 @@ const ContentBreadcrumb: React.FC<ContentBreadcrumbProps> = ({ path, isNotFound 
   const pathSegments = path ? path.split('/').filter(Boolean) : [];
   
   return (
-    <div className="mb-4 px-4 sm:px-6 lg:px-8">
+    <div className="my-4 px-4 sm:px-6 lg:px-8">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
