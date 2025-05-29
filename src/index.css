@@ -189,6 +189,8 @@
     /* Light text for yellow background in dark mode if needed */
 
     --custom-blue: 195 65% 60%;
+
+     --primary-light: 350 100% 84%;
   }
 }
 
@@ -265,7 +267,7 @@
   }
 
   .internal-link {
-    @apply text-primary hover:text-primary/90 transition-colors;
+    @apply text-primary dark:text-primary-light hover:text-primary/90 transition-colors;
     text-decoration: underline;
     text-decoration-color: hsl(var(--primary-light) / 0.5);
     text-decoration-thickness: 0.5em;
