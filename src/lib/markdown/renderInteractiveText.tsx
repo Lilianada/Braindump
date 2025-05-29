@@ -79,11 +79,11 @@ export const renderInteractiveText = (
         parts.push(
           <HoverCard key={`${baseKey}-wikilink-missing-${partIndex}`}>
             <HoverCardTrigger asChild>
-              <span className="internal-link !text-custom-yellow cursor-help">
+              <span className="internal-link cursor-help">
                 {`[[${wikiLinkTitle}]]`}
               </span>
             </HoverCardTrigger>
-            <HoverCardContent className="w-80 bg-popover text-popover-foreground p-4 shadow-md rounded-md border text-sm">
+            <HoverCardContent className="w-80 bg-popover text-popover-foreground px-4 py-2 shadow-md rounded-md border text-sm">
               <p>Content not available. Inform the author.</p>
             </HoverCardContent>
           </HoverCard>
