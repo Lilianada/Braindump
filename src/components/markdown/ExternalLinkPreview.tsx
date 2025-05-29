@@ -71,17 +71,6 @@ const ExternalLinkPreview: React.FC<ExternalLinkPreviewProps> = ({ href, childre
               </p>
             </div>
           )}
-          {!isLoading && !error && !metadata && (
-            <div className="flex flex-col space-y-1">
-              <p className="text-xs text-muted-foreground">Loading preview for:</p>
-              <div className="flex items-center">
-                <span className="truncate text-sm font-medium">{href}</span>
-                <a href={href} target="_blank" rel="noopener noreferrer" className="ml-1.5">
-                  <ExternalLinkIcon className="h-4 w-4 shrink-0 text-muted-foreground hover:text-foreground" />
-                </a>
-              </div>
-            </div>
-          )}
         </HoverCardContent>
       </HoverCard>
     </span>
