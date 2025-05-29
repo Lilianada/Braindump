@@ -9,15 +9,16 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8080, // Your Vite dev server port
+    port: 8080,
     proxy: {
       // Proxy /api requests to our Express server running on port 3001
       '/api': {
-        target: 'http://localhost:3001', // The port your Express server is listening on
+        target: 'http://localhost:3001',
         changeOrigin: true,
-        // rewrite: (path) => path.replace(/^\/api/, '') // Uncomment if your Express server doesn't expect /api prefix
       }
-    }
+    },
+    // Ensure proper fallback for client-side routing
+    historyApiFallback: true,
   },
   plugins: [
     react(),
@@ -30,6 +31,13 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
     },
   },
 }));
