@@ -15,6 +15,15 @@ export interface FirebaseNote {
   [key: string]: any;
 }
 
+// Type guard to validate ContentItem type
+const isValidContentType = (type: string): type is ContentItem['type'] => {
+  const validTypes: ContentItem['type'][] = [
+    'folder', 'note', 'topic', 'glossary_term', 'dictionary_entry', 
+    'log', 'zettel', 'book', 'language', 'concept', 'links'
+  ];
+  return validTypes.includes(type as ContentItem['type']);
+};
+
 export const fetchNotesFromFirebase = async (): Promise<ContentItem[]> => {
   try {
     const notesCollection = collection(db, 'notes');
@@ -22,11 +31,14 @@ export const fetchNotesFromFirebase = async (): Promise<ContentItem[]> => {
     
     const notes: ContentItem[] = notesSnapshot.docs.map(doc => {
       const data = doc.data() as FirebaseNote;
+      const validType: ContentItem['type'] = isValidContentType(data.type) ? 
+        data.type as ContentItem['type'] : 'note';
+      
       return {
         id: doc.id,
         title: data.title || 'Untitled',
         path: data.path || doc.id,
-        type: (data.type as ContentItem['type']) || 'note',
+        type: validType,
         content: data.content || '',
         tags: data.tags || [],
         created: data.created,
@@ -50,11 +62,14 @@ export const fetchNoteByPath = async (path: string): Promise<ContentItem | null>
     
     if (docSnap.exists()) {
       const data = docSnap.data() as FirebaseNote;
+      const validType: ContentItem['type'] = isValidContentType(data.type) ? 
+        data.type as ContentItem['type'] : 'note';
+      
       return {
         id: docSnap.id,
         title: data.title || 'Untitled',
         path: data.path || docSnap.id,
-        type: (data.type as ContentItem['type']) || 'note',
+        type: validType,
         content: data.content || '',
         tags: data.tags || [],
         created: data.created,
@@ -70,11 +85,14 @@ export const fetchNoteByPath = async (path: string): Promise<ContentItem | null>
     for (const doc of notesSnapshot.docs) {
       const data = doc.data() as FirebaseNote;
       if (data.path === path) {
+        const validType: ContentItem['type'] = isValidContentType(data.type) ? 
+          data.type as ContentItem['type'] : 'note';
+        
         return {
           id: doc.id,
           title: data.title || 'Untitled',
           path: data.path || doc.id,
-          type: (data.type as ContentItem['type']) || 'note',
+          type: validType,
           content: data.content || '',
           tags: data.tags || [],
           created: data.created,
