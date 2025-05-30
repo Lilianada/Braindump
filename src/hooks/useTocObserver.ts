@@ -1,5 +1,6 @@
 
-import { useEffect, useOutletContext } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { ContentItem } from '@/types/content';
 import { AppContextType } from '@/components/Layout';
 
