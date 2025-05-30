@@ -1,5 +1,4 @@
-
-To scale **Braindump** from a local-only digital garden to a cloud-powered, user-friendly personal knowledge management app, while maintaining its minimalist feel, here's a detailed breakdown of what you need:
+To scale **Braindump** from a local-only digital garden to a cloud-powered, user-friendly personal knowledge management app, while maintaining its minimalist feel, here’s a detailed breakdown of what you need:
 
 ---
 
@@ -34,7 +33,7 @@ To scale **Braindump** from a local-only digital garden to a cloud-powered, user
 
 ---
 
-## ⚙️ New Functionality You'll Need
+## ⚙️ New Functionality You’ll Need
 
 ### 🧠 CRUD for Notes
 
@@ -151,13 +150,13 @@ To efficiently generate backlinks and related notes on the frontend **without ca
 ### Efficient Frontend Backlink & Related Notes Strategy
 
 1. **Pre-Index Notes at Build Time or in a Lightweight Cache**  
-   - During your site's build process (SSG) or initial app load, create an **in-memory index** mapping note IDs/titles to the notes that reference them.  
+   - During your site’s build process (SSG) or initial app load, create an **in-memory index** mapping note IDs/titles to the notes that reference them.  
    - This avoids scanning all notes on every page load and prevents hydration mismatches in React.  
    - For client-side apps, fetch a precomputed backlinks index JSON from your backend or CDN.
 
 2. **Lazy Load Backlinks & Related Notes**  
    - Render the main note content immediately.  
-   - Load backlinks and related notes asynchronously after initial render (e.g., using React's `useEffect` or Suspense).  
+   - Load backlinks and related notes asynchronously after initial render (e.g., using React’s `useEffect` or Suspense).  
    - Show a lightweight placeholder or spinner to avoid blocking UI.
 
 3. **Backlink Computation Logic**  
@@ -192,8 +191,10 @@ To efficiently generate backlinks and related notes on the frontend **without ca
 - Consider integrating lightweight search/indexing libraries (e.g., [Lunr.js](https://lunrjs.com/)) client-side for more advanced related note similarity.
 
 ---
-Remove implementation for fetching external links
 
+                                                                              Remo
+
+                                                                              
 ---
 
 ## 📋 CODEBASE ANALYSIS & IMPROVEMENT PLAN
