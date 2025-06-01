@@ -18,7 +18,15 @@ export default defineConfig(({ mode }) => ({
       }
     },
     // Ensure proper fallback for client-side routing
-    historyApiFallback: true,
+    historyApiFallback: {
+      // This ensures all non-asset requests are served index.html
+      rewrites: [
+        { from: /^\/api\/.*$/, to: function(context) {
+          return context.parsedUrl.pathname;
+        }},
+        { from: /./, to: '/index.html' }
+      ]
+    },
   },
   plugins: [
     react(),
