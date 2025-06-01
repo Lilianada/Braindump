@@ -38,13 +38,13 @@ export const fetchNotesFromFirebase = async (): Promise<ContentItem[]> => {
         id: doc.id,
         title: data.title || 'Untitled',
         path: data.path || doc.id,
-        type: validType,
+        type: validType, // Use validType instead of data.type
         content: data.content || '',
         tags: data.tags || [],
         created: data.created,
         lastUpdated: data.lastUpdated,
         ...data
-      };
+      } as ContentItem;
     });
     
     return notes;
@@ -69,13 +69,13 @@ export const fetchNoteByPath = async (path: string): Promise<ContentItem | null>
         id: docSnap.id,
         title: data.title || 'Untitled',
         path: data.path || docSnap.id,
-        type: validType,
+        type: validType, // Use validType instead of data.type
         content: data.content || '',
         tags: data.tags || [],
         created: data.created,
         lastUpdated: data.lastUpdated,
         ...data
-      };
+      } as ContentItem;
     }
     
     // If not found by ID, search by path field
@@ -92,13 +92,13 @@ export const fetchNoteByPath = async (path: string): Promise<ContentItem | null>
           id: doc.id,
           title: data.title || 'Untitled',
           path: data.path || doc.id,
-          type: validType,
+          type: validType, // Use validType instead of data.type
           content: data.content || '',
           tags: data.tags || [],
           created: data.created,
           lastUpdated: data.lastUpdated,
           ...data
-        };
+        } as ContentItem;
       }
     }
     
