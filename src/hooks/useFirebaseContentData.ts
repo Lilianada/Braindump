@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { fetchNotesFromFirebase } from '@/services/firebaseService';
 import { ContentItem } from '@/types/content';
@@ -116,11 +117,18 @@ const convertAndStructureFirebaseNotes = (firebaseNotes: any[]): {
     }
   });
 
-  // Get root level folders and notes
+  // Get root level folders and notes, sorted alphabetically
   const rootItems = [
     ...folders.filter(folder => !folder.path.includes('/')),
     ...convertedNotes.filter(note => !note.path.includes('/'))
-  ];
+  ].sort((a, b) => a.title.localeCompare(b.title));
+
+  // Sort children within each folder alphabetically
+  folders.forEach(folder => {
+    if (folder.children) {
+      folder.children.sort((a, b) => a.title.localeCompare(b.title));
+    }
+  });
 
   const allNotesAndTopics = convertedNotes.filter(item => item.type !== 'folder');
   const sequencedNavigableItems = [...allNotesAndTopics].sort((a, b) => a.path.localeCompare(b.path));

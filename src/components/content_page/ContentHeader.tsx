@@ -15,6 +15,11 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ contentItem }) => {
     <header className="mb-8">
       <h1 className="text-2xl font-semibold capitalize mb-2">{contentItem.title}</h1>
       
+      {/* Display description if available */}
+      {contentItem.description && (
+        <p className="text-base text-muted-foreground mb-4">{contentItem.description}</p>
+      )}
+      
       <div className="mt-3 mb-1 text-xs text-muted-foreground space-y-1.5">
         {contentItem.frontmatter?.type && contentItem.type !== contentItem.frontmatter.type && (
           <div className="flex items-center gap-2">
@@ -44,19 +49,6 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ contentItem }) => {
             <span>Category: {category}</span>
           </div>
         )}
-        {/* {contentItem.frontmatter && Object.entries(contentItem.frontmatter)
-          .filter(([key]) => !['id', 'title', 'path', 'type', 'tags', 'created', 'lastUpdated', 'author', 'source', 'slug', 'content', 'category'].includes(key.toLowerCase()))
-          .map(([key, value]) => {
-            if (value === undefined || value === null || (Array.isArray(value) && value.length === 0)) return null;
-            const displayValue = Array.isArray(value) ? value.join(', ') : String(value);
-            return (
-              <div key={key} className="flex items-center gap-2">
-                <Info className="h-4 w-4" />
-                <span>{key.charAt(0).toUpperCase() + key.slice(1)}: {displayValue}</span>
-              </div>
-            );
-          })
-        } */}
       </div>
 
       {contentItem.tags && contentItem.tags.filter(tag => !tag.toLowerCase().startsWith('category:')).length > 0 && (
