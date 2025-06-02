@@ -8,7 +8,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { getNormalizedTags } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
-import { useFirebaseNotes } from '@/hooks/useFirebaseNotes';
+import { useFirebaseContentData } from '@/hooks/useFirebaseContentData';
 
 /**
  * Extracts the main body of a Markdown string by removing YAML frontmatter.
@@ -37,33 +37,25 @@ const TagDetailPage: React.FC = () => {
   const [relatedItems, setRelatedItems] = useState<ContentItem[]>([]);
   const decodedTagName = tagName ? decodeURIComponent(tagName) : '';
   
-  const { data: firebaseNotes, isLoading, error } = useFirebaseNotes();
+  const { allNotesAndTopics } = useFirebaseContentData();
 
   useEffect(() => {
-    if (decodedTagName && firebaseNotes) {
-      const filteredItems = firebaseNotes.filter(item => {
+    if (decodedTagName && allNotesAndTopics.length > 0) {
+      const filteredItems = allNotesAndTopics.filter(item => {
         const normalizedItemTags = getNormalizedTags(item.tags);
         return normalizedItemTags.includes(decodedTagName);
       });
       setRelatedItems(filteredItems);
     }
-  }, [decodedTagName, firebaseNotes]);
+  }, [decodedTagName, allNotesAndTopics]);
+
+  const isLoading = allNotesAndTopics.length === 0;
 
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <span className="text-lg font-medium text-muted-foreground animate-pulse">
           Loading content for tag from Firebase: {decodedTagName}...
-        </span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <span className="text-lg font-medium text-destructive">
-          Error loading content from Firebase
         </span>
       </div>
     );
