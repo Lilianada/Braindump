@@ -410,3 +410,25 @@ function AdminDashboard({ notes }: { notes: NoteDocument[] }) {
 - Consider the `parentId` field for hierarchical note structures
 
 This documentation covers all confirmed existing fields in your Firestore database and provides practical examples for fetching and rendering the data in an admin context.
+
+
+
+
+  
+## Key Questions & Clarifications Needed:
+1. Path Mapping: In the current system, content is accessed via paths like wikis/programming/javascript/ternary-operators. In Firebase, you have filePath and slug fields. Should we:
+- Use filePath as the primary path for routing?
+- Use slug for URL-friendly paths?
+- Create a mapping between the old path structure and Firebase paths?
+
+2. Content Field: The Firebase notes have content (markdown) and noteTitle, but the current system expects title and content. Should we map noteTitle → title?
+
+3. Type Mapping: Firebase notes seem to be primarily "notes", but the current system has multiple types (zettel, topic, glossary_term, etc.). How should we handle type classification from Firebase data?
+
+4. Folder Structure: The current system creates virtual folders from path segments. With Firebase flat structure, should we:
+- Create virtual folders based on filePath segments?
+- Use parentId to build hierarchical structure?
+- Maintain the current folder generation logic but use Firebase data?
+
+5. Published vs All Content: Should we only show publish: true notes, or include all notes? Should there be an admin mode vs public mode?
+
