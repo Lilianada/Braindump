@@ -118,7 +118,15 @@ export const useFirebaseContentData = () => {
   const [glossaryTerms, setGlossaryTerms] = useState<ContentItem[]>([]);
   const [contentSections, setContentSections] = useState<ContentItem[]>([]);
 
-  const { setAllNotesForContext } = useOutletContext<AppContextType>();
+  // Try to get the context, but handle the case where it might not be available
+  let setAllNotesForContext: ((notes: ContentItem[]) => void) | undefined;
+  try {
+    const context = useOutletContext<AppContextType>();
+    setAllNotesForContext = context?.setAllNotesForContext;
+  } catch (error) {
+    // Context not available, which is fine for some components
+    console.log('Outlet context not available, continuing without it');
+  }
 
   useEffect(() => {
     const fetchData = async () => {
