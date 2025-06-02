@@ -1,17 +1,24 @@
 
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, query, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { ContentItem } from '@/types/content';
 
 export interface FirebaseNote {
   id: string;
-  title: string;
+  noteTitle: string;
   content: string;
-  path: string;
-  type: string;
+  filePath: string;
+  slug: string;
+  userId: string;
+  publish?: boolean;
   tags?: string[];
-  created?: string;
-  lastUpdated?: string;
+  category?: {
+    id: string;
+    name: string;
+    color: string;
+  };
+  createdAt?: any;
+  updatedAt?: any;
   [key: string]: any;
 }
 
@@ -24,27 +31,30 @@ const isValidContentType = (type: string): type is ContentItem['type'] => {
   return validTypes.includes(type as ContentItem['type']);
 };
 
-export const fetchNotesFromFirebase = async (): Promise<ContentItem[]> => {
+export const fetchNotesFromFirebase = async (): Promise<FirebaseNote[]> => {
   try {
     const notesCollection = collection(db, 'notes');
-    const notesSnapshot = await getDocs(notesCollection);
+    // Only fetch published notes
+    const publishedQuery = query(notesCollection, where('publish', '==', true));
+    const notesSnapshot = await getDocs(publishedQuery);
     
-    const notes: ContentItem[] = notesSnapshot.docs.map(doc => {
+    const notes: FirebaseNote[] = notesSnapshot.docs.map(doc => {
       const data = doc.data() as FirebaseNote;
-      const validType: ContentItem['type'] = isValidContentType(data.type) ? 
-        data.type as ContentItem['type'] : 'note';
       
       return {
         id: doc.id,
-        title: data.title || 'Untitled',
-        path: data.path || doc.id,
-        type: validType, // Use validType instead of data.type
+        noteTitle: data.noteTitle || 'Untitled',
+        filePath: data.filePath || doc.id,
         content: data.content || '',
+        slug: data.slug || doc.id,
+        userId: data.userId || '',
+        publish: data.publish,
         tags: data.tags || [],
-        created: data.created,
-        lastUpdated: data.lastUpdated,
+        category: data.category,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
         ...data
-      } as ContentItem;
+      } as FirebaseNote;
     });
     
     return notes;
@@ -54,51 +64,60 @@ export const fetchNotesFromFirebase = async (): Promise<ContentItem[]> => {
   }
 };
 
-export const fetchNoteByPath = async (path: string): Promise<ContentItem | null> => {
+export const fetchNoteByPath = async (path: string): Promise<FirebaseNote | null> => {
   try {
-    // Try to find by document ID first
+    // Search by filePath field and ensure it's published
+    const notesCollection = collection(db, 'notes');
+    const pathQuery = query(
+      notesCollection, 
+      where('filePath', '==', path),
+      where('publish', '==', true)
+    );
+    const notesSnapshot = await getDocs(pathQuery);
+    
+    if (!notesSnapshot.empty) {
+      const doc = notesSnapshot.docs[0];
+      const data = doc.data() as FirebaseNote;
+      
+      return {
+        id: doc.id,
+        noteTitle: data.noteTitle || 'Untitled',
+        filePath: data.filePath || doc.id,
+        content: data.content || '',
+        slug: data.slug || doc.id,
+        userId: data.userId || '',
+        publish: data.publish,
+        tags: data.tags || [],
+        category: data.category,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+        ...data
+      } as FirebaseNote;
+    }
+    
+    // Fallback: try to find by document ID if it's published
     const docRef = doc(db, 'notes', path);
     const docSnap = await getDoc(docRef);
     
     if (docSnap.exists()) {
       const data = docSnap.data() as FirebaseNote;
-      const validType: ContentItem['type'] = isValidContentType(data.type) ? 
-        data.type as ContentItem['type'] : 'note';
       
-      return {
-        id: docSnap.id,
-        title: data.title || 'Untitled',
-        path: data.path || docSnap.id,
-        type: validType, // Use validType instead of data.type
-        content: data.content || '',
-        tags: data.tags || [],
-        created: data.created,
-        lastUpdated: data.lastUpdated,
-        ...data
-      } as ContentItem;
-    }
-    
-    // If not found by ID, search by path field
-    const notesCollection = collection(db, 'notes');
-    const notesSnapshot = await getDocs(notesCollection);
-    
-    for (const doc of notesSnapshot.docs) {
-      const data = doc.data() as FirebaseNote;
-      if (data.path === path) {
-        const validType: ContentItem['type'] = isValidContentType(data.type) ? 
-          data.type as ContentItem['type'] : 'note';
-        
+      // Check if it's published
+      if (data.publish === true) {
         return {
-          id: doc.id,
-          title: data.title || 'Untitled',
-          path: data.path || doc.id,
-          type: validType, // Use validType instead of data.type
+          id: docSnap.id,
+          noteTitle: data.noteTitle || 'Untitled',
+          filePath: data.filePath || docSnap.id,
           content: data.content || '',
+          slug: data.slug || docSnap.id,
+          userId: data.userId || '',
+          publish: data.publish,
           tags: data.tags || [],
-          created: data.created,
-          lastUpdated: data.lastUpdated,
+          category: data.category,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt,
           ...data
-        } as ContentItem;
+        } as FirebaseNote;
       }
     }
     

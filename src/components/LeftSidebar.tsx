@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getContentTree, getAllContentItems, ContentItem } from '@/content/mockData';
+import { ContentItem } from '@/types/content';
 import { cn } from '@/lib/utils';
 import { getNormalizedTags } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useFirebaseContentData } from '@/hooks/useFirebaseContentData';
 import PageLinks from './sidebar/PageLinks';
 import ContentNavigation from './sidebar/ContentNavigation';
 import VisualizationLinks from './sidebar/VisualizationLinks';
@@ -15,26 +15,15 @@ interface LeftSidebarProps {
 }
 
 const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
-  const [contentSections, setContentSections] = useState<ContentItem[]>([]);
   const [uniqueTags, setUniqueTags] = useState<string[]>([]);
   const navigate = useNavigate();
+  
+  const { contentSections, allNotesAndTopics } = useFirebaseContentData();
 
   useEffect(() => {
-    const rawContentTree = getContentTree(true);
-    const rootContentPathsToExclude: string[] = []; 
-    
-    const filteredContentTree = rawContentTree.filter(item => {
-      if (item.type === 'folder') return true;
-      if (!item.path.includes('/')) { 
-        return !rootContentPathsToExclude.includes(item.path);
-      }
-      return true;
-    });
-    setContentSections(filteredContentTree);
-    
-    const allItems = getAllContentItems(true);
+    // Extract unique tags from Firebase data
     const tagsSet = new Set<string>();
-    allItems.forEach(item => {
+    allNotesAndTopics.forEach(item => {
       const normalizedItemTags = getNormalizedTags(item.tags); 
       normalizedItemTags.forEach(tag => {
         if (tag) tagsSet.add(tag);
@@ -43,10 +32,10 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
     const sortedTags = Array.from(tagsSet).sort();
     setUniqueTags(sortedTags);
 
-    if (allItems.length > 0 && tagsSet.size === 0) {
-      console.warn("LeftSidebar: No tags found in any content items from 'content_files'. Ensure tags are defined and correctly parsed.");
+    if (allNotesAndTopics.length > 0 && tagsSet.size === 0) {
+      console.warn("LeftSidebar: No tags found in Firebase content items. Ensure tags are defined correctly.");
     } 
-  }, []);
+  }, [allNotesAndTopics]);
 
   const handleTagClick = (tag: string) => {
     navigate(`/tags/${encodeURIComponent(tag)}`);

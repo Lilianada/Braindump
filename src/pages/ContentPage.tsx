@@ -9,16 +9,16 @@ import ContentBody from '@/components/content_page/ContentBody';
 import RelatedContent from '@/components/content_page/RelatedContent';
 import ContentNavigation from '@/components/content_page/ContentNavigation';
 import ContentBreadcrumb from '@/components/content_page/ContentBreadcrumb';
-import { useContentItem } from '@/hooks/useContentItem';
-import { useContentData } from '@/hooks/useContentData';
+import { useFirebaseContentItem } from '@/hooks/useFirebaseContentItem';
+import { useFirebaseContentData } from '@/hooks/useFirebaseContentData';
 import { useBacklinks } from '@/hooks/useBacklinks';
 import { useRelatedNotes } from '@/hooks/useRelatedNotes';
 import { useContentNavigation } from '@/hooks/useContentNavigation';
 import { useTocObserver } from '@/hooks/useTocObserver';
 
 const ContentPage: React.FC = () => {
-  const { contentItem, currentPath } = useContentItem();
-  const { allNotesAndTopics, sequencedNavigableItems, glossaryTerms } = useContentData();
+  const { contentItem, currentPath } = useFirebaseContentItem();
+  const { allNotesAndTopics, sequencedNavigableItems, glossaryTerms } = useFirebaseContentData();
   const { tocItems, setTocItems } = useOutletContext<AppContextType>();
   
   const backlinks = useBacklinks(contentItem, allNotesAndTopics);
