@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -21,7 +20,7 @@ export default defineConfig(({ mode }) => ({
     historyApiFallback: {
       // This ensures all non-asset requests are served index.html
       rewrites: [
-        { from: /^\/api\/.*$/, to: function(context) {
+        { from: /^\/api\/.*$/, to: function(context: any) {
           return context.parsedUrl.pathname;
         }},
         { from: /./, to: '/index.html' }
