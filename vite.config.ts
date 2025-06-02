@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -15,16 +16,6 @@ export default defineConfig(({ mode }) => ({
         target: 'http://localhost:3001',
         changeOrigin: true,
       }
-    },
-    // Ensure proper fallback for client-side routing
-    historyApiFallback: {
-      // This ensures all non-asset requests are served index.html
-      rewrites: [
-        { from: /^\/api\/.*$/, to: function(context: any) {
-          return context.parsedUrl.pathname;
-        }},
-        { from: /./, to: '/index.html' }
-      ]
     },
   },
   plugins: [

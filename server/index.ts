@@ -30,12 +30,12 @@ if (process.env.NODE_ENV === 'production') {
   });
 } else {
   // Development mode - let Vite handle client-side routing
+  app.get('/api/*', (req, res) => {
+    res.status(404).json({ error: 'API endpoint not found' });
+  });
+  
+  // In development, don't handle client routes - Vite handles this
   app.get('*', (req, res) => {
-    // Don't intercept API routes in development
-    if (req.path.startsWith('/api')) {
-      return res.status(404).json({ error: 'API endpoint not found' });
-    }
-    
     res.status(404).json({ 
       error: 'In development mode, routing is handled by Vite dev server',
       message: 'This Express server is for API endpoints only during development'

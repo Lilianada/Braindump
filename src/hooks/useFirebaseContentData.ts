@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { fetchNotesFromFirebase } from '@/services/firebaseService';
 import { ContentItem } from '@/types/content';
@@ -27,6 +26,29 @@ const convertAndStructureFirebaseNotes = (firebaseNotes: any[]): {
         }
       }
       
+      // Fix date conversion
+      const convertFirebaseDate = (firebaseDate: any): string | undefined => {
+        if (!firebaseDate) return undefined;
+        
+        // If it's a Firebase Timestamp
+        if (firebaseDate.toDate && typeof firebaseDate.toDate === 'function') {
+          return firebaseDate.toDate().toISOString();
+        }
+        
+        // If it's already a Date object
+        if (firebaseDate instanceof Date) {
+          return firebaseDate.toISOString();
+        }
+        
+        // If it's a string, try to parse it
+        if (typeof firebaseDate === 'string') {
+          const parsed = new Date(firebaseDate);
+          return isNaN(parsed.getTime()) ? undefined : parsed.toISOString();
+        }
+        
+        return undefined;
+      };
+      
       return {
         id: note.id,
         title: note.noteTitle || 'Untitled',
@@ -34,8 +56,8 @@ const convertAndStructureFirebaseNotes = (firebaseNotes: any[]): {
         type,
         content: note.content || '',
         tags: note.tags || [],
-        created: note.createdAt?.toDate?.()?.toISOString() || note.createdAt,
-        lastUpdated: note.updatedAt?.toDate?.()?.toISOString() || note.updatedAt,
+        created: convertFirebaseDate(note.createdAt),
+        lastUpdated: convertFirebaseDate(note.updatedAt),
         slug: note.slug,
         ...note
       };

@@ -19,6 +19,29 @@ const convertFirebaseToContentItem = (firebaseNote: any): ContentItem | null => 
     }
   }
   
+  // Fix date conversion
+  const convertFirebaseDate = (firebaseDate: any): string | undefined => {
+    if (!firebaseDate) return undefined;
+    
+    // If it's a Firebase Timestamp
+    if (firebaseDate.toDate && typeof firebaseDate.toDate === 'function') {
+      return firebaseDate.toDate().toISOString();
+    }
+    
+    // If it's already a Date object
+    if (firebaseDate instanceof Date) {
+      return firebaseDate.toISOString();
+    }
+    
+    // If it's a string, try to parse it
+    if (typeof firebaseDate === 'string') {
+      const parsed = new Date(firebaseDate);
+      return isNaN(parsed.getTime()) ? undefined : parsed.toISOString();
+    }
+    
+    return undefined;
+  };
+  
   return {
     id: firebaseNote.id,
     title: firebaseNote.noteTitle || 'Untitled',
@@ -26,8 +49,8 @@ const convertFirebaseToContentItem = (firebaseNote: any): ContentItem | null => 
     type,
     content: firebaseNote.content || '',
     tags: firebaseNote.tags || [],
-    created: firebaseNote.createdAt?.toDate?.()?.toISOString() || firebaseNote.createdAt,
-    lastUpdated: firebaseNote.updatedAt?.toDate?.()?.toISOString() || firebaseNote.updatedAt,
+    created: convertFirebaseDate(firebaseNote.createdAt),
+    lastUpdated: convertFirebaseDate(firebaseNote.updatedAt),
     slug: firebaseNote.slug,
     // Include other Firebase fields
     ...firebaseNote
