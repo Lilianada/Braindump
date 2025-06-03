@@ -33,8 +33,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     const body = window.document.body;
     const html = window.document.documentElement;
-    // Updated font list
-    ['font-geist-mono', 'font-geist-sans', 'font-kalam', 'font-indie-flower', 'font-lancelot', 'font-cormorant-upright', 'font-satoshi'].forEach(cls => {
+    // Updated font list to include all fonts
+    ['font-geist-mono', 'font-geist-sans', 'font-satoshi', 'font-kalam', 'font-indie-flower', 'font-lancelot', 'font-cormorant-upright', 'font-nitti'].forEach(cls => {
       body.classList.remove(cls);
       html.classList.remove(cls);
     });

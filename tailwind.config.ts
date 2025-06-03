@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -69,13 +70,14 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-        'geist-sans': ['"Geist Sans"', 'sans-serif'],
-        'geist-mono': ['"Geist Mono"', 'monospace'],
-        'kalam': ['"Kalam"', 'cursive'],
-        'indie-flower': ['"Indie Flower"', 'cursive'],
-        'lancelot': ['"Lancelot"', 'cursive'], 
-        'cormorant-upright': ['"Cormorant Upright"', 'serif'],
-        'satoshi': ['var(--font-satoshi)'],
+        'geist-sans': ['Geist Sans', 'sans-serif'],
+        'geist-mono': ['Geist Mono', 'monospace'],
+        'satoshi': ['Satoshi', 'sans-serif'],
+        'kalam': ['Kalam', 'cursive'],
+        'indie-flower': ['Indie Flower', 'cursive'],
+        'lancelot': ['Lancelot', 'cursive'], 
+        'cormorant-upright': ['Cormorant Upright', 'serif'],
+        'nitti': ['Nitti', 'monospace'],
       },
 			keyframes: {
 				'accordion-down': {
