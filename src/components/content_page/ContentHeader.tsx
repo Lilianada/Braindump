@@ -21,20 +21,10 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ contentItem }) => {
       )}
       
       <div className="mt-3 mb-1 text-xs text-muted-foreground space-y-1.5">
-        {/*{contentItem.frontmatter?.type && contentItem.type !== contentItem.frontmatter.type && (
-          <div className="flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            <span>Type (File): {contentItem.frontmatter.category}</span>
-          </div>
-        )}
-         <div className="flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            <span>Type: {contentItem.category}</span>
-          </div>*/}
         {contentItem.created && (
           <div className="flex items-center gap-2">
             <Sprout className="h-4 w-4" />
-            <span>Planted: {new Date(contentItem.createdAt).toLocaleDateString()}</span>
+            <span>Planted: {new Date(contentItem.created).toLocaleDateString()}</span>
           </div>
         )}
         {contentItem.lastUpdated && (
@@ -46,7 +36,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ contentItem }) => {
         {category && (
            <div className="flex items-center gap-2">
             <Folder className="h-4 w-4" />
-            <span>Category: {category.name}</span>
+            <span>Category: {category}</span>
           </div>
         )}
       </div>
