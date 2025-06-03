@@ -46,7 +46,7 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ contentItem }) => {
         {category && (
            <div className="flex items-center gap-2">
             <Folder className="h-4 w-4" />
-            <span>Category: {category}</span>
+            <span>Category: {category.name}</span>
           </div>
         )}
       </div>
