@@ -136,6 +136,10 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
   const colorClass = iconColors[Math.min(level, iconColors.length - 1)];
   const iconMargin = "mr-1";
 
+  // Check if folder has content - only show as clickable link if it has content
+  const folderHasContent = item.type === 'folder' && item.content && item.content.trim() !== '';
+  const shouldShowAsLink = item.type !== 'folder' || folderHasContent;
+
   const handleLinkClick = (e: React.MouseEvent) => {
     // Don't stop propagation for folders since they need to expand/collapse
     // Only call onItemClick for files to close sidebar
@@ -215,20 +219,33 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
     return (
       <div className="relative flex w-full">
         {renderLines()}
-        <Link
-          to={`/content/${item.path}`}
-          onClick={handleLinkClick}
-          style={{ paddingLeft: `${12 + level * 16}px`, position: "relative", zIndex: 1 }}
-          className={cn(
-            "flex items-center py-2 pr-3 rounded-md text-xs hover:bg-accent hover:text-accent-foreground transition-colors w-full group",
-            isActive ? "bg-primary/10 text-primary font-semibold" : "text-foreground/80"
-          )}
-        >
-          {item.type === 'folder'
-            ? <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive ? "text-primary" : "")} />
-            : <FileIcon className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive ? "text-primary" : "")} />}
-          <span className="truncate flex-1 capitalize tex-xs">{item.title}</span>
-        </Link>
+        {shouldShowAsLink ? (
+          <Link
+            to={`/content/${item.path}`}
+            onClick={handleLinkClick}
+            style={{ paddingLeft: `${12 + level * 16}px`, position: "relative", zIndex: 1 }}
+            className={cn(
+              "flex items-center py-2 pr-3 rounded-md text-xs hover:bg-accent hover:text-accent-foreground transition-colors w-full group",
+              isActive ? "bg-primary/10 text-primary font-semibold" : "text-foreground/80"
+            )}
+          >
+            {item.type === 'folder'
+              ? <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive ? "text-primary" : "")} />
+              : <FileIcon className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive ? "text-primary" : "")} />}
+            <span className="truncate flex-1 capitalize tex-xs">{item.title}</span>
+          </Link>
+        ) : (
+          <div
+            style={{ paddingLeft: `${12 + level * 16}px`, position: "relative", zIndex: 1 }}
+            className={cn(
+              "flex items-center py-2 pr-3 rounded-md text-xs w-full group cursor-default",
+              "text-foreground/60"
+            )}
+          >
+            <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, "text-muted-foreground")} />
+            <span className="truncate flex-1 capitalize tex-xs">{item.title}</span>
+          </div>
+        )}
       </div>
     );
   }
@@ -245,19 +262,26 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
               location.pathname === `/content/${item.path}` ? "bg-primary/10 text-primary font-semibold" : "text-foreground/80"
             )}
           >
-            <Link
-              to={`/content/${item.path}`}
-              className="flex items-center truncate flex-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleLinkClick(e);
-              }}
-            >
-              {item.type === 'folder'
-                ? <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive && item.type === 'folder' ? "text-accent-foreground" : (location.pathname === `/content/${item.path}` ? "text-primary" : ""))} />
-                : <FileIcon className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, location.pathname === `/content/${item.path}` ? "text-primary" : "")} />}
-              <span className="text-left ml-1 truncate flex-1 group-hover:text-accent-foreground">{item.title}</span>
-            </Link>
+            {shouldShowAsLink ? (
+              <Link
+                to={`/content/${item.path}`}
+                className="flex items-center truncate flex-1"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleLinkClick(e);
+                }}
+              >
+                {item.type === 'folder'
+                  ? <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive && item.type === 'folder' ? "text-accent-foreground" : (location.pathname === `/content/${item.path}` ? "text-primary" : ""))} />
+                  : <FileIcon className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, location.pathname === `/content/${item.path}` ? "text-primary" : "")} />}
+                <span className="text-left ml-1 truncate flex-1 group-hover:text-accent-foreground">{item.title}</span>
+              </Link>
+            ) : (
+              <div className="flex items-center truncate flex-1">
+                <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, "text-muted-foreground")} />
+                <span className="text-left ml-1 truncate flex-1 text-foreground/60">{item.title}</span>
+              </div>
+            )}
             {hasChildren && (isOpen ? <ChevronDown className="h-4 w-4 shrink-0 ml-1" /> : <ChevronRight className="h-4 w-4 shrink-0 ml-1" />)}
           </button>
         </CollapsibleTrigger>
