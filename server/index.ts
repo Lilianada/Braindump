@@ -24,8 +24,9 @@ if (process.env.NODE_ENV === 'production') {
   });
 
   // Handle client-side routing - serve index.html for all non-API routes
-  // This is the critical part that fixes the 404 issue
+  // This ensures all routes including /graph work on page reload
   app.get('*', (req, res) => {
+    console.log(`Serving index.html for route: ${req.path}`);
     res.sendFile(path.join(clientBuildPath, 'index.html'));
   });
 } else {
@@ -47,5 +48,7 @@ app.listen(PORT, () => {
   console.log(`Express server running at http://localhost:${PORT}`);
   if (process.env.NODE_ENV !== 'production') {
     console.log('In development, Vite dev server should handle client-side routing.');
+  } else {
+    console.log('Production mode: serving static files and handling client-side routing');
   }
 });

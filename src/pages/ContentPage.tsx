@@ -36,6 +36,12 @@ const ContentPage: React.FC = () => {
   }
   
   if (contentItem.type === 'folder') {
+    // Check if folder has content or children before rendering
+    if ((!contentItem.content || contentItem.content.trim() === '') && 
+        (!contentItem.children || contentItem.children.length === 0)) {
+      return <ContentNotFoundDisplay path={currentPath} />;
+    }
+
     return (
       <div className="animate-fade-in">
         <ContentBreadcrumb path={contentItem.path} />

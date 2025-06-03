@@ -14,27 +14,22 @@ interface ContentBodyProps {
 
 const ContentBody: React.FC<ContentBodyProps> = ({ contentItem, allNotesAndTopics, glossaryTerms, setTocItems }) => {
   if (contentItem.type === 'folder') {
-    const markdownContentToRender = contentItem.content; // Folders might have their own content
-    return (
-      <div className="container mx-auto py-4 animate-fade-in">
-        <header className="mb-8 flex items-center gap-3"> {/* Simplified header for folder itself */}
-          <div>
-            <h1 className="capitalize text-2xl font-semibold">{contentItem.title}</h1>
-            <p className="text-sm text-muted-foreground">
-              Path: /content/{contentItem.path}
-            </p>
-          </div>
-        </header>
-        
-        {markdownContentToRender && markdownContentToRender.trim() !== '' ? (
-          <SimpleRenderer 
-            content={markdownContentToRender} 
-            setTocItems={setTocItems} 
-            allNotes={allNotesAndTopics}
-            glossaryTerms={glossaryTerms}
-          />
-        ) : (
-          contentItem.children && contentItem.children.length > 0 ? (
+    const markdownContentToRender = contentItem.content; 
+    
+    // Only render folder as a page if it has actual content, otherwise redirect or show children
+    if (!markdownContentToRender || markdownContentToRender.trim() === '') {
+      if (contentItem.children && contentItem.children.length > 0) {
+        return (
+          <div className="container mx-auto py-4 animate-fade-in">
+            <header className="mb-8 flex items-center gap-3">
+              <div>
+                <h1 className="capitalize text-2xl font-semibold">{contentItem.title}</h1>
+                <p className="text-sm text-muted-foreground">
+                  Path: /content/{contentItem.path}
+                </p>
+              </div>
+            </header>
+            
             <div>
               <h2 className="text-xl font-semibold mb-2 mt-6">Contents:</h2>
               <ul className="list-disc list-inside space-y-1">
@@ -47,10 +42,32 @@ const ContentBody: React.FC<ContentBodyProps> = ({ contentItem, allNotesAndTopic
                 ))}
               </ul>
             </div>
-          ) : (
-             <p className="text-muted-foreground">This folder is currently empty or has no overview content.</p>
-          )
-        )}
+          </div>
+        );
+      } else {
+        // Empty folder - don't show as a page, return null or redirect
+        return null;
+      }
+    }
+    
+    // Folder has content, render it
+    return (
+      <div className="container mx-auto py-4 animate-fade-in">
+        <header className="mb-8 flex items-center gap-3">
+          <div>
+            <h1 className="capitalize text-2xl font-semibold">{contentItem.title}</h1>
+            <p className="text-sm text-muted-foreground">
+              Path: /content/{contentItem.path}
+            </p>
+          </div>
+        </header>
+        
+        <SimpleRenderer 
+          content={markdownContentToRender} 
+          setTocItems={setTocItems} 
+          allNotes={allNotesAndTopics}
+          glossaryTerms={glossaryTerms}
+        />
       </div>
     );
   }

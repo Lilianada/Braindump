@@ -33,6 +33,12 @@ const ContentHeader: React.FC<ContentHeaderProps> = ({ contentItem }) => {
             <span>Last Tended: {new Date(contentItem.lastUpdated).toLocaleDateString()}</span>
           </div>
         )}
+        {contentItem.category?.name && (
+           <div className="flex items-center gap-2">
+            <Folder className="h-4 w-4" />
+            <span>Category: {contentItem.category.name}</span>
+          </div>
+        )}
         {category && (
            <div className="flex items-center gap-2">
             <Folder className="h-4 w-4" />
