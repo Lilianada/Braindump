@@ -4,13 +4,12 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { prism as prismLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useTheme } from '@/contexts/ThemeContext';
-// Removed: import MermaidDiagram from './MermaidDiagram';
 
 interface CustomCodeBlockProps {
   className?: string;
   children?: React.ReactNode;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  node?: any; // node is passed by react-markdown
+  node?: any;
   inline?: boolean;
 }
 
@@ -19,13 +18,19 @@ const CustomCodeBlock: React.FC<CustomCodeBlockProps> = ({ node, inline, classNa
   const match = /language-(\w+)/.exec(className || '');
   const codeString = String(children).replace(/\n$/, '');
 
+  // Fix inline code rendering - ensure it stays inline
   if (inline) {
-    // For inline code, apply a subtle muted background with consistent styling
-    return <code className={`${className} bg-muted/60 dark:bg-muted/70 px-1 py-0.5 rounded text-sm`} {...props}>{children}</code>;
+    return (
+      <code 
+        className="bg-muted/60 dark:bg-muted/70 px-1.5 py-0.5 rounded text-sm font-mono not-prose" 
+        {...props}
+      >
+        {children}
+      </code>
+    );
   }
 
   const baseStyle = theme === 'dark' ? okaidia : prismLight;
-  // Modify the syntax highlighter theme to have a transparent background
   const transparentThemeStyle = {
     ...baseStyle,
     'pre[class*="language-"]': {

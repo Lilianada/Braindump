@@ -141,8 +141,6 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
   const shouldShowAsLink = item.type !== 'folder' || folderHasContent;
 
   const handleLinkClick = (e: React.MouseEvent) => {
-    // Don't stop propagation for folders since they need to expand/collapse
-    // Only call onItemClick for files to close sidebar
     if (item.type !== 'folder' && onItemClick) {
       onItemClick(item);
     }
@@ -242,7 +240,7 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
               "text-foreground/60"
             )}
           >
-            <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, "text-muted-foreground")} />
+            <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass)} />
             <span className="truncate flex-1 capitalize tex-xs">{item.title}</span>
           </div>
         )}
@@ -271,14 +269,12 @@ const CollapsibleNavItem: React.FC<CollapsibleNavItemProps> = ({
                   handleLinkClick(e);
                 }}
               >
-                {item.type === 'folder'
-                  ? <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive && item.type === 'folder' ? "text-accent-foreground" : (location.pathname === `/content/${item.path}` ? "text-primary" : ""))} />
-                  : <FileIcon className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, location.pathname === `/content/${item.path}` ? "text-primary" : "")} />}
+                <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, isActive && item.type === 'folder' ? "text-accent-foreground" : (location.pathname === `/content/${item.path}` ? "text-primary" : ""))} />
                 <span className="text-left ml-1 truncate flex-1 group-hover:text-accent-foreground">{item.title}</span>
               </Link>
             ) : (
               <div className="flex items-center truncate flex-1">
-                <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass, "text-muted-foreground")} />
+                <Folder className={cn("h-3 w-3 shrink-0", iconMargin, colorClass)} />
                 <span className="text-left ml-1 truncate flex-1 text-foreground/60">{item.title}</span>
               </div>
             )}

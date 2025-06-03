@@ -24,6 +24,7 @@ import '@/styles/custom-graph-styles.css';
 import { generateGraphData } from '@/lib/graph-utils';
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
+import LoadingGrid from '@/components/LoadingGrid';
 
 const NoteGraph: React.FC = () => {
   const { fitView } = useReactFlow();
@@ -69,11 +70,7 @@ const NoteGraph: React.FC = () => {
   );
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-muted-foreground">Loading graph from Firebase...</p>
-      </div>
-    );
+    return <LoadingGrid />;
   }
 
   return (

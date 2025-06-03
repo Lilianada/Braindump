@@ -10,7 +10,6 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    historyApiFallback: true, // This ensures client-side routing works in development
     proxy: {
       // Proxy /api requests to our Express server running on port 3001
       '/api': {
@@ -39,4 +38,8 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
+  preview: {
+    port: 8080,
+    host: "::",
+  }
 }));

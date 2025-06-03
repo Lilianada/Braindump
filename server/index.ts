@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 
   // Handle client-side routing - serve index.html for all non-API routes
-  // This ensures all routes including /graph work on page reload
+  // This ensures all routes including /graph and /content/* work on page reload
   app.get('*', (req, res) => {
     console.log(`Serving index.html for route: ${req.path}`);
     res.sendFile(path.join(clientBuildPath, 'index.html'));
