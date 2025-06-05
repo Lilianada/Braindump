@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ContentItem } from '@/content/mockData';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { extractMarkdownBody } from '@/lib/utils';
-import SimpleRenderer from '@/components/SimpleRenderer'; // Added import
-import { TocItem } from '@/types'; // Added import for dummy function type
+import SimpleRenderer from '@/components/SimpleRenderer';
+import { TocItem } from '@/types';
 
 export const renderInteractiveText = (
   textNode: string,

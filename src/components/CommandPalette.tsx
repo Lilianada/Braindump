@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FileText, Tag, FolderOpen, ArrowUpDown, Filter as FilterIcon, Tags as TagsIcon } from 'lucide-react';
@@ -29,27 +30,25 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
 
   useEffect(() => {
     if (open) {
-      // console.log("[CommandPalette] useEffect triggered due to open state.");
-      const fetchedItems = getAllContentItems(true); // Force refresh for testing
-      setAllItems(fetchedItems);
-      // console.log("[CommandPalette] Fetched items:", fetchedItems);
+      const fetchData = async () => {
+        const fetchedItems = await getAllContentItems();
+        setAllItems(fetchedItems);
 
-      const tagsSet = new Set<string>();
-      fetchedItems.forEach(item => {
-        // console.log(`[CommandPalette] Processing item for tags: ${item.title}, item.tags:`, item.tags);
-        const normalizedItemTags = getNormalizedTags(item.tags); // item.tags should be string[]
-        // console.log(`[CommandPalette] Normalized tags for ${item.title}:`, normalizedItemTags);
-        normalizedItemTags.forEach(tag => {
-         if (tag) tagsSet.add(tag);
+        const tagsSet = new Set<string>();
+        fetchedItems.forEach(item => {
+          const normalizedItemTags = getNormalizedTags(item.tags);
+          normalizedItemTags.forEach(tag => {
+           if (tag) tagsSet.add(tag);
+          });
         });
-      });
-      const sortedTags = Array.from(tagsSet).sort();
-      setUniqueTags(sortedTags);
-      // console.log("[CommandPalette] Unique tags set:", sortedTags);
+        const sortedTags = Array.from(tagsSet).sort();
+        setUniqueTags(sortedTags);
 
+        const fetchedCategories = fetchedItems.filter(item => item.type === 'folder');
+        setCategories(fetchedCategories);
+      };
 
-      const fetchedCategories = fetchedItems.filter(item => item.type === 'folder');
-      setCategories(fetchedCategories);
+      fetchData();
     }
   }, [open]);
 
@@ -70,7 +69,6 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ open, onOpenChange }) =
     runCommand(() => navigate('/tags'));
   };
 
-  // console.log("[CommandPalette] Rendering with uniqueTags:", uniqueTags);
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
       <CommandInput placeholder="Type a command or search..." />

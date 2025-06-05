@@ -5,7 +5,7 @@ import SimpleRenderer from '@/components/SimpleRenderer';
 import { getAllContentItems, ContentItem } from '@/components/content/mockdata';
 import { TocItem } from '@/types';
 import { AppContextType } from '@/components/Layout';
-import docsContentRaw from '@/pages_files/docs.md?raw'; // Updated import path
+import docsContentRaw from '@/pages_files/docs.md?raw';
 
 const DocsPage = () => {
   const { setTocItems: setGlobalTocItems } = useOutletContext<AppContextType>();
@@ -13,12 +13,14 @@ const DocsPage = () => {
   const [glossaryTerms, setGlossaryTerms] = useState<ContentItem[]>([]);
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
 
-
   useEffect(() => {
-    // Fetched for potential [[links]] or other interactions within the Docs page content.
-    const items = getAllContentItems();
-    setAllNotes(items);
-    setGlossaryTerms(items.filter(item => item.type === 'glossary_term'));
+    const fetchData = async () => {
+      const items = await getAllContentItems();
+      setAllNotes(items);
+      setGlossaryTerms(items.filter(item => item.type === 'glossary_term'));
+    };
+    
+    fetchData();
   }, []);
   
   // Update global TOC when local TOC changes

@@ -2,28 +2,27 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TocItem } from '@/types';
-import { ContentItem } from '@/content/mockData'; // Import ContentItem
+import { ContentItem } from '@/content/mockData';
 import { cn } from '@/lib/utils';
-import { AlignLeft } from 'lucide-react'; // Icon for TOC title
+import { AlignLeft } from 'lucide-react';
 
 interface RightSidebarProps {
   tocItems: TocItem[];
-  currentContentItem: ContentItem | null; // Add current content item
-  allNotes: ContentItem[]; // Add all notes for context
-  activeTocItemId: string | null; // New prop
+  currentContentItem: ContentItem | null;
+  allNotes: ContentItem[];
+  activeTocItemId: string | null;
 }
 
 const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentItem, allNotes, activeTocItemId }) => {
-  const scrollAreaRef = useRef<HTMLDivElement>(null); // Ref for ScrollArea viewport or scrollable element
-  const activeTocItemRef = useRef<HTMLLIElement>(null); // Ref for the active item element
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const activeTocItemRef = useRef<HTMLLIElement>(null);
 
   const getIndentClass = (level: number) => {
-    if (level === 2) return "pl-5"; // Adjusted for active indicator space
-    if (level === 3) return "pl-8"; // Adjusted for active indicator space
-    return "pl-2"; // Base indent for h1, adjusted
+    if (level === 2) return "pl-5";
+    if (level === 3) return "pl-8";
+    return "pl-2";
   };
 
-  // Auto-scroll TOC to the active item
   useEffect(() => {
     if (activeTocItemId && activeTocItemRef.current) {
       activeTocItemRef.current.scrollIntoView({
@@ -41,26 +40,21 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
     const foundBacklinks: ContentItem[] = [];
 
     allNotes.forEach(note => {
-      if (note.id === currentContentItem.id) return; // Don't link to self
-
+      if (note.id === currentContentItem.id) return;
+      
       if (note.content) {
-        // Check for [[Title]] style links
         const titleLinkRegex = /\[\[(.*?)\]\]/g;
         let match;
         while ((match = titleLinkRegex.exec(note.content)) !== null) {
           if (match[1].toLowerCase() === currentTitleLower) {
             foundBacklinks.push(note);
-            return; // Found in this note, move to next note
+            return;
           }
         }
-        // Check for path-based links (simplified, assumes direct path match)
-        // This is a basic check; more robust path checking might be needed for complex linking
         if (note.content.includes(currentPath) || note.content.includes(currentContentItem.path)) {
-             // A more robust check would be to find markdown links `[text](path)`
-             // For now, simple string inclusion
-            if (!foundBacklinks.find(bl => bl.id === note.id)) { // Avoid duplicates if both title and path link exist
-                foundBacklinks.push(note);
-            }
+          if (!foundBacklinks.find(bl => bl.id === note.id)) {
+            foundBacklinks.push(note);
+          }
         }
       }
     });
@@ -76,35 +70,33 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
     const foundRelated: ContentItem[] = [];
 
     allNotes.forEach(note => {
-      if (note.id === currentContentItem.id) return; // Don't relate to self
+      if (note.id === currentContentItem.id) return;
       if (note.tags && note.tags.some(tag => currentTags.has(tag.toLowerCase()))) {
         foundRelated.push(note);
       }
     });
-    // Optional: sort related notes by number of shared tags or other criteria
     return foundRelated;
   }, [currentContentItem, allNotes]);
 
-
   return (
     <aside className="hidden lg:block sticky top-16 h-[calc(100vh-4rem)] w-64 border-l border-border">
-      <ScrollArea ref={scrollAreaRef} className="h-full px-4 py-6 scrollbar-hide"> {/* Added scrollbar-hide */}
+      <ScrollArea ref={scrollAreaRef} className="h-full px-4 py-6 scrollbar-hide">
         <div className="space-y-8">
           <div>
             <h3 className="mb-3 text-xs font-semibold uppercase text-muted-foreground tracking-wider flex items-center">
               <AlignLeft className="h-4 w-4 mr-2" /> On this page
             </h3>
             {tocItems && tocItems.length > 0 ? (
-              <ul className="space-y-0.5"> {/* Reduced space-y */}
+              <ul className="space-y-0.5">
                 {tocItems.map(item => {
                   const isActive = item.id === activeTocItemId;
                   return (
                     <li 
                       key={item.id} 
-                      ref={isActive ? activeTocItemRef : null} // Assign ref to the active item
+                      ref={isActive ? activeTocItemRef : null}
                       className={cn(
                         getIndentClass(item.level),
-                        "relative py-1" // Added py-1 for consistent item height
+                        "relative py-1"
                       )}
                     >
                       {isActive && (
@@ -120,13 +112,11 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
                           e.preventDefault();
                           const target = document.getElementById(item.id);
                           if (target) {
-                            // Use a more subtle scroll behavior
                             target.scrollIntoView({
                               behavior: 'smooth',
                               block: 'start',
                               inline: 'nearest'
                             });
-                            // Update URL without adding to history to prevent navigation issues
                             window.history.replaceState(null, '', `#${item.id}`);
                           }
                         }}
@@ -179,7 +169,6 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ tocItems, currentContentIte
               </div>
             </>
           )}
-
         </div>
       </ScrollArea>
     </aside>
