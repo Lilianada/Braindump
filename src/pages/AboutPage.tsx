@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import SimpleRenderer from '@/components/SimpleRenderer';
-import { getAllContentItems, ContentItem } from '@/content/mockData';
+import { getAllContentItems, ContentItem } from '@/components/content/mockdata';
 import { TocItem } from '@/types';
 import { AppContextType } from '@/components/Layout';
 import aboutContentRaw from '@/pages_files/about.md?raw'; // Updated import path

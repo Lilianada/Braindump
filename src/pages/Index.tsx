@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { getAllContentItems, ContentItem } from '@/content/mockData';
+import { getAllContentItems, ContentItem } from '@/components/content/mockdata';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { TocItem } from '@/types';
 import homeContentRaw from '@/pages_files/index.md?raw'; // Updated import path

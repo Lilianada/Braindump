@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ContentItem } from '@/content/mockData';
+import { ContentItem } from '@/components/content/mockdata';
 import { renderInteractiveText } from '@/lib/markdown/renderInteractiveText';
 
 interface CustomParagraphProps extends React.PropsWithChildren<unknown> {
