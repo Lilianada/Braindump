@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import { Tag as TagIcon, Search, X, ChevronDown, ArrowUpDown } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import { getNormalizedTags } from '@/lib/utils';
 import { useFirebaseNotes } from '@/hooks/useFirebaseNotes';
 import { cn } from '@/lib/utils';
 import LoadingGrid from '@/components/LoadingGrid';
+import { AppContextType } from '@/components/Layout';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +34,15 @@ const TagsPage: React.FC = () => {
   const [sortField, setSortField] = useState<SortField>('count');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   
+  const { setTocItems, setActiveTocItemId } = useOutletContext<AppContextType>();
   const { data: firebaseNotes, isLoading, error } = useFirebaseNotes();
+
+  // Clear TOC when component mounts
+  useEffect(() => {
+    // Reset TOC and active TOC item when TagsPage mounts
+    setTocItems([]);
+    setActiveTocItemId(null);
+  }, [setTocItems, setActiveTocItemId]);
 
   // Update sort option when field or direction changes
   useEffect(() => {

@@ -1,9 +1,20 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import NoteGraph from '@/components/graph/NoteGraph';
 import { ReactFlowProvider } from '@xyflow/react'; // Import ReactFlowProvider
+import { AppContextType } from '@/components/Layout';
 
 const GraphViewPage: React.FC = () => {
+  const { setTocItems, setActiveTocItemId } = useOutletContext<AppContextType>();
+
+  // Clear TOC when component mounts
+  useEffect(() => {
+    // Reset TOC and active TOC item when GraphViewPage mounts
+    setTocItems([]);
+    setActiveTocItemId(null);
+  }, [setTocItems, setActiveTocItemId]);
+  
   return (
     <div className="container mx-auto p-0 md:p-0 h-[calc(100vh-4rem)] flex flex-col"> {/* Full height minus navbar */}
       {/* Header can be kept or removed */}
