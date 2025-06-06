@@ -1,25 +1,47 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Tag as TagIcon, Search } from 'lucide-react';
+import { Tag as TagIcon, Search, X, ChevronDown, ArrowUpDown } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { getNormalizedTags } from '@/lib/utils';
 import { useFirebaseNotes } from '@/hooks/useFirebaseNotes';
+import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type TagWithCount = {
   tag: string;
   count: number;
 };
 
+type SortOption = 'nameAsc' | 'nameDesc' | 'countAsc' | 'countDesc';
+type SortField = 'name' | 'count';
+
 const TagsPage: React.FC = () => {
   const [tags, setTags] = useState<TagWithCount[]>([]);
   const [filteredTags, setFilteredTags] = useState<TagWithCount[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortOption, setSortOption] = useState<SortOption>('countDesc');
+  const [sortField, setSortField] = useState<SortField>('count');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   
   const { data: firebaseNotes, isLoading, error } = useFirebaseNotes();
+
+  // Update sort option when field or direction changes
+  useEffect(() => {
+    if (sortField === 'name') {
+      setSortOption(sortDirection === 'asc' ? 'nameAsc' : 'nameDesc');
+    } else {
+      setSortOption(sortDirection === 'asc' ? 'countAsc' : 'countDesc');
+    }
+  }, [sortField, sortDirection]);
 
   useEffect(() => {
     if (firebaseNotes && firebaseNotes.length > 0) {
@@ -29,24 +51,58 @@ const TagsPage: React.FC = () => {
           if (tag) tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
         });
       });
+      
       const tagsArray = Array.from(tagMap.entries())
         .map(([tag, count]) => ({ tag, count }))
         .sort((a, b) => b.count - a.count);
+      
       setTags(tagsArray);
       setFilteredTags(tagsArray);
     }
   }, [firebaseNotes]);
 
+  // Handle search and sorting
   useEffect(() => {
-    if (searchTerm.trim() === '') {
-      setFilteredTags(tags);
-    } else {
-      const filtered = tags.filter(({ tag }) =>
+    let result = [...tags];
+    
+    // Apply search filter
+    if (searchTerm.trim() !== '') {
+      result = result.filter(({ tag }) =>
         tag.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredTags(filtered);
     }
-  }, [searchTerm, tags]);
+    
+    // Apply sorting
+    result = sortTags(result, sortOption);
+    
+    setFilteredTags(result);
+  }, [searchTerm, tags, sortOption]);
+
+  const handleSortFieldChange = (field: SortField) => {
+    if (sortField === field) {
+      // Toggle direction if clicking the same field
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Set new field and default direction
+      setSortField(field);
+      setSortDirection(field === 'name' ? 'asc' : 'desc'); // Default to A-Z for name, Most to Least for count
+    }
+  };
+
+  const sortTags = (tagsToSort: TagWithCount[], option: SortOption): TagWithCount[] => {
+    switch (option) {
+      case 'nameAsc':
+        return [...tagsToSort].sort((a, b) => a.tag.localeCompare(b.tag));
+      case 'nameDesc':
+        return [...tagsToSort].sort((a, b) => b.tag.localeCompare(a.tag));
+      case 'countAsc':
+        return [...tagsToSort].sort((a, b) => a.count - b.count);
+      case 'countDesc':
+        return [...tagsToSort].sort((a, b) => b.count - a.count);
+      default:
+        return tagsToSort;
+    }
+  };
 
   if (isLoading) {
     return (
@@ -68,54 +124,108 @@ const TagsPage: React.FC = () => {
   return (
     <ScrollArea className="h-full">
       <div className="w-full px-4 py-8 max-w-6xl mx-auto">
-        <div className="flex flex-col items-center gap-4 mb-8">
+        <div className="flex flex-col items-center gap-4 mb-6">
           <TagIcon className="h-8 w-8 text-primary mb-2" />
           <CardTitle className="text-3xl font-bold tracking-tight text-center">All Tags</CardTitle>
           <CardDescription className="text-center max-w-2xl mx-auto text-muted-foreground text-lg">
-            Browse by tag. Click a tag to see all related notes. Use the search below to find specific tags.
+            Browse by tag. Click a tag to see all related notes.
           </CardDescription>
-          
-          {/* Search Input */}
-          <div className="relative w-full max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search tags..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-
-          {/* Stats */}
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <span>Total: {tags.length} tags</span>
-            {searchTerm && <span>Found: {filteredTags.length} tags</span>}
-            <span>From Firebase: {firebaseNotes?.length || 0} notes</span>
+        </div>
+        
+        {/* Search and Sort - combined in one row */}
+        <div className="mb-8 max-w-4xl mx-auto">
+          <div className="flex flex-wrap items-center gap-4">
+            {/* Search area - takes up most space */}
+            <div className="relative flex-1 min-w-[200px]">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search tags..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-10"
+              />
+              {searchTerm && (
+                <button 
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground hover:text-foreground"
+                  aria-label="Clear search"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+            
+            {/* Sort dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="flex items-center gap-1.5 flex-shrink-0"
+                >
+                  <ArrowUpDown className="h-3.5 w-3.5" />
+                  <span>
+                    Sort: {sortField === 'name' ? 'Name' : 'Count'} 
+                    {sortDirection === 'asc' ? ' (A→Z)' : ' (Z→A)'}
+                  </span>
+                  <ChevronDown className="h-3.5 w-3.5 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuItem 
+                  className={cn(
+                    "flex items-center justify-between cursor-pointer",
+                    sortField === 'name' && "font-medium"
+                  )}
+                  onClick={() => handleSortFieldChange('name')}
+                >
+                  <span>Name</span>
+                  {sortField === 'name' && (
+                    <ArrowUpDown className="h-3.5 w-3.5" />
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  className={cn(
+                    "flex items-center justify-between cursor-pointer",
+                    sortField === 'count' && "font-medium"
+                  )}
+                  onClick={() => handleSortFieldChange('count')}
+                >
+                  <span>Count</span>
+                  {sortField === 'count' && (
+                    <ArrowUpDown className="h-3.5 w-3.5" />
+                  )}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            {/* Tags count */}
+            <div className="text-xs text-muted-foreground whitespace-nowrap">
+              {searchTerm ? 
+                `${filteredTags.length} of ${tags.length}` : 
+                `${tags.length} tags`
+              }
+            </div>
           </div>
         </div>
-
+        
         {filteredTags.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          /* List View - Clean and minimal design */
+          <div className="rounded-xl overflow-hidden border border-border">
             {filteredTags.map(({ tag, count }) => (
               <Link
                 key={tag}
                 to={`/tags/${encodeURIComponent(tag)}`}
-                className="group block"
+                className="flex items-center justify-between py-3 px-4 hover:bg-muted/50 transition-colors border-b border-border last:border-b-0"
               >
-                <div className="bg-card border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors h-full flex flex-col justify-between">
-                  <div className="flex items-start gap-2 mb-3">
-                    <TagIcon className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                    <span className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2 text-sm">
-                      {tag}
-                    </span>
-                  </div>
-                  <div className="flex justify-end">
-                    <Badge variant="secondary" className="text-xs font-mono">
-                      {count} {count === 1 ? 'note' : 'notes'}
-                    </Badge>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <TagIcon className="h-4 w-4 text-primary" />
+                  <span className="font-medium">{tag}</span>
                 </div>
+                <Badge variant="outline" className="ml-auto">
+                  {count} {count === 1 ? 'note' : 'notes'}
+                </Badge>
               </Link>
             ))}
           </div>
@@ -136,5 +246,6 @@ const TagsPage: React.FC = () => {
     </ScrollArea>
   );
 };
+
 
 export default TagsPage;
