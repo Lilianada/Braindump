@@ -1,14 +1,15 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Tag as TagIcon, Search, X, ChevronDown, ArrowUpDown } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getNormalizedTags } from '@/lib/utils';
 import { useFirebaseNotes } from '@/hooks/useFirebaseNotes';
 import { cn } from '@/lib/utils';
+import LoadingGrid from '@/components/LoadingGrid';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -105,11 +106,7 @@ const TagsPage: React.FC = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <span className="text-lg font-medium text-muted-foreground animate-pulse">Loading tags from Firebase...</span>
-      </div>
-    );
+    return <LoadingGrid />;
   }
 
   if (error) {
@@ -124,13 +121,25 @@ const TagsPage: React.FC = () => {
   return (
     <ScrollArea className="h-full">
       <div className="w-full px-4 py-8 max-w-6xl mx-auto">
-        <div className="flex flex-col items-center gap-4 mb-6">
-          <TagIcon className="h-8 w-8 text-primary mb-2" />
-          <CardTitle className="text-3xl font-bold tracking-tight text-center">All Tags</CardTitle>
-          <CardDescription className="text-center max-w-2xl mx-auto text-muted-foreground text-lg">
+        {/* Header - matching content page design */}
+        <header className="mb-8">
+          <h1 className="text-2xl font-semibold capitalize mb-2">All Tags</h1>
+          <p className="text-base text-muted-foreground mb-4">
             Browse by tag. Click a tag to see all related notes.
-          </CardDescription>
-        </div>
+          </p>
+          
+          <div className="mt-3 mb-1 text-xs text-muted-foreground space-y-1.5">
+            <div className="flex items-center gap-2">
+              <TagIcon className="h-4 w-4" />
+              <span>
+                {searchTerm ? 
+                  `${filteredTags.length} of ${tags.length} tags found` : 
+                  `${tags.length} total tags`
+                }
+              </span>
+            </div>
+          </div>
+        </header>
         
         {/* Search and Sort - combined in one row */}
         <div className="mb-8 max-w-4xl mx-auto">
@@ -199,14 +208,6 @@ const TagsPage: React.FC = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            
-            {/* Tags count */}
-            <div className="text-xs text-muted-foreground whitespace-nowrap">
-              {searchTerm ? 
-                `${filteredTags.length} of ${tags.length}` : 
-                `${tags.length} tags`
-              }
-            </div>
           </div>
         </div>
         
@@ -246,6 +247,5 @@ const TagsPage: React.FC = () => {
     </ScrollArea>
   );
 };
-
 
 export default TagsPage;

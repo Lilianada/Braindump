@@ -9,6 +9,9 @@ export const useTocObserver = (contentItem: ContentItem | null, tocItems: any[])
 
   useEffect(() => {
     if (!contentItem || contentItem.type === 'folder' || !setActiveTocItemId || !setTocItems) {
+      // Clear TOC items when there's no content item or it's a folder
+      setTocItems([]);
+      setActiveTocItemId(null);
       return;
     }
 
@@ -17,6 +20,9 @@ export const useTocObserver = (contentItem: ContentItem | null, tocItems: any[])
         .filter(el => el.tagName.match(/^H[1-3]$/) && el.id);
       
       if (headingElements.length === 0) {
+        // Clear TOC if no headings found
+        setTocItems([]);
+        setActiveTocItemId(null);
         return;
       }
 
@@ -48,4 +54,14 @@ export const useTocObserver = (contentItem: ContentItem | null, tocItems: any[])
 
     return () => clearTimeout(timer);
   }, [contentItem, setActiveTocItemId, tocItems, setTocItems]);
+
+  // Clear TOC when component unmounts or contentItem changes
+  useEffect(() => {
+    return () => {
+      if (setTocItems && setActiveTocItemId) {
+        setTocItems([]);
+        setActiveTocItemId(null);
+      }
+    };
+  }, [setTocItems, setActiveTocItemId]);
 };
