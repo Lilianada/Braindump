@@ -1,3 +1,4 @@
+
 /* Obsidian Vault-like Prose Styling (inspired by Image 2) */
 /* Place this _after_ your base styles. Only styles prose elements, not links. */
 
@@ -41,7 +42,7 @@
 }
 
 .prose strong {
-  color: #e4d8ff; /* softer highlight for bold */
+  color: #b6bccd; /* same as regular text color */
   font-weight: 700;
   letter-spacing: 0.01em;
 }
