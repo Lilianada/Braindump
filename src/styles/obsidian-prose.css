@@ -1,4 +1,3 @@
-
 /* Obsidian Vault-like Prose Styling (inspired by Image 2) */
 /* Place this _after_ your base styles. Only styles prose elements, not links. */
 
@@ -146,13 +145,13 @@
 
 /* Blockquotes */
 .prose blockquote {
-  border-left: 3px solid #8be7ff;
-  background: rgba(139, 231, 255, 0.08);
+  border-left: 2px solid hsl(var(--border));
+  background: transparent;
   margin: 1.5em 0;
-  padding: 0.8em 1.1em 0.8em 1.4em;
+  padding: 0.8em 0 0.8em 1.2em;
   font-style: italic;
-  color: #b6bccd;
-  border-radius: 0.4em;
+  color: hsl(var(--muted-foreground));
+  border-radius: 0;
 }
 
 /* Inline code (no backticks, slight background) */

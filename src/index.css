@@ -353,6 +353,10 @@
     @apply text-[hsl(var(--custom-blue))];
   }
 
+  .prose blockquote {
+    @apply border-l-2 border-border/50 pl-4 py-2 text-muted-foreground italic bg-transparent;
+  }
+
   .prose :where(p):not(:where([class~="not-prose"] *)) {
     font-size: inherit;
     /* Ensure paragraphs within prose also inherit */
