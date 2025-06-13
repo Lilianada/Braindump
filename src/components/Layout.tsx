@@ -11,10 +11,10 @@ import { TocItem } from '@/types';
 import { ContentItem } from '@/content/mockData';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { ListOrdered, AlignLeft } from 'lucide-react';
+import { AlignLeft } from 'lucide-react';
 
 export interface AppContextType {
-  tocItems: TocItem[]; // Added tocItems
+  tocItems: TocItem[];
   setTocItems: React.Dispatch<React.SetStateAction<TocItem[]>>;
   setCurrentContentItem: React.Dispatch<React.SetStateAction<ContentItem | null>>;
   setAllNotesForContext: React.Dispatch<React.SetStateAction<ContentItem[]>>;
@@ -38,8 +38,8 @@ const Layout: React.FC = () => {
   };
 
   const getIndentClass = (level: number) => {
-    if (level === 2) return "pl-5";
-    if (level === 3) return "pl-8";
+    if (level === 2) return "pl-4 sm:pl-5";
+    if (level === 3) return "pl-6 sm:pl-8";
     return "pl-2";
   };
   
@@ -71,7 +71,7 @@ const Layout: React.FC = () => {
         <LeftSidebar isOpen={isLeftSidebarOpen} onClose={() => setIsLeftSidebarOpen(false)} />
         <main className="flex-1 flex max-w-full overflow-x-hidden">
           <ScrollArea className="flex-1 h-[calc(100vh-4rem)] scrollbar-hide overflow-y-auto">
-            <div className={cn("container p-0  max-w-2xl mx-auto text-justify w-full")}>
+            <div className={cn("container p-4 sm:p-6 lg:p-0 max-w-full sm:max-w-2xl mx-auto text-justify w-full")}>
                <Outlet context={{ tocItems, setTocItems, setCurrentContentItem, setAllNotesForContext, activeTocItemId, setActiveTocItemId } satisfies AppContextType} />
             </div>
           </ScrollArea>
@@ -89,16 +89,16 @@ const Layout: React.FC = () => {
       <div className="lg:hidden fixed bottom-4 right-4 z-50">
         <Popover open={isTocPopoverOpen} onOpenChange={setIsTocPopoverOpen}>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="icon" className="rounded-full shadow-lg">
-              <AlignLeft className="h-4 w-4" />
+            <Button variant="outline" size="icon" className="rounded-full shadow-lg h-10 w-10 sm:h-12 sm:w-12">
+              <AlignLeft className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="sr-only">On This Page</span>
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 mb-2 p-0" side="top" align="end">
-            <ScrollArea ref={popoverScrollAreaRef} className="max-h-72 scrollbar-hide">
-              <div className="p-4">
-                <h3 className="mb-3 text-sm font-semibold uppercase text-muted-foreground tracking-wider flex items-center">
-                  <AlignLeft className="h-4 w-4 mr-2" /> On this page
+          <PopoverContent className="w-56 sm:w-64 mb-2 p-0" side="top" align="end">
+            <ScrollArea ref={popoverScrollAreaRef} className="max-h-64 sm:max-h-72 scrollbar-hide">
+              <div className="p-3 sm:p-4">
+                <h3 className="mb-2 sm:mb-3 text-xs sm:text-sm font-semibold uppercase text-muted-foreground tracking-wider flex items-center">
+                  <AlignLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" /> On this page
                 </h3>
                 {tocItems && tocItems.length > 0 ? (
                   <ul className="space-y-0.5">
@@ -119,7 +119,7 @@ const Layout: React.FC = () => {
                           <a 
                             href={`#${item.id}`} 
                             className={cn(
-                              "text-xs transition-colors internal-link block w-full",
+                              "text-xs sm:text-sm transition-colors internal-link block w-full truncate",
                               isActive ? "text-primary font-medium" : "text-foreground/70 hover:text-primary"
                             )}
                             onClick={(e) => handleTocItemClick(e, item.id)}
@@ -143,4 +143,3 @@ const Layout: React.FC = () => {
 };
 
 export default Layout;
-

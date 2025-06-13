@@ -102,14 +102,14 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
       
       {/* Sidebar */}
       <aside className={cn(
-        "fixed md:sticky top-0 left-0 h-screen md:h-[calc(100vh-4rem)] md:top-16 pt-16 md:pt-0 w-72 bg-background border-r border-border flex-col z-40 md:z-30 transition-transform duration-500 ease-in-out",
+        "fixed md:sticky top-0 left-0 h-screen md:h-[calc(100vh-4rem)] md:top-16 pt-16 md:pt-0 w-64 sm:w-72 bg-background border-r border-border flex-col z-40 md:z-30 transition-transform duration-500 ease-in-out",
         "md:flex md:flex-col", 
         isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0" 
       )}>
         <div className="h-full w-full overflow-hidden">
           <ScrollArea className="h-full w-full">
-            <div className="px-4 py-4">
-              <nav className="space-y-6">
+            <div className="px-3 sm:px-4 py-3 sm:py-4">
+              <nav className="space-y-4 sm:space-y-6">
                 <PageLinks onItemClick={() => onClose?.()} />
                 <ContentNavigation contentSections={contentSections} onItemClick={handleItemClick} />
                 <VisualizationLinks onItemClick={() => onClose?.()} />

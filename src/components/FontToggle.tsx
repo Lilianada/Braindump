@@ -23,19 +23,25 @@ const fonts: { value: Font; label: string }[] = [
 const FontToggle: React.FC = () => {
   const { font, setFont } = useTheme();
 
+  const handleValueChange = (newFont: string) => {
+    setFont(newFont as Font);
+  };
+
   return (
-    <Select value={font} onValueChange={(newFont) => setFont(newFont as Font)}>
-      <SelectTrigger className="w-[180px] text-xs sm:text-sm">
-        <SelectValue placeholder="Select font" />
-      </SelectTrigger>
-      <SelectContent>
-        {fonts.map((f) => (
-          <SelectItem key={f.value} value={f.value}>
-            {f.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div onClick={(e) => e.stopPropagation()}>
+      <Select value={font} onValueChange={handleValueChange}>
+        <SelectTrigger className="w-[180px] text-xs sm:text-sm">
+          <SelectValue placeholder="Select font" />
+        </SelectTrigger>
+        <SelectContent>
+          {fonts.map((f) => (
+            <SelectItem key={f.value} value={f.value}>
+              {f.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 

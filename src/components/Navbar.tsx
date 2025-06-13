@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Ellipsis, Menu as MenuIcon } from 'lucide-react'; // Removed Brain import
+import { Search, Ellipsis, Menu as MenuIcon } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import FontToggle from './FontToggle';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,7 @@ import CommandPalette from './CommandPalette';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface NavbarProps {
-  onToggleSidebar?: () => void; // For mobile sidebar toggle
+  onToggleSidebar?: () => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
@@ -38,28 +39,28 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
         <div className="flex items-center">
           {onToggleSidebar && (
             <Button variant="ghost" size="icon" onClick={onToggleSidebar} className="md:hidden mr-2">
-              <MenuIcon className="h-6 w-6" />
+              <MenuIcon className="h-5 w-5" />
             </Button>
           )}
-          <Link to="/" className="flex items-end text-base font-medium font-geist-sans">
-            <img src="/logo.png" alt="Braindump Logo" className="h-8 w-8 mr-2" />
-            Braindump
+          <Link to="/" className="flex items-end text-sm sm:text-base font-medium font-geist-sans">
+            <img src="/logo.png" alt="Braindump Logo" className="h-6 w-6 sm:h-8 sm:w-8 mr-2" />
+            <span className="hidden sm:inline">Braindump</span>
           </Link>
         </div>
         <div className="flex items-center space-x-1 sm:space-x-2">
           {isMobile ? (
             <Button variant="ghost" size="icon" aria-label="Search" onClick={() => setIsCommandOpen(true)}>
-              <Search className="h-5 w-5" />
+              <Search className="h-4 w-4" />
             </Button>
           ) : (
             <Button
               variant="outline"
-              className="h-9 px-3 text-muted-foreground text-sm justify-start w-40 sm:w-64"
+              className="h-8 sm:h-9 px-2 sm:px-3 text-muted-foreground text-xs sm:text-sm justify-start w-32 sm:w-40 lg:w-64"
               onClick={() => setIsCommandOpen(true)}
             >
-              <Search className="h-4 w-4 mr-2" />
-              Search...
-              <kbd className="pointer-events-none ml-auto hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 md:flex">
+              <Search className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Search...</span>
+              <kbd className="pointer-events-none ml-auto hidden h-4 sm:h-5 select-none items-center gap-1 rounded border bg-muted px-1 sm:px-1.5 font-mono text-[9px] sm:text-[10px] font-medium opacity-100 lg:flex">
                 <span className="text-xs">⌘</span>K
               </kbd>
             </Button>
@@ -67,18 +68,20 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Menu">
-                <Ellipsis className="h-5 w-5" />
+              <Button variant="ghost" size="icon" aria-label="Menu" className="h-8 w-8 sm:h-10 sm:w-10">
+                <Ellipsis className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem className="p-0">
+            <DropdownMenuContent align="end" className="w-48 sm:w-56" side="bottom" sideOffset={8}>
+              <DropdownMenuItem 
+                className="p-0 focus:bg-transparent"
+                onSelect={(e) => e.preventDefault()}
+              >
                 <div className="py-2 px-2 w-full">
                   <p className="text-xs text-muted-foreground px-2 pb-1">Font</p>
                   <FontToggle />
                 </div>
               </DropdownMenuItem>
-              {/* Add other menu items here if needed */}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
