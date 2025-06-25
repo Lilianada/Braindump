@@ -1,97 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lancelot&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&display=swap');
 
-@import url('https://unpkg.com/geist@1.4.2/dist/geist-sans.css');
-@import url('https://unpkg.com/geist@1.4.2/dist/geist-mono.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Satoshi Light */
+/* Custom font faces */
 @font-face {
   font-family: 'Satoshi';
-  src: url('/fonts/Satoshi-Light.otf') format('opentype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/Satoshi-LightItalic.otf') format('opentype');
-  font-weight: 300;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* Satoshi Regular */
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/satoshi/Satoshi-Regular.woff2') format('woff2'),
-    url('/fonts/satoshi/Satoshi-Regular.woff') format('woff'),
-    url('/fonts/satoshi/Satoshi-Regular.ttf') format('truetype'),
-    url('/fonts/satoshi/Satoshi-Regular.eot') format('embedded-opentype'),
-    url('/fonts/satoshi/Satoshi-Regular.otf') format('opentype');
+  src: url('/fonts/satoshi/Satoshi-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/satoshi/Satoshi-Italic.otf') format('opentype');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* Satoshi Medium */
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/satoshi/Satoshi-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/satoshi/Satoshi-MediumItalic.otf') format('opentype');
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* Satoshi Bold */
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/satoshi/Satoshi-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/satoshi/Satoshi-BoldItalic.otf') format('opentype');
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* Satoshi Black */
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/satoshi/Satoshi-Black.otf') format('opentype');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/fonts/satoshi/Satoshi-BlackItalic.otf') format('opentype');
-  font-weight: 900;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* Nitti font face declarations */
 @font-face {
   font-family: 'Nitti';
   src: url('/fonts/nitti/Nitti-Normal.woff') format('woff');
@@ -100,307 +24,201 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'Nitti';
-  src: url('/fonts/nitti/Nitti-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+:root {
+  --background: 0 0% 100%;
+  /* Light mode background */
+  --foreground: 253 23% 8%;
+  /* Light mode text */
+
+  --card: 0 0% 100%;
+  --card-foreground: 253 23% 8%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 253 23% 8%;
+
+  --primary: 350 65% 60%;
+  /* Custom primary color */
+  --primary-foreground: 0 0% 100%;
+  /* Text on primary color - white for good contrast */
+
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 350 65% 70%;
+  /* Ring color to match primary */
+
+  --radius: 0.5rem;
+
+  /* Custom font variables */
+  --font-geist-sans: "Geist Sans", sans-serif;
+  --font-geist-mono: "Geist Mono", monospace;
+  --font-kalam: "Kalam", cursive;
+  --font-indie-flower: "Indie Flower", cursive;
+  --font-lancelot: "Lancelot", cursive;
+  --font-cormorant-upright: "Cormorant Upright", serif;
+  --font-satoshi: "Satoshi", sans-serif;
+  --font-nitti: "Nitti", monospace;
+
+  /* Custom yellow for wiki links */
+  --custom-yellow: 48 100% 80%;
+  --custom-yellow-foreground: 253 23% 8%;
+
+  /* Custom blue for italic texts */
+  --custom-blue: 195 65% 60%;
+
+  --primary-light: 350 100% 84%;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+.dark {
+  --background: 253 23% 8%;
+  /* Dark mode background */
+  --foreground: 210 40% 98%;
+  /* Dark mode text */
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    /* Light mode background */
-    --foreground: 253 23% 8%;
-    /* Light mode text */
+  --card: 253 23% 8%;
+  --card-foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 253 23% 8%;
+  --popover: 253 23% 8%;
+  --popover-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 253 23% 8%;
+  --primary: 350 65% 70%;
+  /* Custom primary color */
+  --primary-foreground: 0 0% 100%;
 
-    --primary: 350 65% 60%;
-    /* Custom primary color */
-    --primary-foreground: 0 0% 100%;
-    /* Text on primary color - white for good contrast */
+  --secondary: 217.2 4% 18%;
+  --secondary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 217.2 4% 18%;
+  --muted-foreground: 215 20.2% 65.1%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 217.2 4% 18%;
+  --accent-foreground: 210 40% 98%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 90% 60%;
+  --destructive-foreground: 210 40% 98%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+  --border: 217.2 4% 18%;
+  --input: 217.2 4% 18%;
+  --ring: 350 65% 70%;
+  /* Ring color to match primary */
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 350 65% 70%;
-    /* Ring color to match primary */
+  /* Custom yellow for wiki links in dark mode */
+  --custom-yellow: 48 100% 70%;
+  --custom-yellow-foreground: 210 40% 98%;
+  /* Light text for yellow background in dark mode if needed */
 
-    --radius: 0.5rem;
+  --custom-blue: 195 65% 60%;
 
-    /* Custom font variables */
-    --font-geist-sans: "Geist Sans", sans-serif;
-    --font-geist-mono: "Geist Mono", monospace;
-    --font-kalam: "Kalam", cursive;
-    --font-indie-flower: "Indie Flower", cursive;
-    --font-lancelot: "Lancelot", cursive;
-    --font-cormorant-upright: "Cormorant Upright", serif;
-    --font-satoshi: "Satoshi", sans-serif;
-    --font-nitti: "Nitti", monospace;
-
-    /* Custom yellow for wiki links */
-    --custom-yellow: 48 100% 80%;
-    --custom-yellow-foreground: 253 23% 8%;
-
-    /* Custom blue for italic texts */
-    --custom-blue: 195 65% 60%;
-
-    --primary-light: 350 100% 84%;
-  }
-
-  .dark {
-    --background: 253 23% 8%;
-    /* Dark mode background */
-    --foreground: 210 40% 98%;
-    /* Dark mode text */
-
-    --card: 253 23% 8%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 253 23% 8%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 350 65% 70%;
-    /* Custom primary color */
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 217.2 4% 18%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 4% 18%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 4% 18%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 90% 60%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 4% 18%;
-    --input: 217.2 4% 18%;
-    --ring: 350 65% 70%;
-    /* Ring color to match primary */
-
-    /* Custom yellow for wiki links in dark mode */
-    --custom-yellow: 48 100% 70%;
-    --custom-yellow-foreground: 210 40% 98%;
-    /* Light text for yellow background in dark mode if needed */
-
-    --custom-blue: 195 65% 60%;
-
-     --primary-light: 350 100% 84%;
-  }
+   --primary-light: 350 100% 84%;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+/* Base styles */
+* {
+  border-color: hsl(var(--border));
+}
 
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-geist-mono);
-    /* Default font to Geist Mono */
-    font-size: 14px;
-    /* Set base body font size */
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
 
-  body.font-geist-sans {
-    font-family: var(--font-geist-sans);
-  }
+/* Font classes */
+.font-geist-sans {
+  font-family: 'Geist Sans', system-ui, -apple-system, sans-serif;
+}
 
-  body.font-geist-mono {
-    font-family: var(--font-geist-mono);
-  }
+.font-geist-mono {
+  font-family: 'Geist Mono', 'Monaco', 'Menlo', monospace;
+}
 
-  body.font-satoshi {
-    font-family: var(--font-satoshi);
-  }
+.font-satoshi {
+  font-family: 'Satoshi', system-ui, -apple-system, sans-serif;
+}
 
-  body.font-kalam {
-    font-family: var(--font-kalam);
-  }
+.font-kalam {
+  font-family: 'Kalam', cursive;
+}
 
-  body.font-indie-flower {
-    font-family: var(--font-indie-flower);
-  }
+.font-indie-flower {
+  font-family: 'Indie Flower', cursive;
+}
 
-  body.font-lancelot {
-    font-family: var(--font-lancelot);
-  }
+.font-lancelot {
+  font-family: 'Lancelot', serif;
+}
 
-  body.font-cormorant-upright {
-    font-family: var(--font-cormorant-upright);
-  }
+.font-cormorant-upright {
+  font-family: 'Cormorant Upright', serif;
+}
 
-  body.font-nitti {
-    font-family: var(--font-nitti);
-  }
+.font-nitti {
+  font-family: 'Nitti', monospace;
+}
 
-  html {
-    font-family: var(--font-geist-mono);
+/* Animation classes */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-
-  html.font-geist-sans {
-    font-family: var(--font-geist-sans);
-  }
-
-  html.font-geist-mono {
-    font-family: var(--font-geist-mono);
-  }
-
-  html.font-satoshi {
-    font-family: var(--font-satoshi);
-  }
-
-  html.font-kalam {
-    font-family: var(--font-kalam);
-  }
-
-  html.font-indie-flower {
-    font-family: var(--font-indie-flower);
-  }
-
-  html.font-lancelot {
-    font-family: var(--font-lancelot);
-  }
-
-  html.font-cormorant-upright {
-    font-family: var(--font-cormorant-upright);
-  }
-
-  html.font-nitti {
-    font-family: var(--font-nitti);
-  }
-
-  /* Custom link styling */
-  .external-link {
-    @apply text-[hsl(var(--primary))] dark:text-[hsl(var(--primary-light))] no-underline hover:underline transition-colors;
-  }
-
-  .internal-link {
-    @apply text-primary dark:text-[hsl(var(primary-light))] hover:text-primary/90 transition-colors;
-    text-decoration: underline;
-    text-decoration-color: hsl(var(--primary-light) / 0.5);
-    text-decoration-thickness: 0.5em;
-    text-underline-offset: -0.2em;
-    text-decoration-skip-ink: none;
-    transition: color 0.2s ease, text-decoration-color 0.2s ease;
-  }
-
-  .internal-link:hover {
-    text-decoration-color: hsl(var(--primary-light));
-  }
-
-  .dark .internal-link {
-    text-decoration-color: hsl(var(--primary) / 0.8);
-    color: hsl(var(--foreground));
-  }
-  
-  .dark .internal-link:hover {
-    text-decoration-color: hsl(var(--primary-light) / 1);
-  }
-
-  /* Style external links (now with internal style) */
-  .prose a[href^='http'],
-  .prose .dark\:prose-invert a[href^='http'] {
-    @apply external-link;
-  }
-
-  /* Style internal links (now with external style) */
-  .prose a:not([href^='http']):not(.external-link),
-  .prose .dark\:prose-invert a:not([href^='http']):not(.external-link) {
-    @apply internal-link;
-  }
-
-  .custom-quote {
-    @apply bg-[hsl(var(--custom-yellow))]/40 text-sm dark:bg-[hsl(var(--custom-yellow))]/80 px-1 py-0.5 dark:text-[hsl(var(--primary))] font-geist-mono my-2;
-  }
-
-  /* Adjust prose default font size if body is 14px */
-  .prose {
-    font-size: inherit;
-    /* Inherit from body's 14px */
-  }
-
-  .prose strong {
-    @apply text-foreground;
-  }
-
-  .prose em {
-    @apply text-[hsl(var(--custom-blue))];
-  }
-
-  .prose blockquote {
-    @apply border-l-2 border-border/50 pl-4 py-2 text-muted-foreground italic bg-transparent;
-  }
-
-  .prose :where(p):not(:where([class~="not-prose"] *)) {
-    font-size: inherit;
-    /* Ensure paragraphs within prose also inherit */
-  }
-
-  /* Remove backticks from inline code in prose */
-  .prose :where(code):not(:where([class~="not-prose"] *))::before,
-  .prose :where(code):not(:where([class~="not-prose"] *))::after {
-    content: "";
-  }
-
-  /* Styling for KaTeX display math blocks - ensure uniform with other blocks */
-  .katex-display>.katex {
-    @apply bg-muted p-4 rounded-md block my-4;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-
-  /* Reset prose's default styling for code blocks */
-  .prose :where(code):not(:where([class~="not-prose"] *)) {
-    background-color: transparent;
-    padding: 0;
-    border-radius: 0;
-    font-weight: normal;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Remove pre styling from prose so CustomCodeBlock handles it */
-.prose :where(pre):not(:where([class~=not-prose], [class~=not-prose] *)) {
-  background-color: transparent;
-  padding: 0;
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
 }
 
-/* Loading Grid Animation */
-@keyframes pulse {
+/* Prose container for documentation pages */
+.prose-container {
+  max-width: none;
+  overflow-x: hidden;
+}
 
-  0%,
-  100% {
-    opacity: 0.2;
-    transform: scale(0.9) rotate(0deg);
-  }
+.prose-container > * {
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  50% {
-    opacity: 0.4;
-    transform: scale(1.1) rotate(5deg);
-  }
+.prose-container > .wide {
+  max-width: none;
+}
+
+/* External link styling - simplified */
+.external-link {
+  @apply text-blue-600 dark:text-blue-400 underline decoration-dotted underline-offset-2 hover:text-blue-800 dark:hover:text-blue-300 transition-colors;
+}
+
+/* Internal link styling  */
+.internal-link {
+  @apply text-purple-600 dark:text-purple-400 underline decoration-dotted underline-offset-2 hover:text-purple-800 dark:hover:text-purple-300 transition-colors;
+}
+
+/* Blockquote styling - subtle and clean */
+blockquote {
+  @apply border-l-4 border-gray-300 dark:border-gray-600 pl-4 py-2 my-4 bg-transparent text-gray-700 dark:text-gray-300 italic;
+}
+
+/* Remove any default margins that might cause double scrollbars */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Ensure main container doesn't create horizontal overflow */
+#root {
+  overflow-x: hidden;
 }

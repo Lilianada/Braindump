@@ -1,5 +1,5 @@
 
-import { fetchNotesFromFirebase } from '@/services/firebaseService';
+import { fetchAllContentItems } from '@/services/contentService';
 import { ContentItem } from '@/types/content';
 import { Node, Edge, MarkerType } from '@xyflow/react';
 
@@ -10,56 +10,10 @@ interface GraphData {
   edges: Edge[];
 }
 
-// Convert Firebase notes to ContentItems
-const convertFirebaseToContentItem = (firebaseNote: any): ContentItem => {
-  let type: ContentItem['type'] = 'note';
-  
-  if (firebaseNote.category?.name) {
-    const categoryName = firebaseNote.category.name.toLowerCase();
-    const validTypes = ['folder', 'note', 'topic', 'glossary_term', 'dictionary_entry', 'log', 'zettel', 'book', 'language', 'concept', 'links'];
-    if (validTypes.includes(categoryName)) {
-      type = categoryName as ContentItem['type'];
-    }
-  }
-  
-  const convertFirebaseDate = (firebaseDate: any): string | undefined => {
-    if (!firebaseDate) return undefined;
-    
-    if (firebaseDate.toDate && typeof firebaseDate.toDate === 'function') {
-      return firebaseDate.toDate().toISOString();
-    }
-    
-    if (firebaseDate instanceof Date) {
-      return firebaseDate.toISOString();
-    }
-    
-    if (typeof firebaseDate === 'string') {
-      const parsed = new Date(firebaseDate);
-      return isNaN(parsed.getTime()) ? undefined : parsed.toISOString();
-    }
-    
-    return undefined;
-  };
-  
-  return {
-    id: firebaseNote.id,
-    title: firebaseNote.noteTitle || 'Untitled',
-    path: firebaseNote.filePath || firebaseNote.id,
-    type,
-    content: firebaseNote.content || '',
-    tags: firebaseNote.tags || [],
-    created: convertFirebaseDate(firebaseNote.createdAt),
-    lastUpdated: convertFirebaseDate(firebaseNote.updatedAt),
-    slug: firebaseNote.slug,
-    ...firebaseNote
-  };
-};
-
 export async function generateGraphData(): Promise<GraphData> {
   try {
-    console.log('Fetching notes from Firebase for graph...');
-    const firebaseNotes = await fetchNotesFromFirebase();
-    const allNotes = firebaseNotes.map(convertFirebaseToContentItem);
+    console.log('Fetching notes from content directory for graph...');
+    const allNotes = await fetchAllContentItems();
     
     const nodes: Node[] = [];
     const edges: Edge[] = [];
@@ -110,10 +64,10 @@ export async function generateGraphData(): Promise<GraphData> {
       }
     });
     
-    console.log(`Generated ${nodes.length} nodes and ${edges.length} edges from Firebase data.`);
+    console.log(`Generated ${nodes.length} nodes and ${edges.length} edges from local content.`);
     return { nodes, edges };
   } catch (error) {
-    console.error('Error generating graph data from Firebase:', error);
+    console.error('Error generating graph data from content:', error);
     return { nodes: [], edges: [] };
   }
 }

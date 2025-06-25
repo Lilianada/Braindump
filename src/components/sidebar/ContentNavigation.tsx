@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ContentItem } from '@/content/mockData';
+import { ContentItem } from '@/types/content';
 import CollapsibleNavItem from './CollapsibleNavItem';
 
 interface ContentNavigationProps {

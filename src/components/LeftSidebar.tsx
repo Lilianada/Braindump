@@ -5,7 +5,7 @@ import { ContentItem } from '@/types/content';
 import { cn } from '@/lib/utils';
 import { getNormalizedTags } from '@/lib/utils';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useFirebaseContentData } from '@/hooks/useFirebaseContentData';
+import { useContentData } from '@/hooks/useContentData';
 import PageLinks from './sidebar/PageLinks';
 import ContentNavigation from './sidebar/ContentNavigation';
 import VisualizationLinks from './sidebar/VisualizationLinks';
@@ -19,10 +19,10 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
   const [uniqueTags, setUniqueTags] = useState<string[]>([]);
   const navigate = useNavigate();
   
-  const { contentSections, allNotesAndTopics } = useFirebaseContentData();
+  const { contentSections, allNotesAndTopics } = useContentData();
 
   useEffect(() => {
-    // Extract unique tags from Firebase data
+    // Extract unique tags from content data
     const tagsSet = new Set<string>();
     allNotesAndTopics.forEach(item => {
       const normalizedItemTags = getNormalizedTags(item.tags); 
@@ -34,7 +34,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
     setUniqueTags(sortedTags);
 
     if (allNotesAndTopics.length > 0 && tagsSet.size === 0) {
-      console.warn("LeftSidebar: No tags found in Firebase content items. Ensure tags are defined correctly.");
+      console.warn("LeftSidebar: No tags found in content items. Ensure tags are defined correctly.");
     } 
   }, [allNotesAndTopics]);
 
@@ -94,7 +94,13 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
       {/* Mobile overlay */}
       {isOpen && (
         <div 
-          onClick={handleOverlayClick}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (onClose) {
+              onClose();
+            }
+          }}
           className="fixed inset-0 bg-black/50 z-30 md:hidden" 
           aria-hidden="true" 
         />
@@ -102,7 +108,7 @@ const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen, onClose }) => {
       
       {/* Sidebar */}
       <aside className={cn(
-        "fixed md:sticky top-0 left-0 h-screen md:h-[calc(100vh-4rem)] md:top-16 pt-16 md:pt-0 w-64 sm:w-72 bg-background border-r border-border flex-col z-40 md:z-30 transition-transform duration-500 ease-in-out",
+        "fixed md:sticky top-0 left-0 h-screen md:h-[calc(100vh-4rem)] md:top-16 pt-16 md:pt-0 w-64 sm:w-72 bg-background border-r border-border flex-col z-40 md:z-30 transition-transform duration-700 ease-in-out",
         "md:flex md:flex-col", 
         isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0" 
       )}>

@@ -30,7 +30,7 @@ const DocsPage = () => {
   }, [tocItems]); // setGlobalTocItems is stable
 
   return (
-    <div className="container mx-auto py-8 animate-fade-in">
+    <div className="container mx-auto py-8 animate-fade-in prose-container">
       <SimpleRenderer
         content={docsContentRaw}
         setTocItems={setTocItems} 
