@@ -1,23 +1,30 @@
+## About Braindump
 
+Braindump is a personal knowledge management system built for capturing, organizing, and connecting ideas. It's designed as a digital garden where thoughts can grow and evolve through interconnected notes.
 
-## About Me
+### Key Features
 
-Hi, my name is Lilian. I am an [[Indie developer]], content curator, [[lifestyle connoisseur]], and [[personal trainer]]. At this point, I can call myself whatever I choose.
+- **[[Zettelkasten Method]]**: Atomic notes with unique identifiers for building a web of knowledge
+- **Bidirectional Linking**: Create connections between related concepts using [[wiki-style links]]
+- **Tag System**: Organize content with flexible tagging for easy categorization and discovery
+- **Graph Visualization**: Visual representation of how your notes connect and relate
+- **Markdown Support**: Write in familiar Markdown syntax with enhanced features
+- **Search & Discovery**: Powerful search across all content with semantic understanding
 
-I write code for work, vibe code for fun, and read code for growth.
+### Philosophy
 
-I spend most mornings working out or cosplaying as the personal trainer of some rich person.
+Braindump embraces the concept of **learning in public** and **thinking in writing**. It's built on the principle that knowledge compounds when ideas are connected rather than stored in isolation.
 
-I surf the web for fun, enjoy going down [[rabbit holes]], bookmarking links, [[curating content]] to read and revisit.
+The system encourages:
+- **Atomic thinking**: One idea per note for maximum reusability
+- **Progressive summarization**: Iteratively refine and connect ideas over time
+- **Serendipitous discovery**: Find unexpected connections through exploration
 
-I don’t enjoy social media because I dislike the *performative nature* where everyone feels pressured to entertain followers. I don’t enjoy being an entertainer but don’t mind being entertained. To me, entertaining means writing casually about topics I enjoy in less than 1000 words.
+### Built With
 
-There aren’t many interesting things about me, but here are a few:
-- I have *8 piercings and more to come*.
-- I’ve gone blonde and ginger (ginger was my favorite).
-- My last relationship was 6 years ago (very crazy).
-- I’ve been in 2 situationships during that period (do not recommend).
-- I have no favorite artist, actor, movie, or song.
+This project is a modern web application using React, TypeScript, and Vite, designed to be fast, responsive, and extensible for personal knowledge workflows.
 
-Find me elsewhere:  
-[Twitter](https://x.com/lilian_ada_) | [Instagram](https://instagram.com/defitcreative) | [LinkedIn](https://www.linkedin.com/in/lilianada) | [GitHub](https://www.github.com/lilianada) | [RSS](https://braindump.lilyslab.xyz/rss.xml)
+---
+
+*Start building your second brain with Braindump.*
+

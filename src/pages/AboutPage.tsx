@@ -27,7 +27,7 @@ const AboutPage = () => {
   useEffect(() => {
     setGlobalTocItems(tocItems);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tocItems]); // setGlobalTocItems is stable
+  }, [tocItems]);
 
   return (
     <div className="container mx-auto py-8 animate-fade-in">

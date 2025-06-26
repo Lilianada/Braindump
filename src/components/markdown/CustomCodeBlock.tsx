@@ -22,7 +22,7 @@ const CustomCodeBlock: React.FC<CustomCodeBlockProps> = ({ node, inline, classNa
   if (inline) {
     return (
       <code 
-        className="bg-muted/60 dark:bg-muted/70 px-1.5 py-0.5 rounded text-sm font-mono not-prose" 
+        className="bg-muted/60 dark:bg-muted/70 px-1.5 py-0.5 rounded text-sm font-mono not-prose inline whitespace-nowrap" 
         {...props}
       >
         {children}

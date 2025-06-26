@@ -28,9 +28,9 @@ const DocsPage = () => {
     setGlobalTocItems(tocItems);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tocItems]); // setGlobalTocItems is stable
-
+  
   return (
-    <div className="container mx-auto py-8 animate-fade-in prose-container">
+    <div className="container mx-auto py-8 animate-fade-in">
       <SimpleRenderer
         content={docsContentRaw}
         setTocItems={setTocItems} 

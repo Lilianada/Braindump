@@ -155,27 +155,40 @@
 }
 
 /* Inline code (no backticks, slight background) */
-.prose code {
-  background: #19202c;
-  color: #ffb5f2;
+.prose code:not(pre code) {
+  background: hsl(var(--muted));
+  color: hsl(var(--foreground));
   border-radius: 0.33em;
   font-size: 0.98em;
   padding: 0.13em 0.45em;
   font-family: var(--font-geist-mono), monospace;
   font-weight: 400;
+  display: inline;
+  white-space: nowrap;
 }
 
-/* Code blocks */
+/* Code blocks - let CustomCodeBlock handle the styling */
 .prose pre {
-  background: #161722;
-  color: #c5c4d4;
-  font-family: var(--font-geist-mono), monospace;
-  border-radius: 0.38em;
-  padding: 1.1em 1.35em;
-  margin: 1.4em 0;
-  font-size: 1em;
-  overflow-x: auto;
-  border: 1px solid #26263b;
+  --tw-prose-pre-bg: transparent !important;
+  --tw-prose-pre-code: inherit !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  overflow: visible !important;
+}
+
+/* Also override any code inside pre */
+.prose pre code {
+  background: transparent !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: inherit !important;
+  color: inherit !important;
 }
 
 /* Paragraphs */
