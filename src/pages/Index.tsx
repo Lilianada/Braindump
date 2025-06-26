@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { getAllContentItems, ContentItem } from '@/components/content/mockdata';
+import { getAllContentItems, ContentItem } from '@/components/content/data';
 import SimpleRenderer from '@/components/SimpleRenderer';
 import { TocItem } from '@/types';
 import { AppContextType } from '@/components/Layout';

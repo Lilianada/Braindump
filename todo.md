@@ -212,7 +212,7 @@ To efficiently generate backlinks and related notes on the frontend **without ca
    - Status: **UNRESOLVED** ⚠️
 
 3. **Data Layer Inconsistency**
-   - App uses both local file system (`mockData.ts`) and Firebase simultaneously
+   - App uses both local file system (`data.ts`) and Firebase simultaneously
    - `ContentPage` still references local files while Firebase hooks exist
    - Status: **PARTIALLY IMPLEMENTED** ⚠️
 

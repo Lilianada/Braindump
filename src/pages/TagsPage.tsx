@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getNormalizedTags } from '@/lib/utils';
-import { useFirebaseNotes } from '@/hooks/useFirebaseNotes';
+import { getAllContentItems, ContentItem } from '@/components/content/data';
 import { cn } from '@/lib/utils';
 import LoadingGrid from '@/components/LoadingGrid';
 import { AppContextType } from '@/components/Layout';
@@ -33,9 +33,11 @@ const TagsPage: React.FC = () => {
   const [sortOption, setSortOption] = useState<SortOption>('countDesc');
   const [sortField, setSortField] = useState<SortField>('count');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [allNotes, setAllNotes] = useState<ContentItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   const { setTocItems, setActiveTocItemId } = useOutletContext<AppContextType>();
-  const { data: firebaseNotes, isLoading, error } = useFirebaseNotes();
 
   // Clear TOC when component mounts
   useEffect(() => {
@@ -43,6 +45,25 @@ const TagsPage: React.FC = () => {
     setTocItems([]);
     setActiveTocItemId(null);
   }, [setTocItems, setActiveTocItemId]);
+
+  // Load content data
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        const items = await getAllContentItems();
+        setAllNotes(items);
+        setError(null);
+      } catch (err) {
+        console.error('Error loading content:', err);
+        setError('Failed to load content');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadData();
+  }, []);
 
   // Update sort option when field or direction changes
   useEffect(() => {
@@ -54,9 +75,9 @@ const TagsPage: React.FC = () => {
   }, [sortField, sortDirection]);
 
   useEffect(() => {
-    if (firebaseNotes && firebaseNotes.length > 0) {
+    if (allNotes && allNotes.length > 0) {
       const tagMap = new Map<string, number>();
-      firebaseNotes.forEach(item => {
+      allNotes.forEach(item => {
         getNormalizedTags(item.tags).forEach(tag => {
           if (tag) tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
         });
@@ -69,7 +90,7 @@ const TagsPage: React.FC = () => {
       setTags(tagsArray);
       setFilteredTags(tagsArray);
     }
-  }, [firebaseNotes]);
+  }, [allNotes]);
 
   // Handle search and sorting
   useEffect(() => {
@@ -121,8 +142,8 @@ const TagsPage: React.FC = () => {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <span className="text-lg font-medium text-destructive">Error loading tags from Firebase</span>
-        <span className="text-sm text-muted-foreground mt-2">Please check your Firebase configuration</span>
+        <span className="text-lg font-medium text-destructive">Error loading tags</span>
+        <span className="text-sm text-muted-foreground mt-2">Please try refreshing the page</span>
       </div>
     );
   }
@@ -248,7 +269,7 @@ const TagsPage: React.FC = () => {
                 <p className="text-muted-foreground text-sm">Try adjusting your search term</p>
               </>
             ) : (
-              <p className="text-muted-foreground text-lg">No tags found in Firebase notes.</p>
+              <p className="text-muted-foreground text-lg">No tags found in notes.</p>
             )}
           </div>
         )}

@@ -8,7 +8,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { getNormalizedTags } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
-import { useFirebaseContentData } from '@/hooks/useFirebaseContentData';
+import { getAllContentItems } from '@/components/content/data';
 import { AppContextType } from '@/components/Layout';
 
 /**
@@ -36,10 +36,11 @@ function extractMarkdownBody(markdownContent: string | undefined | null): string
 const TagDetailPage: React.FC = () => {
   const { tagName } = useParams<{ tagName: string }>();
   const [relatedItems, setRelatedItems] = useState<ContentItem[]>([]);
+  const [allNotesAndTopics, setAllNotesAndTopics] = useState<ContentItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const decodedTagName = tagName ? decodeURIComponent(tagName) : '';
   
   const { setTocItems, setActiveTocItemId } = useOutletContext<AppContextType>();
-  const { allNotesAndTopics } = useFirebaseContentData();
   
   // Clear TOC when component mounts
   useEffect(() => {
@@ -47,6 +48,23 @@ const TagDetailPage: React.FC = () => {
     setTocItems([]);
     setActiveTocItemId(null);
   }, [setTocItems, setActiveTocItemId]);
+
+  // Load content data
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        const items = await getAllContentItems();
+        setAllNotesAndTopics(items);
+      } catch (err) {
+        console.error('Error loading content:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadData();
+  }, []);
 
   useEffect(() => {
     if (decodedTagName && allNotesAndTopics.length > 0) {
@@ -58,13 +76,11 @@ const TagDetailPage: React.FC = () => {
     }
   }, [decodedTagName, allNotesAndTopics]);
 
-  const isLoading = allNotesAndTopics.length === 0;
-
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <span className="text-lg font-medium text-muted-foreground animate-pulse">
-          Loading content for tag from Firebase: {decodedTagName}...
+          Loading content for tag: {decodedTagName}...
         </span>
       </div>
     );
@@ -87,7 +103,7 @@ const TagDetailPage: React.FC = () => {
               </CardTitle>
             </div>
             <CardDescription>
-              Found {relatedItems.length} item(s) matching this tag from Firebase.
+              Found {relatedItems.length} item(s) matching this tag.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -119,7 +135,7 @@ const TagDetailPage: React.FC = () => {
                 ))}
               </ul>
             ) : (
-              <p className="text-muted-foreground">No content found for this tag in Firebase.</p>
+              <p className="text-muted-foreground">No content found for this tag.</p>
             )}
           </CardContent>
         </Card>

@@ -35,16 +35,16 @@ const NoteGraph: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const loadGraphData = useCallback(async () => {
-    console.log('Loading graph data from Firebase...');
+    console.log('Loading graph data...');
     setIsLoading(true);
     try {
       const { nodes: initialNodes, edges: initialEdges } = await generateGraphData();
-      console.log(`Loaded ${initialNodes.length} nodes, ${initialEdges.length} edges from Firebase.`);
+      console.log(`Loaded ${initialNodes.length} nodes, ${initialEdges.length} edges.`);
       setNodes(initialNodes);
       setEdges(initialEdges);
       setTimeout(() => fitView({duration: 800 }), 100);
     } catch (error) {
-      console.error("Error loading graph data from Firebase:", error);
+      console.error("Error loading graph data:", error);
     } finally {
       setIsLoading(false);
     }

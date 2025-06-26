@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TocItem } from '@/types';
-import { ContentItem } from '@/content/mockData';
+import { ContentItem } from '@/content/data';
 import { cn } from '@/lib/utils';
 import { AlignLeft } from 'lucide-react';
 

@@ -1,4 +1,3 @@
-
 // Re-export the ContentItem type
 export type { ContentItem } from '../../types/content';
 

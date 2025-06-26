@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { TocItem } from '@/types';
-import { ContentItem } from '@/content/mockData';
+import { ContentItem } from '@/content/data';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { AlignLeft } from 'lucide-react';
@@ -70,11 +70,11 @@ const Layout: React.FC = () => {
       <div className="flex flex-1 pt-16 overflow-hidden">
         <LeftSidebar isOpen={isLeftSidebarOpen} onClose={() => setIsLeftSidebarOpen(false)} />
         <main className="flex-1 flex max-w-full overflow-x-hidden">
-          <ScrollArea className="flex-1 h-[calc(100vh-4rem)] scrollbar-hide overflow-y-auto">
+          <div className="flex-1 h-[calc(100vh-4rem)] overflow-y-auto">
             <div className={cn("container p-4 sm:p-6 lg:p-0 max-w-full sm:max-w-2xl mx-auto text-justify w-full")}>
                <Outlet context={{ tocItems, setTocItems, setCurrentContentItem, setAllNotesForContext, activeTocItemId, setActiveTocItemId } satisfies AppContextType} />
             </div>
-          </ScrollArea>
+          </div>
           <RightSidebar 
             tocItems={tocItems} 
             currentContentItem={currentContentItem}

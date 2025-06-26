@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ContentItem } from '@/content/mockData';
+import { ContentItem } from '@/content/data';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { extractMarkdownBody } from '@/lib/utils';
 import SimpleRenderer from '@/components/SimpleRenderer';

@@ -11,7 +11,7 @@ import {
   CommandItem,
   CommandSeparator,
 } from '@/components/ui/command';
-import { getAllContentItems, ContentItem } from '@/content/mockData';
+import { getAllContentItems, ContentItem } from '@/content/data';
 import { toast } from 'sonner';
 import { getNormalizedTags } from '@/lib/utils';
 

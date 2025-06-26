@@ -1,6 +1,6 @@
 import React from 'react';
 import { renderInteractiveText } from '@/lib/markdown/renderInteractiveText';
-import { ContentItem } from '@/components/content/mockdata';
+import { ContentItem } from '@/components/content/data';
 
 interface InteractiveFragmentProps extends React.PropsWithChildren<unknown> {
   allNotes: ContentItem[];

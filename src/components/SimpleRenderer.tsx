@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math'; // Added
 import rehypeKatex from 'rehype-katex'; // Added
 import { TocItem } from '@/types';
-import { ContentItem } from '@/components/content/mockdata';
+import { ContentItem } from '@/components/content/data';
 
 import CustomHeading from './markdown/CustomHeading';
 import CustomParagraph from './markdown/CustomParagraph';
